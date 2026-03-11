@@ -29,4 +29,19 @@ public class Point {
     public double distance(Point other) {
         return Math.sqrt(distanceSquared(other));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj || obj != null && getClass() == obj.getClass() && _xyz.equals(((Point) obj)._xyz);
+    }
+
+    @Override
+    public int hashCode() {
+        return _xyz.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Point" + _xyz;
+    }
 }
