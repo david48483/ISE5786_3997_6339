@@ -8,6 +8,10 @@ import primitives.Vector;
  * Every geometry must be able to return its normal vector at a given point.
  */
 public abstract class Geometry {
+    /**
+     * Default constructor for base geometry type.
+     */
+    protected Geometry() {}
 
     /**
      * Returns the normal vector to the geometry at the given point.
@@ -16,4 +20,3 @@ public abstract class Geometry {
      */
     public abstract Vector getNormal(Point point);
 }
-

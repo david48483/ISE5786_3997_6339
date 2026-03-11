@@ -1,31 +1,67 @@
 package primitives;
 
+/**
+ * Represents a point in a 3D Cartesian coordinate system.
+ * Coordinates are stored as an immutable {@link Double3} tuple.
+ */
 public class Point {
+    /** Coordinate tuple (x, y, z) of the point. */
     final Double3 _xyz;
 
+    /** Constant for the origin point (0,0,0). */
     public static final Point ZERO = new Point(Double3.ZERO);
 
+    /**
+     * Constructs a point from a {@link Double3} coordinate tuple.
+     * @param xyz the coordinate tuple
+     */
     public Point(Double3 xyz) {
         _xyz = xyz;
     }
 
+    /**
+     * Constructs a point from three coordinate values.
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param z z-coordinate
+     */
     public Point(double x, double y, double z) {
         _xyz = new Double3(x, y, z);
     }
 
+    /**
+     * Subtracts another point from this point.
+     * @param other the point to subtract
+     * @return the vector from {@code other} to this point
+     */
     public Vector subtract(Point other) {
         return new Vector(_xyz.subtract(other._xyz));
     }
 
+    /**
+     * Translates this point by a vector.
+     * @param vector the translation vector
+     * @return a new translated point
+     */
     public Point add(Vector vector) {
         return new Point(_xyz.add(vector._xyz));
     }
 
+    /**
+     * Computes the squared Euclidean distance to another point.
+     * @param other the other point
+     * @return the squared distance between the points
+     */
     public double distanceSquared(Point other) {
         Double3 diff = _xyz.subtract(other._xyz);
         return diff._d1() * diff._d1() + diff._d2() * diff._d2() + diff._d3() * diff._d3();
     }
 
+    /**
+     * Computes the Euclidean distance to another point.
+     * @param other the other point
+     * @return the distance between the points
+     */
     public double distance(Point other) {
         return Math.sqrt(distanceSquared(other));
     }
