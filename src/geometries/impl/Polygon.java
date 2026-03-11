@@ -77,4 +77,22 @@ public class Polygon extends Geometry {
 
     @Override
     public Vector getNormal(Point point) { return _plane.getNormal(point); }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Polygon other = (Polygon) obj;
+        return _vertices.equals(other._vertices) && _plane.equals(other._plane);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * _vertices.hashCode() + _plane.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Polygon{vertices=" + _vertices + "}";
+    }
 }

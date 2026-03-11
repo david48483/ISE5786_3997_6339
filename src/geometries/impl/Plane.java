@@ -18,8 +18,8 @@ public class Plane extends Geometry {
 
     /**
      * Constructs a plane from three points.
-     * The normal vector is computed from the cross product of two edges.
-     * At this stage, only the point is stored (normal computation is deferred).
+     * Stores one point on the plane and computes a normalized normal vector
+     * from the cross product of two edge vectors.
      * @param p1 first point on the plane
      * @param p2 second point on the plane
      * @param p3 third point on the plane
