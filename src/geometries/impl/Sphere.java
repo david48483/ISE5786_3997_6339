@@ -8,11 +8,14 @@ import primitives.Vector;
  */
 public class Sphere extends RadialGeometry {
 
-    /** Center point of the sphere. */
+    /**
+     * Center point of the sphere.
+     */
     private final Point _center;
 
     /**
      * Constructs a sphere from a center point and radius.
+     *
      * @param center the center point
      * @param radius the sphere radius
      */
@@ -21,12 +24,6 @@ public class Sphere extends RadialGeometry {
         _center = center;
     }
 
-    /**
-     * Returns the normal vector at a given point on the sphere.
-     * For stage 1 this method is intentionally not implemented.
-     * @param point a point on the sphere surface
-     * @return null in stage 1
-     */
     @Override
     public Vector getNormal(Point point) {
         return null;
@@ -37,16 +34,16 @@ public class Sphere extends RadialGeometry {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Sphere other = (Sphere) obj;
-        return Double.compare(_radius, other._radius) == 0 && _center.equals(other._center);
+        return Double.compare(radius(), other.radius()) == 0 && _center.equals(other._center);
     }
 
     @Override
     public int hashCode() {
-        return 31 * Double.hashCode(_radius) + _center.hashCode();
+        return 31 * Double.hashCode(radius()) + _center.hashCode();
     }
 
     @Override
     public String toString() {
-        return "Sphere{center=" + _center + ", radius=" + _radius + "}";
+        return "Sphere{center=" + _center + ", radius=" + radius() + "}";
     }
 }

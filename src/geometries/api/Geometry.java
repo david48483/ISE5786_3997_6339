@@ -11,10 +11,12 @@ public abstract class Geometry {
     /**
      * Default constructor for base geometry type.
      */
-    protected Geometry() {}
+    protected Geometry() {
+    }
 
     /**
      * Returns the normal vector to the geometry at the given point.
+     *
      * @param point a point on the surface of the geometry
      * @return the normal vector at the given point
      */

@@ -10,6 +10,7 @@ public class Triangle extends Polygon {
 
     /**
      * Constructs a triangle from three vertices.
+     *
      * @param p1 first vertex
      * @param p2 second vertex
      * @param p3 third vertex
@@ -20,6 +21,6 @@ public class Triangle extends Polygon {
 
     @Override
     public String toString() {
-        return "Triangle" + _vertices;
+        return "Triangle" + vertices();
     }
 }

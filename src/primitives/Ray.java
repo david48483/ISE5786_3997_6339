@@ -6,15 +6,20 @@ package primitives;
  */
 public class Ray {
 
-    /** The origin point of the ray. */
+    /**
+     * The origin point of the ray.
+     */
     private final Point _origin;
 
-    /** The normalized direction vector of the ray. */
+    /**
+     * The normalized direction vector of the ray.
+     */
     private final Vector _direction;
 
     /**
      * Constructs a ray from an origin point and a direction vector.
      * The direction vector is normalized before being stored.
+     *
      * @param origin    the starting point of the ray
      * @param direction the direction of the ray (need not be normalized)
      */
@@ -25,6 +30,7 @@ public class Ray {
 
     /**
      * Returns the origin point of the ray.
+     *
      * @return the origin point
      */
     public Point origin() {
@@ -33,6 +39,7 @@ public class Ray {
 
     /**
      * Returns the normalized direction vector of the ray.
+     *
      * @return the direction vector
      */
     public Vector direction() {

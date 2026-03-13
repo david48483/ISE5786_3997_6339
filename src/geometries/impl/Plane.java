@@ -10,16 +10,21 @@ import primitives.Vector;
  */
 public class Plane extends Geometry {
 
-    /** A point on the plane. */
+    /**
+     * A point on the plane.
+     */
     private final Point _point;
 
-    /** The normalized normal vector of the plane. */
+    /**
+     * The normalized normal vector of the plane.
+     */
     private final Vector _normal;
 
     /**
      * Constructs a plane from three points.
      * Stores one point on the plane and computes a normalized normal vector
      * from the cross product of two edge vectors.
+     *
      * @param p1 first point on the plane
      * @param p2 second point on the plane
      * @param p3 third point on the plane
@@ -36,6 +41,7 @@ public class Plane extends Geometry {
     /**
      * Constructs a plane from a point and a normal vector.
      * The normal vector is normalized before being stored.
+     *
      * @param point  a point on the plane
      * @param normal the normal vector of the plane (need not be normalized)
      */
@@ -44,11 +50,6 @@ public class Plane extends Geometry {
         _normal = normal.normalize();
     }
 
-    /**
-     * Returns the normal vector of the plane.
-     * @param point a point (not used, included for interface consistency)
-     * @return the normalized normal vector
-     */
     @Override
     public Vector getNormal(Point point) {
         return _normal;

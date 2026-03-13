@@ -9,15 +9,14 @@ import static primitives.Util.isZero;
  */
 public class Vector extends Point {
 
-    /** Unit vector along the X axis. */
-    public static final Vector AXIS_X = new Vector(1, 0, 0);
-    /** Unit vector along the Y axis. */
-    public static final Vector AXIS_Y = new Vector(0, 1, 0);
-    /** Unit vector along the Z axis. */
+    /**
+     * Unit vector along the Z axis.
+     */
     public static final Vector AXIS_Z = new Vector(0, 0, 1);
 
     /**
      * Constructs a vector from three double components.
+     *
      * @param x the X component
      * @param y the Y component
      * @param z the Z component
@@ -29,6 +28,7 @@ public class Vector extends Point {
 
     /**
      * Constructs a vector from a {@link Double3} object.
+     *
      * @param xyz the coordinate container
      * @throws IllegalArgumentException if the resulting vector is zero
      */
@@ -38,6 +38,7 @@ public class Vector extends Point {
 
     /**
      * Validates that the given {@link Double3} is not a zero vector.
+     *
      * @param xyz the coordinate container to validate
      * @return the same {@code xyz} if valid
      * @throws IllegalArgumentException if all components are effectively zero
@@ -50,15 +51,17 @@ public class Vector extends Point {
 
     /**
      * Adds another vector to this vector.
+     *
      * @param other the vector to add
      * @return a new vector representing the sum
      */
     public Vector add(Vector other) {
-        return new Vector(_xyz.add(other._xyz));
+        return new Vector(xyz().add(other.xyz()));
     }
 
     /**
      * Scales this vector by a scalar factor.
+     *
      * @param scalar the scaling factor
      * @return a new scaled vector
      * @throws IllegalArgumentException if scalar is zero
@@ -66,35 +69,38 @@ public class Vector extends Point {
     public Vector scale(double scalar) {
         if (isZero(scalar))
             throw new IllegalArgumentException("Scaling by zero is not allowed");
-        return new Vector(_xyz.scale(scalar));
+        return new Vector(xyz().scale(scalar));
     }
 
     /**
      * Computes the dot product of this vector with another.
+     *
      * @param other the other vector
      * @return the scalar dot product
      */
     public double dotProduct(Vector other) {
-        return _xyz._d1() * other._xyz._d1()
-                + _xyz._d2() * other._xyz._d2()
-                + _xyz._d3() * other._xyz._d3();
+        return xyz()._d1() * other.xyz()._d1()
+                + xyz()._d2() * other.xyz()._d2()
+                + xyz()._d3() * other.xyz()._d3();
     }
 
     /**
      * Computes the cross product of this vector with another.
+     *
      * @param other the other vector
      * @return a new vector perpendicular to both operands
      * @throws IllegalArgumentException if the result is a zero vector (parallel vectors)
      */
     public Vector crossProduct(Vector other) {
-        double x = _xyz._d2() * other._xyz._d3() - _xyz._d3() * other._xyz._d2();
-        double y = _xyz._d3() * other._xyz._d1() - _xyz._d1() * other._xyz._d3();
-        double z = _xyz._d1() * other._xyz._d2() - _xyz._d2() * other._xyz._d1();
+        double x = xyz()._d2() * other.xyz()._d3() - xyz()._d3() * other.xyz()._d2();
+        double y = xyz()._d3() * other.xyz()._d1() - xyz()._d1() * other.xyz()._d3();
+        double z = xyz()._d1() * other.xyz()._d2() - xyz()._d2() * other.xyz()._d1();
         return new Vector(x, y, z);
     }
 
     /**
      * Returns the squared length (magnitude) of this vector.
+     *
      * @return the squared length
      */
     public double lengthSquared() {
@@ -103,6 +109,7 @@ public class Vector extends Point {
 
     /**
      * Returns the length (magnitude) of this vector.
+     *
      * @return the length
      */
     public double length() {
@@ -111,6 +118,7 @@ public class Vector extends Point {
 
     /**
      * Returns the squared Euclidean distance between this vector tip and another.
+     *
      * @param other the other vector
      * @return the squared distance
      */
@@ -119,25 +127,17 @@ public class Vector extends Point {
     }
 
     /**
-     * Returns the Euclidean distance between this vector tip and another.
-     * @param other the other vector
-     * @return the distance
-     */
-    public double distance(Vector other) {
-        return Math.sqrt(distanceSquared(other));
-    }
-
-    /**
      * Returns a normalized (unit length) version of this vector.
+     *
      * @return a new unit vector in the same direction
      */
     public Vector normalize() {
-        return new Vector(_xyz.divide(length()));
+        return new Vector(xyz().divide(length()));
     }
 
     @Override
     public boolean equals(Object obj) {
-        return this == obj || obj != null && getClass() == obj.getClass() && _xyz.equals(((Vector) obj)._xyz);
+        return this == obj || obj != null && getClass() == obj.getClass() && xyz().equals(((Vector) obj).xyz());
     }
 
     @Override
@@ -147,6 +147,6 @@ public class Vector extends Point {
 
     @Override
     public String toString() {
-        return "Vector" + _xyz;
+        return "Vector" + xyz();
     }
 }

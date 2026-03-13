@@ -5,14 +5,19 @@ package primitives;
  * Coordinates are stored as an immutable {@link Double3} tuple.
  */
 public class Point {
-    /** Coordinate tuple (x, y, z) of the point. */
-    final Double3 _xyz;
+    /**
+     * Coordinate tuple (x, y, z) of the point.
+     */
+    private final Double3 _xyz;
 
-    /** Constant for the origin point (0,0,0). */
+    /**
+     * Constant for the origin point (0,0,0).
+     */
     public static final Point ZERO = new Point(Double3.ZERO);
 
     /**
      * Constructs a point from a {@link Double3} coordinate tuple.
+     *
      * @param xyz the coordinate tuple
      */
     public Point(Double3 xyz) {
@@ -21,6 +26,7 @@ public class Point {
 
     /**
      * Constructs a point from three coordinate values.
+     *
      * @param x x-coordinate
      * @param y y-coordinate
      * @param z z-coordinate
@@ -30,35 +36,49 @@ public class Point {
     }
 
     /**
+     * Returns the coordinate tuple of this point.
+     * This accessor is intended for subclasses that build additional vector algebra.
+     *
+     * @return immutable coordinate tuple
+     */
+    protected Double3 xyz() {
+        return _xyz;
+    }
+
+    /**
      * Subtracts another point from this point.
+     *
      * @param other the point to subtract
      * @return the vector from {@code other} to this point
      */
     public Vector subtract(Point other) {
-        return new Vector(_xyz.subtract(other._xyz));
+        return new Vector(_xyz.subtract(other.xyz()));
     }
 
     /**
      * Translates this point by a vector.
+     *
      * @param vector the translation vector
      * @return a new translated point
      */
     public Point add(Vector vector) {
-        return new Point(_xyz.add(vector._xyz));
+        return new Point(_xyz.add(vector.xyz()));
     }
 
     /**
      * Computes the squared Euclidean distance to another point.
+     *
      * @param other the other point
      * @return the squared distance between the points
      */
     public double distanceSquared(Point other) {
-        Double3 diff = _xyz.subtract(other._xyz);
+        Double3 diff = _xyz.subtract(other.xyz());
         return diff._d1() * diff._d1() + diff._d2() * diff._d2() + diff._d3() * diff._d3();
     }
 
     /**
      * Computes the Euclidean distance to another point.
+     *
      * @param other the other point
      * @return the distance between the points
      */

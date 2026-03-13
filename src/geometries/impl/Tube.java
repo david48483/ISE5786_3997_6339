@@ -10,13 +10,16 @@ import primitives.Vector;
  */
 public class Tube extends RadialGeometry {
 
-    /** Axis ray of the tube. */
-    protected final Ray _axis;
+    /**
+     * Axis ray of the tube.
+     */
+    private final Ray _axis;
 
     /**
      * Constructs a tube with a radius and an axis ray.
+     *
      * @param radius the tube radius
-     * @param axis the axis ray of the tube
+     * @param axis   the axis ray of the tube
      */
     public Tube(double radius, Ray axis) {
         super(radius);
@@ -24,11 +27,14 @@ public class Tube extends RadialGeometry {
     }
 
     /**
-     * Returns the normal vector at a given point on the tube.
-     * For stage 1 this method is intentionally not implemented.
-     * @param point a point on the tube
-     * @return null in stage 1
+     * Returns the tube axis ray.
+     *
+     * @return axis ray
      */
+    protected Ray axis() {
+        return _axis;
+    }
+
     @Override
     public Vector getNormal(Point point) {
         return null;
@@ -39,16 +45,16 @@ public class Tube extends RadialGeometry {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Tube other = (Tube) obj;
-        return Double.compare(_radius, other._radius) == 0 && _axis.equals(other._axis);
+        return Double.compare(radius(), other.radius()) == 0 && axis().equals(other.axis());
     }
 
     @Override
     public int hashCode() {
-        return 31 * Double.hashCode(_radius) + _axis.hashCode();
+        return 31 * Double.hashCode(radius()) + axis().hashCode();
     }
 
     @Override
     public String toString() {
-        return "Tube{radius=" + _radius + ", axis=" + _axis + "}";
+        return "Tube{radius=" + radius() + ", axis=" + axis() + "}";
     }
 }
