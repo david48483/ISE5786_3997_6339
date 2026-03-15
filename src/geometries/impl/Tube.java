@@ -13,7 +13,7 @@ public class Tube extends RadialGeometry {
     /**
      * Axis ray of the tube.
      */
-    private final Ray _axis;
+    protected final Ray _axis;
 
     /**
      * Constructs a tube with a radius and an axis ray.
@@ -26,15 +26,6 @@ public class Tube extends RadialGeometry {
         _axis = axis;
     }
 
-    /**
-     * Returns the tube axis ray.
-     *
-     * @return axis ray
-     */
-    protected Ray axis() {
-        return _axis;
-    }
-
     @Override
     public Vector getNormal(Point point) {
         return null;
@@ -45,16 +36,16 @@ public class Tube extends RadialGeometry {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Tube other = (Tube) obj;
-        return Double.compare(radius(), other.radius()) == 0 && axis().equals(other.axis());
+        return Double.compare(_radius, other._radius) == 0 && _axis.equals(other._axis);
     }
 
     @Override
     public int hashCode() {
-        return 31 * Double.hashCode(radius()) + axis().hashCode();
+        return 31 * Double.hashCode(_radius) + _axis.hashCode();
     }
 
     @Override
     public String toString() {
-        return "Tube{radius=" + radius() + ", axis=" + axis() + "}";
+        return "Tube{radius=" + _radius + ", axis=" + _axis + "}";
     }
 }

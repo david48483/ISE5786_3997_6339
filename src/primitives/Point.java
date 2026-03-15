@@ -8,7 +8,7 @@ public class Point {
     /**
      * Coordinate tuple (x, y, z) of the point.
      */
-    private final Double3 _xyz;
+    protected final Double3 _xyz;
 
     /**
      * Constant for the origin point (0,0,0).
@@ -36,23 +36,13 @@ public class Point {
     }
 
     /**
-     * Returns the coordinate tuple of this point.
-     * This accessor is intended for subclasses that build additional vector algebra.
-     *
-     * @return immutable coordinate tuple
-     */
-    protected Double3 xyz() {
-        return _xyz;
-    }
-
-    /**
      * Subtracts another point from this point.
      *
      * @param other the point to subtract
      * @return the vector from {@code other} to this point
      */
     public Vector subtract(Point other) {
-        return new Vector(_xyz.subtract(other.xyz()));
+        return new Vector(_xyz.subtract(other._xyz));
     }
 
     /**
@@ -62,7 +52,7 @@ public class Point {
      * @return a new translated point
      */
     public Point add(Vector vector) {
-        return new Point(_xyz.add(vector.xyz()));
+        return new Point(_xyz.add(vector._xyz));
     }
 
     /**
@@ -72,8 +62,10 @@ public class Point {
      * @return the squared distance between the points
      */
     public double distanceSquared(Point other) {
-        Double3 diff = _xyz.subtract(other.xyz());
-        return diff._d1() * diff._d1() + diff._d2() * diff._d2() + diff._d3() * diff._d3();
+        double dx = _xyz._d1() - other._xyz._d1();
+        double dy = _xyz._d2() - other._xyz._d2();
+        double dz = _xyz._d3() - other._xyz._d3();
+        return dx * dx + dy * dy + dz * dz;
     }
 
     /**

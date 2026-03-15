@@ -10,7 +10,12 @@ public abstract class RadialGeometry extends Geometry {
     /**
      * The radius of the geometry.
      */
-    private final double _radius;
+    protected final double _radius;
+
+    /**
+     * The squared radius of the geometry.
+     */
+    protected final double _radiusSquared;
 
     /**
      * Constructs a radial geometry with the given radius.
@@ -19,14 +24,6 @@ public abstract class RadialGeometry extends Geometry {
      */
     public RadialGeometry(double radius) {
         _radius = radius;
-    }
-
-    /**
-     * Returns the radius value.
-     *
-     * @return geometry radius
-     */
-    protected double radius() {
-        return _radius;
+        _radiusSquared = radius * radius;
     }
 }

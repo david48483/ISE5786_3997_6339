@@ -5,7 +5,7 @@ package primitives;
  * package.
  * <p>
  * The class provides operations related to floating-point accuracy control,
- * primarily for robust geometric zero checks.
+ * sign comparison, and simple numeric utilities.
  * </p>
  * <p>
  * The implementation is optimized for performance and therefore avoids
@@ -81,4 +81,45 @@ public final class Util {
     public static boolean isZero(double number) {
         return getExp(number) < ACCURACY;
     }
+
+    /**
+     * Returns zero if the given value is numerically close to zero.
+     * <p>
+     * This helps eliminate floating-point noise that may accumulate
+     * in geometric calculations.
+     * </p>
+     *
+     * @param number the number to align
+     * @return 0.0 if the value is considered zero, otherwise the original
+     * value
+     */
+    public static double alignZero(double number) {
+        return getExp(number) < ACCURACY ? 0.0 : number;
+    }
+
+    /**
+     * Checks whether two numbers have the same sign.
+     * <p>
+     * Zero is considered neither positive nor negative.
+     * </p>
+     *
+     * @param n1 first number
+     * @param n2 second number
+     * @return {@code true} if both numbers are positive or both are negative
+     */
+    public static boolean compareSign(double n1, double n2) {
+        return (n1 > 0 && n2 > 0) || (n1 < 0 && n2 < 0);
+    }
+
+    /**
+     * Returns a random double in the range {@code [min, max)}.
+     *
+     * @param min lower bound (inclusive)
+     * @param max upper bound (exclusive)
+     * @return random value in the specified range
+     */
+    public static double random(double min, double max) {
+        return Math.random() * (max - min) + min;
+    }
+
 }

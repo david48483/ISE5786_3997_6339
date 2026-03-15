@@ -6,7 +6,6 @@ import primitives.Vector;
 
 /**
  * Represents a plane in 3D space, defined by a point and a normal vector.
- * The normal vector is stored normalized.
  */
 public class Plane extends Geometry {
 
@@ -22,8 +21,8 @@ public class Plane extends Geometry {
 
     /**
      * Constructs a plane from three points.
-     * Stores one point on the plane and computes a normalized normal vector
-     * from the cross product of two edge vectors.
+     * At this stage, one point is stored as a reference and the normal
+     * is intentionally initialized to {@code null}.
      *
      * @param p1 first point on the plane
      * @param p2 second point on the plane
@@ -31,11 +30,7 @@ public class Plane extends Geometry {
      */
     public Plane(Point p1, Point p2, Point p3) {
         _point = p1;
-        // Compute two edge vectors
-        Vector v1 = p2.subtract(p1);
-        Vector v2 = p3.subtract(p1);
-        // Compute normal as cross product and normalize
-        _normal = v1.crossProduct(v2).normalize();
+        _normal = null;
     }
 
     /**

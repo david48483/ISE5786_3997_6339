@@ -34,16 +34,16 @@ public class Sphere extends RadialGeometry {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Sphere other = (Sphere) obj;
-        return Double.compare(radius(), other.radius()) == 0 && _center.equals(other._center);
+        return Double.compare(_radius, other._radius) == 0 && _center.equals(other._center);
     }
 
     @Override
     public int hashCode() {
-        return 31 * Double.hashCode(radius()) + _center.hashCode();
+        return 31 * Double.hashCode(_radius) + _center.hashCode();
     }
 
     @Override
     public String toString() {
-        return "Sphere{center=" + _center + ", radius=" + radius() + "}";
+        return "Sphere{center=" + _center + ", radius=" + _radius + "}";
     }
 }
