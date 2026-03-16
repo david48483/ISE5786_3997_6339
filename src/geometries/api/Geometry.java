@@ -6,6 +6,7 @@ import primitives.Vector;
 /**
  * Abstract base class for all geometric bodies in the scene.
  * Every geometry must be able to return its normal vector at a given point.
+ * @author David & Yheuda
  */
 public abstract class Geometry {
 

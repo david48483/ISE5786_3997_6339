@@ -42,6 +42,7 @@ public record Double3(double _d1, double _d2, double _d3) {
 
     /**
      * Constructor to initialize Double3 based object the same number values
+     * [because it is record do not need regular constructor]
      *
      * @param value number value for all 3 numbers
      */
