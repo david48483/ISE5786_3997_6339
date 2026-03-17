@@ -41,21 +41,21 @@ public final class Main {
     /** A vector for tests to (3,6,9) */
     private static final Vector V5          = new Vector(3, 6, 9);
 
-    /**
-     * Entry point of the project's basic sanity tests.
-     * The program checks the core functionality implemented in the first stage.
-     * It is intended to be executed again in later stages, without modification,
-     * to verify that new code does not break the existing functionality.
-     */
-    public static void main() {
-        pointTests();
-        pointDistancesTests();
-        vectorDoubleOperationTests();
-        vectorSingleOperationTests();
-        rayTests();
-        geometryConstructorTests();
-        out.println("If there were no any other outputs - all tests succeeded!");
-    }
+   /**
+    * Entry point of the project's basic sanity tests.
+    * The program checks the core functionality implemented in the first stage.
+    * It is intended to be executed again in later stages, without modification,
+    * to verify that new code does not break the existing functionality.
+    */
+   static void main() {
+      pointTests();
+      pointDistancesTests();
+      vectorDoubleOperationTests();
+      vectorSingleOperationTests();
+      rayTests();
+      geometryConstructorTests();
+      out.println("If there were no any other outputs - all tests succeeded!");
+   }
 
     /**
      * Basic test for the Ray constructor.
@@ -209,17 +209,17 @@ public final class Main {
             out.println("ERROR: cross product anti-commutativity wrong");
     }
 
-    /**
-     * Basic constructor checks for geometry classes.
-     * At this stage most geometry constructors only store the given parameters.
-     * Therefore the tests verify mainly that objects can be created successfully.
-     * The only geometry that performs structural validation in its constructor
-     * is {@link Polygon}, which checks coplanarity, ordering and convexity.
-     * However, Polygon is supplied to the students already tested, therefore
-     * it is not tested here.
-     */
-    private static void geometryConstructorTests() {
-        // At this stage geometries mainly store constructor parameters.
+   /**
+    * Basic constructor checks for geometry classes.
+    * At this stage most geometry constructors only store the given parameters.
+    * Therefore, the tests verify mainly that objects can be created successfully.
+    * The only geometry that performs structural validation in its constructor
+    * is {@link Polygon}, which checks coplanarity, ordering and convexity.
+    * However, Polygon is supplied to the students already tested, therefore
+    * it is not tested here.
+    */
+   private static void geometryConstructorTests() {
+      // At this stage geometries mainly store constructor parameters.
 
         // ---- Plane ----------------------------------------------------------
         // constructor by three points

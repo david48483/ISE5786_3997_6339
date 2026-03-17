@@ -6,6 +6,7 @@ import static primitives.Util.isZero;
  * Represents a 3D vector with direction and magnitude.
  * Inherits coordinate storage from {@link Point}.
  * A zero vector is forbidden and will cause an {@link IllegalArgumentException}.
+ * @author David & Yheuda
  */
 public class Vector extends Point {
 
