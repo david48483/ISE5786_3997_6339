@@ -6,6 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Unit tests for primitives.Double3 class
+ * * The tests verify:
+ * * <ul>
+ * * <li>Constructor {@link Polygon#Polygon(Point...)}</li>
+ * * <li>{@link Polygon#getNormal(Point)}</li>
+ * * </ul>
+ * <p>
+ * <p>
  * * @author David & yehuda
  */
 class Double3Tests {
