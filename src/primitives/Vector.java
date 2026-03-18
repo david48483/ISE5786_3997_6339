@@ -1,11 +1,10 @@
 package primitives;
 
-import static primitives.Util.isZero;
-
 /**
  * Represents a 3D vector with direction and magnitude.
  * Inherits coordinate storage from {@link Point}.
  * A zero vector is forbidden and will cause an {@link IllegalArgumentException}.
+ *
  * @author David & Yheuda
  */
 public class Vector extends Point {
@@ -32,7 +31,7 @@ public class Vector extends Point {
      * @throws IllegalArgumentException if the resulting vector is zero
      */
     public Vector(double x, double y, double z) {
-        super(validateNonZero(new Double3(x, y, z)));
+        this(new Double3(x, y, z));
     }
 
     /**
@@ -42,20 +41,9 @@ public class Vector extends Point {
      * @throws IllegalArgumentException if the resulting vector is zero
      */
     public Vector(Double3 xyz) {
-        super(validateNonZero(xyz));
-    }
-
-    /**
-     * Validates that the given {@link Double3} is not a zero vector.
-     *
-     * @param xyz the coordinate container to validate
-     * @return the same {@code xyz} if valid
-     * @throws IllegalArgumentException if all components are effectively zero
-     */
-    private static Double3 validateNonZero(Double3 xyz) {
-        if (isZero(xyz._d1()) && isZero(xyz._d2()) && isZero(xyz._d3()))
+        if (Double3.ZERO.equals(xyz))
             throw new IllegalArgumentException("Zero vector is not allowed");
-        return xyz;
+        super(xyz);
     }
 
     /**
