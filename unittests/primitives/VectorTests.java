@@ -8,6 +8,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class VectorTests {
 
     @Test
+    void testConstructorA() {
+        assertEquals(new Vector(1, 2, 3), new Vector(1, 2, 3),
+                "ERROR: Vector constructor failed to create the expected vector");
+
+    }
+
+    @Test
+    void testConstructorB() {
+        assertThrows(IllegalArgumentException.class, () -> new Vector(0, 0, 0),
+                "ERROR: Vector constructor with zero vector should throw exception");
+    }
+
+    @Test
     void testAdd() {
         // ============ Equivalence Partitions Tests ==============
         assertEquals(new Vector(4, 5, 6), new Vector(1, 1, 1).add(new Vector(3, 4, 5)),

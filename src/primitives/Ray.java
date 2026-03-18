@@ -3,6 +3,7 @@ package primitives;
 /**
  * Represents a ray (half-line) in 3D space, defined by an origin point and a direction vector.
  * The direction vector is always stored normalized.
+ *
  * @author David & Yheuda
  */
 public class Ray {
