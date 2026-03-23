@@ -41,13 +41,12 @@ public class PlaneTests {
     @Test
     void testConstructurB() {
         Plane plane = new Plane(p2, v1);
-        assertEquals(1, plane.getNormal(p2).length(), DELTA, "aaa");
+        assertEquals(v1.normalize(), plane.getNormal(p2), "aaa");
 
     }
 
     @Test
     void testGetNormal() {
-        // הגדרת נתוני הבסיס למישור - מישור XY
 
         Plane plane = new Plane(Point.ZERO, p2, p3);
 
