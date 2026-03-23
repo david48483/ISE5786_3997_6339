@@ -8,8 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Unit tests for primitives.Double3 class
  * * The tests verify:
  * * <ul>
- * * <li>Constructor {@link Polygon#Polygon(Point...)}</li>
- * * <li>{@link Polygon#getNormal(Point)}</li>
+ * * <li>{@link primitives.Double3#add(primitives.Double3)}</li>
  * * </ul>
  * <p>
  * <p>
