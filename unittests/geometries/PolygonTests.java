@@ -1,4 +1,4 @@
-package geometryies;
+package geometries;
 
 import geometries.impl.Polygon;
 import org.junit.jupiter.api.Test;
