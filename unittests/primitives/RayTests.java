@@ -44,6 +44,7 @@ class RayTests {
     @Test
     void testConstructor() {
         // ============ Equivalence Partitions Tests ==============
+
         // TC01 test for check constructor with valid inputs
         assertDoesNotThrow(() -> new Ray(point, vector1),
                 "ERROR: Ray constructor failed to create the expected ray");

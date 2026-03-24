@@ -17,5 +17,6 @@ public class SphereTests {
 
         assertEquals(expectedNormal, sphere.getNormal(new Point(0, 0, 7)),
                 "ERROR: Sphere getNormal() returned wrong normal for a point on the sphere");
+
     }
 }
