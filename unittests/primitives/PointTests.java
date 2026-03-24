@@ -47,6 +47,7 @@ class PointTests {
     @Test
     void testAdd() {
         // ============ Equivalence Partitions Tests ==============
+
         // TC01: Adding a vector to a point should yield the expected translated point.
         assertEquals(new Point(6, 8, 10), POINT.add(VECTOR),
                 "ERROR: Point add(Vector) failed");
@@ -65,17 +66,14 @@ class PointTests {
     @Test
     void testSubtract() {
         // ============ Equivalence Partitions Tests ==============
-        // TC01: Subtracting a point from itself should yield the zero vector.
-//        assertEquals(Point.ZERO, POINT.subtract(POINT),//rerurn vector, it can't return 000
-//                "ERROR: Point subtract(Point) with itself failed");
+
+        //TC01: Subtracting a point from itself should yield the zero vector.
+        assertThrows(IllegalArgumentException.class, () -> POINT.subtract(POINT),
+                "ERROR: Point subtract(Point) with itself should throw an exception");
 
         // TC02: Subtracting a different point should yield the expected vector.
         assertEquals(new Vector(-3, -6, -2), POINT.subtract(POINT2),
                 "ERROR: Point subtract(Point) with different point failed");
-
-        //TC03: Subtracting a point from itself should yield the zero vector.
-        assertThrows(IllegalArgumentException.class, () -> POINT.subtract(POINT),
-                "ERROR: Point subtract(Point) with itself should throw an exception");
 
     }
 

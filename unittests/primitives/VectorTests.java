@@ -10,10 +10,10 @@ public class VectorTests {
     private static final double DELTA = 1e-6;
 
     //  Vectors used in the tests
-    private static final Vector v1 = new Vector(1, 2, 3);
+    private static final Vector V1 = new Vector(1, 2, 3);
 
     //  Another vector used in the tests
-    private static final Vector v2 = new Vector(4, 5, 6);
+    private static final Vector V2 = new Vector(4, 5, 6);
 
     /**
      * test method for {@link Vector#Vector(double, double, double)}.
@@ -22,7 +22,7 @@ public class VectorTests {
     void testConstructorA() {
 
         //TC01 Testing a constructor that receives three doubles
-        assertEquals(v1, v1,
+        assertEquals(V1, V1,
                 "ERROR: Vector constructor failed to create the expected vector");
 
     }
@@ -47,13 +47,13 @@ public class VectorTests {
         // ============ Equivalence Partitions Tests ==============
 
         //TC01 Testing the add method of the vector class
-        assertEquals(v2, new Vector(1, 1, 1).add(new Vector(3, 4, 5)),
+        assertEquals(V2, new Vector(1, 1, 1).add(new Vector(3, 4, 5)),
                 "ERROR: Vector add(Vector) failed");
 
         // =============== Boundary Values Tests ==================
 
         //TC11 Testing the add method of the vector class in case negative values
-        assertThrows(IllegalArgumentException.class, () -> v1.add(new Vector(-1, -2, -3)),
+        assertThrows(IllegalArgumentException.class, () -> V1.add(new Vector(-1, -2, -3)),
                 "ERROR: Vector add(Vector) with inverse vector should throw exception");
     }
 
@@ -65,13 +65,13 @@ public class VectorTests {
         // ============ Equivalence Partitions Tests ==============
 
         //TC01 Testing the subtract method of the vector class
-        assertEquals(new Vector(3, 4, 5), v2.subtract(new Vector(1, 1, 1)),
+        assertEquals(new Vector(3, 4, 5), V2.subtract(new Vector(1, 1, 1)),
                 "ERROR: Vector subtract(Vector) failed");
 
         // =============== Boundary Values Tests ==================
 
         //TC11 Testing the subtract method of the vector class in case subtracting a vector from itself should throw an exception
-        assertThrows(IllegalArgumentException.class, () -> v1.subtract(new Vector(1, 2, 3)),
+        assertThrows(IllegalArgumentException.class, () -> V1.subtract(new Vector(1, 2, 3)),
                 "ERROR: Vector subtract(Vector) with itself should throw exception");
     }
 
@@ -83,21 +83,21 @@ public class VectorTests {
         // ============ Equivalence Partitions Tests ==============
 
         //TC01  Testing the scale method of the vector class with different factors
-        assertEquals(new Vector(2, 4, 6), v1.scale(2),
+        assertEquals(new Vector(2, 4, 6), V1.scale(2),
                 "ERROR: Vector scale(double) failed");
 
         // TC02 Testing the scale method of the vector class with negative factor
-        assertEquals(new Vector(-1, -2, -3), v1.scale(-1),
+        assertEquals(new Vector(-1, -2, -3), V1.scale(-1),
                 "ERROR: Vector scale(double) with negative factor failed");
 
         //TC03  Testing the scale method of the vector class with fractional factor
-        assertEquals(new Vector(0.5, 1, 1.5), v1.scale(0.5),
+        assertEquals(new Vector(0.5, 1, 1.5), V1.scale(0.5),
                 "ERROR: Vector scale(double) with fractional factor failed");
 
         // =============== Boundary Values Tests ==================
 
         //TC11 Testing the scale method of the vector class with zero factor should throw an exception
-        assertThrows(IllegalArgumentException.class, () -> v1.scale(0),
+        assertThrows(IllegalArgumentException.class, () -> V1.scale(0),
                 "ERROR: Vector scale(double) with zero should throw exception");
     }
 
@@ -109,11 +109,11 @@ public class VectorTests {
         // ============ Equivalence Partitions Tests ==============
 
         //TC01  Testing the dotProduct method of the vector class with different vectors
-        assertEquals(32, v1.dotProduct(v2), DELTA,
+        assertEquals(32, V1.dotProduct(V2), DELTA,
                 "ERROR: Vector dotProduct(Vector) failed");
 
         //TC02  Testing the dotProduct method of the vector class with negative vector
-        assertEquals(-32, v1.dotProduct(new Vector(-4, -5, -6)), DELTA,
+        assertEquals(-32, V1.dotProduct(new Vector(-4, -5, -6)), DELTA,
                 "ERROR: Vector dotProduct(Vector) with negative vector failed");
 
         // =============== Boundary Values Tests ==================
@@ -132,26 +132,26 @@ public class VectorTests {
         // ============ Equivalence Partitions Tests ==============
 
         //TC01  Testing the crossProduct method of the vector class with different vectors
-        Vector cross = v1.crossProduct(v2);
+        Vector cross = V1.crossProduct(V2);
         assertEquals(new Vector(-3, 6, -3), cross,
                 "ERROR: Vector crossProduct(Vector) failed");
 
         // TC02 Testing the crossProduct method of the vector class with cross vector
-        assertEquals(0, cross.dotProduct(v1), 0.00001,
+        assertEquals(0, cross.dotProduct(V1), 0.00001,
                 "ERROR: Vector crossProduct(Vector) is not orthogonal to the first vector");
 
         //TC03  Testing the crossProduct method of the vector class with cross vector
-        assertEquals(0, cross.dotProduct(v2), 0.00001,
+        assertEquals(0, cross.dotProduct(V2), 0.00001,
                 "ERROR: Vector crossProduct(Vector) is not orthogonal to the second vector");
 
         // =============== Boundary Values Tests ==================
 
         // TC11 Testing the crossProduct method of the vector class with parallel vectors should throw an exception
-        assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(new Vector(2, 4, 6)),
+        assertThrows(IllegalArgumentException.class, () -> V1.crossProduct(new Vector(2, 4, 6)),
                 "ERROR: Vector crossProduct(Vector) with parallel vector should throw exception");
 
         //TC12  Testing the crossProduct method of the vector class with antiparallel vectors should throw an exception
-        assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(new Vector(-2, -4, -6)),
+        assertThrows(IllegalArgumentException.class, () -> V1.crossProduct(new Vector(-2, -4, -6)),
                 "ERROR: Vector crossProduct(Vector) with anti-parallel vector should throw exception");
     }
 
@@ -164,7 +164,7 @@ public class VectorTests {
         // ============ Equivalence Partitions Tests ==============
 
         //TC01  Testing the lengthSquared method of the vector class with different vectors
-        assertEquals(14, v1.lengthSquared(), DELTA,
+        assertEquals(14, V1.lengthSquared(), DELTA,
                 "ERROR: Vector lengthSquared() failed");
 
         //TC02  Testing the lengthSquared method of the vector class with different vectors
@@ -186,7 +186,7 @@ public class VectorTests {
 
         //TC02  Testing the length method of the vector class with different vectors
         assertEquals(Math.sqrt(50), new Vector(3, 4, 5).length(), DELTA,
-                "ERROR: Vector length() with different vector failed");
+                "ERROR: Vector length() with an incomplete result  failed");
 
         //TC03  Testing the length method of the vector class with different vectors
         assertEquals(1, new Vector(0, 1, 0).length(), DELTA,
@@ -202,7 +202,7 @@ public class VectorTests {
         // ============ Equivalence Partitions Tests ==============
 
         //TC01  Testing the normalize method of the vector class with different vectors
-        assertEquals(1, v1.normalize().length(), 0.00001,
+        assertEquals(1, V1.normalize().length(), 0.00001,
                 "ERROR: Vector normalize() does not produce a unit vector");
 
         // TC02 Testing the normalize method of the vector class with different vectors
@@ -210,7 +210,7 @@ public class VectorTests {
                 "ERROR: Vector normalize() does not produce the expected normalized vector");
 
         //TC03  Testing the normalize method of the vector class with different vectors
-        assertThrows(IllegalArgumentException.class, () -> v1.normalize().crossProduct(v1),
+        assertThrows(IllegalArgumentException.class, () -> V1.normalize().crossProduct(V1),
                 "ERROR: Vector normalize() does not produce a vector orthogonal to the original vector");
     }
 }

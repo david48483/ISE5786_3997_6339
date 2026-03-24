@@ -7,55 +7,99 @@ import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for class {@link Plane}.
+ * The tests verify:
+ * <ul>
+ * <li>Plane constructor validity</li>
+ * <li>{@link Plane#getNormal(Point)}</li>
+ * </ul>
+ * Tests follow the methodology of
+ * Equivalence Partitions (EP) and Boundary Values (BVA).
+ *
+ * @author David & Yheuda
+ */
+
 public class PlaneTests {
 
-    double DELTA = 1e-6;
+    //  Points used in the tests
+    private static final Point P2 = new Point(1, 0, 0);
 
-    Point p2 = new Point(1, 0, 0);
-    Point p3 = new Point(0, 1, 0);
+    //  Another point used in the tests
+    private static final Point P3 = new Point(0, 1, 0);
 
-    Vector v1 = new Vector(3, 4, 5);
+    //  A vector used in the tests
+    private static final Vector V1 = new Vector(3, 4, 5);
+
+    /**
+     * Test method for {@link Plane#Plane(Point, Point, Point)}.
+     * validate that the constructor correctly creates a plane from three non-collinear points,
+     * and that it throws an exception when the points are collinear or when two or more points are the same.
+     */
 
     @Test
     void testConstructor() {
 
         // ============ Equivalence Partitions Tests ==============
 
-        //TC01 check constructor
-        assertDoesNotThrow(() -> new Plane(Point.ZERO, p2, p3),
-                "ERORR,Plane constructor failed to create the expected plane  ");
+        //TC01 check constructor, different points
+        assertDoesNotThrow(() -> new Plane(Point.ZERO, P2, P3),
+                "ERROR,Plane constructor failed to create the expected plane  ");
 
         // =============== Boundary Values Tests ==================
 
-        assertThrows(IllegalArgumentException.class, () -> new Plane(p2, p2, p3), "aaaa");
+        //TC11 First and second points are the same.
+        assertThrows(IllegalArgumentException.class, () -> new Plane(P2, P2, P3),
+                "ERROR: Plane constructor should throw exception when first and second points are the same");
 
-        assertThrows(IllegalArgumentException.class, () -> new Plane(p2, p3, p2), "aaaa");
+        //  TC12 First and third points are the same.
+        assertThrows(IllegalArgumentException.class, () -> new Plane(P2, P3, P2),
+                "ERROR: Plane constructor should throw exception when first and third points are the same");
 
-        assertThrows(IllegalArgumentException.class, () -> new Plane(p3, p2, p2), "aaaa");
+        //  TC13 Second and third points are the same.
+        assertThrows(IllegalArgumentException.class, () -> new Plane(P3, P2, P2),
+                "ERROR: Plane constructor should throw exception when second and third points are the same");
 
-        assertThrows(IllegalArgumentException.class, () -> new Plane(p2, new Point(4, 0, 0), Point.ZERO),
-                "aaaa");
+        //  TC14 All three points are the same collinear.
+        assertThrows(IllegalArgumentException.class, () -> new Plane(P2, new Point(4, 0, 0), Point.ZERO),
+                "ERROR: Plane constructor should throw exception when all three points are the same collinear");
 
     }
 
+    /**
+     * Test method for {@link Plane#Plane(Point, Vector)}.
+     * validate that the constructor correctly creates a plane from a point and a normal vector,
+     * and that it throws an exception when the normal vector is the zero vector.
+     */
     @Test
-    void testConstructurB() {
-        Plane plane = new Plane(p2, v1);
-        assertEquals(v1.normalize(), plane.getNormal(p2), "aaa");
+    void testConstructorB() {
+
+        Plane plane = new Plane(P2, V1);
+        Vector expectedNormal = new Vector(3 / Math.sqrt(50), 4 / Math.sqrt(50), 5 / Math.sqrt(50));
+
+        //  ============ Equivalence Partitions Tests ==============
+
+        //  TC01 check constructor.
+        assertEquals(expectedNormal, plane.getNormal(P2),
+                "ERROR: Plane constructor failed to create the expected plane with point and normal vector");
 
     }
 
+    /**
+     * Test method for {@link Plane#getNormal(Point)}.
+     * validate that the method returns the correct normal vector for points on the plane.
+     */
     @Test
     void testGetNormal() {
 
-        Plane plane = new Plane(Point.ZERO, p2, p3);
+        Plane plane = new Plane(Point.ZERO, P2, P3);
 
         Vector expectedNormal = new Vector(0, 0, 1);
 
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: A point that is not the reference
-        assertEquals(expectedNormal, plane.getNormal(p2),
+        assertEquals(expectedNormal, plane.getNormal(P2),
                 "getNormal() wrong result for a point on the plane (not reference point)");
 
         // =============== Boundary Values Tests ==================
