@@ -7,14 +7,35 @@ import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Unit tests for class {@link Sphere}.
+ * The tests verify:
+ * <ul>
+ * <li>{@link Sphere#getNormal(Point)}</li>
+ * </ul>
+ * Tests follow the methodology of
+ * Equivalence Partitions (EP) and Boundary Values (BVA).
+ *
+ * @author David &  Yehuda
+ */
+
 public class SphereTests {
 
+    /**
+     * Test method for {@link Sphere#getNormal(Point)}.
+     * check that the normal vector is correct for points on the sphere.
+     */
     @Test
     void testGetNormal() {
+
+        // ============ Equivalence Partitions Tests ==============
+
+        // create a simple sphere
         Sphere sphere = new Sphere(Point.ZERO, 7);
 
         Vector expectedNormal = new Vector(0, 0, 1);
 
+        //TC01  a regular check
         assertEquals(expectedNormal, sphere.getNormal(new Point(0, 0, 7)),
                 "ERROR: Sphere getNormal() returned wrong normal for a point on the sphere");
 

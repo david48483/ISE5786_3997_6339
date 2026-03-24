@@ -13,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * <ul>
  * <li>{@link Tube#getNormal(Point)} </li>
  * </ul>
+ *  Tests follow the methodology of
+ *  Equivalence Partitions (EP) and Boundary Values (BVA).
  *
  * @author David & Yheuda
  *
