@@ -2,8 +2,7 @@ package primitives;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class VectorTests {
     //  Delta value for accuracy when comparing double values.
@@ -17,24 +16,22 @@ public class VectorTests {
 
     /**
      * test method for {@link Vector#Vector(double, double, double)}.
+     * test method for {@link Vector#Vector(Double3)}.
      */
     @Test
-    void testConstructorA() {
+    void testConstructor() {
 
         //TC01 Testing a constructor that receives three doubles
-        assertEquals(V1, V1,
-                "ERROR: Vector constructor failed to create the expected vector");
+        assertDoesNotThrow(() -> new Vector(1, 2, 3),
+                "ERROR: Vector constructor with valid inputs should not throw exception");
 
-    }
+        //TC02 Testing a constructor that receives a Double3
+        assertEquals(new Vector(1, 2, 3), new Vector(new Double3(1, 2, 3)),
+                "ERROR: Vector constructor with valid inputs did not create the expected vector");
 
-    /**
-     * test method for {@link Vector#Vector(double, double, double)}.
-     */
+        // =============== Boundary Values Tests ==================
 
-    @Test
-    void testConstructorB() {
-
-        //TC01 check exception to zero vector
+        //TC11 check exception to zero vector
         assertThrows(IllegalArgumentException.class, () -> new Vector(0, 0, 0),
                 "ERROR: Vector constructor with zero vector should throw exception");
     }
