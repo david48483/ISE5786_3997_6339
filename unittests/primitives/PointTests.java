@@ -1,7 +1,6 @@
 package primitives;
 
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -71,7 +70,7 @@ class PointTests {
         assertThrows(IllegalArgumentException.class, () -> POINT.subtract(POINT),
                 "ERROR: Point subtract(Point) with itself should throw an exception");
 
-        // TC02: Subtracting a different point should yield the expected vector.
+        // TC01: Subtracting a different point should yield the expected vector.
         assertEquals(new Vector(-3, -6, -2), POINT.subtract(POINT2),
                 "ERROR: Point subtract(Point) with different point failed");
 
@@ -84,9 +83,12 @@ class PointTests {
     @Test
     void testDistanceSquared() {
         // ============ Equivalence Partitions Tests ==============
+
         // TC01: Squared distance between a point and itself should be zero.
         assertEquals(0, POINT.distanceSquared(POINT), DELTA,
                 "ERROR: Point distanceSquared(Point) with itself failed");
+
+        // =============== Boundary Values Tests ==================
 
         //TC02:  Squared distance between a point and a different point should be calculated correctly.
         assertEquals(49, POINT.distanceSquared(POINT2), DELTA,

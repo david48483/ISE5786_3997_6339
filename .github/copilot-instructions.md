@@ -39,12 +39,30 @@ Apply these rules in every code change unless the user explicitly asks otherwise
 - Do not hardcode configurable or repeated values; extract them to named constants.
 - Use the IDE auto-formatter to enforce indentation and spacing.
 
+## Mandatory TDD workflow for this stage
+
+- Stage goals:
+    - Continue developing the project according to Extreme Programming principles, with special emphasis on TDD.
+    - Continue practicing structured unit test design and writing.
+    - Add computational behavior to the geometric model by implementing intersection calculations.
+    - Implement the Composite design pattern and manage collections using `List` and enhanced `for` loops.
+- This stage extends the existing geometric model by adding behavior; do not redesign the model structure unless the
+  stage instructions explicitly require it.
+- Follow this exact work order for every required task in this stage:
+    1. Define the class and method signatures.
+    2. Write the JavaDoc.
+    3. Write the unit tests.
+    4. Implement incrementally while running all tests until they pass.
+    5. Refactor.
+    6. Run all tests again.
+- Do not deviate from this order.
+
 ## Stage-specific project rules
 
 - The following files are supplied for this stage and must not be modified unless the user explicitly asks to do so:
     - `src/primitives/Double3.java`
     - `src/primitives/Util.java`
-    - `src/Main.java`
+    - `src/test/Main.java`
     - `src/geometries/impl/Polygon.java`
 - Do not define retrieval methods (getters) at this stage, except in `Ray`.
 - Do not define setter/update methods.
