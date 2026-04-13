@@ -1,6 +1,7 @@
 package primitives;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -52,7 +53,8 @@ class PointTests {
                 "ERROR: Point add(Vector) failed");
 
         // =============== Boundary Values Tests ==================
-        // TC02: Adding an inverse vector should yield the origin.
+
+        // TC11: Adding an inverse vector should yield the origin.
         assertEquals(Point.ZERO, POINT.add(new Vector(-3, -4, -5)),
                 "ERROR: Point add(Vector) with inverse vector failed");
 
@@ -66,13 +68,15 @@ class PointTests {
     void testSubtract() {
         // ============ Equivalence Partitions Tests ==============
 
-        //TC01: Subtracting a point from itself should yield the zero vector.
-        assertThrows(IllegalArgumentException.class, () -> POINT.subtract(POINT),
-                "ERROR: Point subtract(Point) with itself should throw an exception");
-
         // TC01: Subtracting a different point should yield the expected vector.
         assertEquals(new Vector(-3, -6, -2), POINT.subtract(POINT2),
                 "ERROR: Point subtract(Point) with different point failed");
+
+        // =============== Boundary Values Tests ==================
+
+        //TC11: Subtracting a point from itself should yield the zero vector.
+        assertThrows(IllegalArgumentException.class, () -> POINT.subtract(POINT),
+                "ERROR: Point subtract(Point) with itself should throw an exception");
 
     }
 
@@ -84,15 +88,15 @@ class PointTests {
     void testDistanceSquared() {
         // ============ Equivalence Partitions Tests ==============
 
-        // TC01: Squared distance between a point and itself should be zero.
-        assertEquals(0, POINT.distanceSquared(POINT), DELTA,
-                "ERROR: Point distanceSquared(Point) with itself failed");
+        //TC01:  Squared distance between a point and a different point should be calculated correctly.
+        assertEquals(49, POINT.distanceSquared(POINT2), DELTA,
+                "ERROR: Point distanceSquared(Point) with different point failed");
 
         // =============== Boundary Values Tests ==================
 
-        //TC02:  Squared distance between a point and a different point should be calculated correctly.
-        assertEquals(49, POINT.distanceSquared(POINT2), DELTA,
-                "ERROR: Point distanceSquared(Point) with different point failed");
+        // TC11: Squared distance between a point and itself should be zero.
+        assertEquals(0, POINT.distanceSquared(POINT), DELTA,
+                "ERROR: Point distanceSquared(Point) with itself failed");
     }
 
     /**
@@ -106,6 +110,12 @@ class PointTests {
         // TC01: Distance between two different points should be calculated correctly.
         assertEquals(7, POINT.distance(POINT2), DELTA,
                 "ERROR: Point distance(Point) with different point failed");
+
+        //  =============== Boundary Values Tests ==================
+        
+        // TC11: Distance between a point and itself should be zero.
+        assertEquals(0, POINT.distance(POINT), DELTA,
+                "ERROR: Point distance(Point) with itself failed");
     }
 
 }
