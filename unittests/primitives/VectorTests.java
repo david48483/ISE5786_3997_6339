@@ -216,7 +216,7 @@ public class VectorTests {
         //=== Boundary Values Tests ==================
 
         // TC11 Testing the normalize method of the vector class with zero component should throw an exception
-        assertEquals(Vector.AXIS_X, Vector.AXIS_X.normalize().length(),
-                "ERROR: vector normlize has not changed the vector");
+        assertEquals(Vector.AXIS_X, Vector.AXIS_X.normalize(),
+                "ERROR: vector normalize has not changed the vector");
     }
 }

@@ -26,17 +26,21 @@ public class TriangleTests {
      * check that the normal vector is correct for points on the triangle.
      */
 
+    //  Points used in the tests
+    private static final Point PX = new Point(4, 0, 0);
+
+    //  Another point used in the tests
+    private static final Point PY = new Point(0, 4, 0);
+
     @Test
     void testGetNormal() {
         //  create a simple triangle in the XY plane
-        Triangle triangle = new Triangle(new Point(4, 0, 0), new Point(0, 4, 0), Point.ZERO);
-
-        Vector expectedNormal = new Vector(0, 0, 1);
+        Triangle triangle = new Triangle(PX, PY, Point.ZERO);
 
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: a regular check for a point on the triangle
-        assertEquals(expectedNormal, triangle.getNormal(new Point(1, 1, 0)),
+        assertEquals(Vector.AXIS_Z, triangle.getNormal(new Point(1, 1, 0)),
                 "ERROR: Triangle getNormal() returned wrong normal for a point inside the triangle");
     }
 }

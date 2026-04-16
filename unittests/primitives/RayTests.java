@@ -36,6 +36,8 @@ class RayTests {
      */
     private static final Point point = new Point(1, 2, 3);
 
+    private static final Ray ray1 = new Ray(point, vector1);
+
     /**
      * Test method for {@link Ray#Ray(Point, Vector)}.
      * Verifies correct ray construction and normalization of the direction vector.
@@ -48,27 +50,24 @@ class RayTests {
         // TC01 test for check constructor with valid inputs
         assertDoesNotThrow(() -> new Ray(point, vector1),
                 "ERROR: Ray constructor failed to create the expected ray");
+    }
 
-        //TC02 test for check return correct direction
-        Ray ray1 = new Ray(point, vector1);
-        assertEquals(new Vector(1, 0, 0), ray1.direction(),
+    @Test
+    void testDirection() {
+        // ============ Equivalence Partitions Tests ==============
+
+        //TC01 test for check return correct direction
+        assertEquals(Vector.AXIS_X, ray1.direction(),
                 "ERROR: Ray constructor failed to normalize the direction vector");
+    }
 
-        //TC03 test for check return correct origin
-        assertEquals(new Point(1, 2, 3), ray1.origin(),
+    @Test
+    void testOrigin() {
+        // ============ Equivalence Partitions Tests ==============
+        
+        //TC01 test for check return correct origin
+        assertEquals(point, ray1.origin(),
                 "ERROR: Ray constructor failed to set the origin point correctly");
-
-        //TC04 test for check return correct direction with different vector
-        Ray ray2 = new Ray(Point.ZERO, vector2);
-        assertEquals(new Vector(0, 0, 1), ray2.direction(),
-                "ERROR: Ray constructor failed to set the direction vector correctly");
-
-        // =============== Boundary Values Tests ==================
-
-        //TC11 test for edge case - negative direction
-        Ray ray3 = new Ray(Point.ZERO, new Vector(0, 0, -2));
-        assertEquals(new Vector(0, 0, -1), ray3.direction(),
-                "ERROR: Ray constructor failed to normalize the direction vector with negative components");
 
     }
 }

@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Tests follow the methodology of
  * Equivalence Partitions (EP) and Boundary Values (BVA).
  *
- * @author David &  Yehuda
+ * @author David &amp; Yehuda
  */
 
 public class SphereTests {
@@ -33,10 +33,8 @@ public class SphereTests {
         // create a simple sphere
         Sphere sphere = new Sphere(Point.ZERO, 7);
 
-        Vector expectedNormal = new Vector(0, 0, 1);
-
         //TC01  a regular check
-        assertEquals(expectedNormal, sphere.getNormal(new Point(0, 0, 7)),
+        assertEquals(Vector.AXIS_Z, sphere.getNormal(new Point(0, 0, 7)),
                 "ERROR: Sphere getNormal() returned wrong normal for a point on the sphere");
 
     }
