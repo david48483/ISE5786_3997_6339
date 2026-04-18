@@ -25,12 +25,18 @@ class PointTests {
      */
     private static final Point POINT = new Point(3, 4, 5);
 
+    /**
+     * Shared point used in test cases.
+     */
     private static final Point POINT2 = new Point(6, 10, 7);
     /**
      * Shared vector used in test cases.
      */
     private static final Vector VECTOR = new Vector(3, 4, 5);
 
+    /**
+     * A small delta for comparing floating-point numbers
+     */
     private static final double DELTA = 1e-6;
 
     /**
@@ -112,7 +118,7 @@ class PointTests {
                 "ERROR: Point distance(Point) with different point failed");
 
         //  =============== Boundary Values Tests ==================
-        
+
         // TC11: Distance between a point and itself should be zero.
         assertEquals(0, POINT.distance(POINT), DELTA,
                 "ERROR: Point distance(Point) with itself failed");

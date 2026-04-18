@@ -5,7 +5,8 @@ import primitives.Ray;
 /**
  * Represents a finite cylinder in 3D space.
  * A cylinder extends a tube and adds a finite height.
- * @author David & Yheuda
+ *
+ * @author David &amp; Yehuda
  */
 public class Cylinder extends Tube {
 

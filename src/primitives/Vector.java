@@ -5,7 +5,7 @@ package primitives;
  * Inherits coordinate storage from {@link Point}.
  * A zero vector is forbidden and will cause an {@link IllegalArgumentException}.
  *
- * @author David & Yheuda
+ * @author David &amp; Yehuda
  */
 public class Vector extends Point {
 

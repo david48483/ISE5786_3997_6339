@@ -4,19 +4,57 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for class {@link Vector}.
+ * The tests verify:
+ * <ul>
+ *     <li>{@link Vector#Vector(double, double, double)}</li>
+ *     <li>{@link Vector#Vector(Double3)}</li>
+ *     <li>{@link Vector#add(Vector)}</li>
+ *     <li>{@link Point#subtract(Point)}</li>
+ *     <li>{@link Vector#scale(double)}</li>
+ *     <li>{@link Vector#dotProduct(Vector)}</li>
+ *     <li>{@link Vector#crossProduct(Vector)}</li>
+ *     <li>{@link Vector#lengthSquared()}</li>
+ *     <li>{@link Vector#length()}</li>
+ *     <li>{@link Vector#normalize()}</li>
+ * </ul>
+ * Tests follow the methodology of
+ * Equivalence Partitions (EP) and Boundary Values (BVA).
+ *
+ * @author David &amp; Yehuda
+ */
+
 public class VectorTests {
-    //  Delta value for accuracy when comparing double values.
+    /**
+     * Default constructor for VectorTests.
+     */
+    public VectorTests() {
+    }
+
+    /**
+     * Delta value for accuracy when comparing double values.
+     */
     private static final double DELTA = 1e-6;
 
-    //  Vectors used in the tests
+    /**
+     * Vectors used in the tests
+     */
     private static final Vector V1 = new Vector(1, 2, 3);
 
-    //  Another vector used in the tests
+    /**
+     * Another vector used in the tests
+     */
     private static final Vector V2 = new Vector(4, 5, 6);
 
-    //  A vector with all components equal to 3, used in the tests
+    /**
+     * A vector with all components equal to 3, used in the tests
+     */
     private static final Vector V3 = new Vector(3, 3, 3);
 
+    /**
+     * A vector with components (3, 4, 0), used in the tests
+     */
     private static final Vector V4 = new Vector(3, 4, 0);
 
     /**

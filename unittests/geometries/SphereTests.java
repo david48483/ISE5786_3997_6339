@@ -22,6 +22,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class SphereTests {
 
     /**
+     * Default constructor for SphereTests.
+     */
+    public SphereTests() {
+    }
+
+    /**
      * Test method for {@link Sphere#getNormal(Point)}.
      * check that the normal vector is correct for points on the sphere.
      */

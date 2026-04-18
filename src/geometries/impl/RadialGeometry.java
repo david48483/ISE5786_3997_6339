@@ -4,7 +4,8 @@ import geometries.api.Geometry;
 
 /**
  * Abstract base class for all radial geometric bodies (bodies defined by a radius).
- * @author David & Yheuda
+ *
+ * @author David &amp; Yehuda
  */
 public abstract class RadialGeometry extends Geometry {
 

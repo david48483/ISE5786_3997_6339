@@ -21,6 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class RayTests {
 
     /**
+     * Default constructor for RayTests.
+     */
+    public RayTests() {
+    }
+
+    /**
      * Vector (4,0,0) used in ray tests
      */
     private static final Vector vector1 = new Vector(4, 0, 0);
@@ -36,6 +42,9 @@ class RayTests {
      */
     private static final Point point = new Point(1, 2, 3);
 
+    /**
+     * Ray created from point and vector1, used in ray tests
+     */
     private static final Ray ray1 = new Ray(point, vector1);
 
     /**
@@ -52,6 +61,10 @@ class RayTests {
                 "ERROR: Ray constructor failed to create the expected ray");
     }
 
+    /**
+     * Test method for {@link Ray#direction()}.
+     * Verifies that the direction method returns the correct normalized direction vector.
+     */
     @Test
     void testDirection() {
         // ============ Equivalence Partitions Tests ==============
@@ -61,10 +74,14 @@ class RayTests {
                 "ERROR: Ray constructor failed to normalize the direction vector");
     }
 
+    /**
+     * Test method for {@link Ray#origin()}.
+     * Verifies that the origin method returns the correct origin point.
+     */
     @Test
     void testOrigin() {
         // ============ Equivalence Partitions Tests ==============
-        
+
         //TC01 test for check return correct origin
         assertEquals(point, ray1.origin(),
                 "ERROR: Ray constructor failed to set the origin point correctly");

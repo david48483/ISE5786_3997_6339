@@ -5,7 +5,8 @@ import primitives.Point;
 /**
  * Represents a triangle in 3D space.
  * A triangle is a polygon with exactly three vertices.
- * @author David & Yheuda
+ *
+ * @author David &amp; Yehuda
  */
 public class Triangle extends Polygon {
 

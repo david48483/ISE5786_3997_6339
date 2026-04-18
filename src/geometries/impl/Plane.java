@@ -7,7 +7,7 @@ import primitives.Vector;
 /**
  * Represents a plane in 3D space, defined by a point and a normal vector.
  *
- * @author David & Yheuda
+ * @author David &amp; Yehuda
  */
 public class Plane extends Geometry {
 

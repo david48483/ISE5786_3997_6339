@@ -17,20 +17,35 @@ import static org.junit.jupiter.api.Assertions.*;
  * Tests follow the methodology of
  * Equivalence Partitions (EP) and Boundary Values (BVA).
  *
- * @author David & Yheuda
+ * @author David &amp; Yehuda
  */
 
 public class PlaneTests {
 
+    /**
+     * Default constructor for PlaneTests.
+     */
+    public PlaneTests() {
+    }
+
+    /**
+     * A small delta for comparing floating-point numbers
+     */
     private static final double DELTA = 1e-6;
 
-    //  Points used in the tests
+    /**
+     * Points used in the tests
+     */
     private static final Point P2 = new Point(1, 0, 0);
 
-    //  Another point used in the tests
+    /**
+     * Another point used in the tests
+     */
     private static final Point P3 = new Point(0, 1, 0);
 
-    //  A vector used in the tests
+    /**
+     * A vector used in the tests
+     */
     private static final Vector V1 = new Vector(3, 4, 5);
 
     /**

@@ -16,11 +16,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *  Tests follow the methodology of
  *  Equivalence Partitions (EP) and Boundary Values (BVA).
  *
- * @author David & Yheuda
+ * @author David &amp; Yehuda
  *
  */
 
 public class TubeTests {
+
+    /**
+     * Default constructor for TubeTests.
+     */
+    public TubeTests() {
+    }
 
     /**
      * Test method for {@link Tube#getNormal(Point)}.

@@ -3,7 +3,8 @@ package primitives;
 /**
  * Represents a point in a 3D Cartesian coordinate system.
  * Coordinates are stored as an immutable {@link Double3} tuple.
- * @author David & Yheuda
+ *
+ * @author David &amp; Yehuda
  */
 
 public class Point {

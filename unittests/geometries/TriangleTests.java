@@ -16,22 +16,31 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Tests follow the methodology of
  * Equivalence Partitions (EP) and Boundary Values (BVA).
  *
- * @author David & Yheuda
+ * @author David &amp; Yehuda
  */
 
 public class TriangleTests {
 
     /**
+     * Default constructor for TriangleTests.
+     */
+    public TriangleTests() {
+    }
+
+    /**
+     * Points used in the tests
+     */
+    private static final Point PX = new Point(4, 0, 0);
+
+    /**
+     * Another point used in the tests
+     */
+    private static final Point PY = new Point(0, 4, 0);
+
+    /**
      * Test method for {@link Triangle#getNormal(Point)}.
      * check that the normal vector is correct for points on the triangle.
      */
-
-    //  Points used in the tests
-    private static final Point PX = new Point(4, 0, 0);
-
-    //  Another point used in the tests
-    private static final Point PY = new Point(0, 4, 0);
-
     @Test
     void testGetNormal() {
         //  create a simple triangle in the XY plane

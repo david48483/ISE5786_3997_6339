@@ -9,7 +9,7 @@ import primitives.Vector;
  * Represents an infinite tube in 3D space.
  * The tube is defined by a central axis ray and a radius.
  *
- * @author David & Yheuda
+ * @author David &amp; Yehuda
  */
 public class Tube extends RadialGeometry {
 
