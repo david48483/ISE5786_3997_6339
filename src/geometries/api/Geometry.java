@@ -1,6 +1,7 @@
 package geometries.api;
 
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
 
 /**
@@ -9,7 +10,7 @@ import primitives.Vector;
  *
  * @author David &amp; Yehuda
  */
-public abstract class Geometry {
+public abstract class Geometry extends Intersectable {
 
     /**
      * Constructs a geometry. This constructor is empty because the base class does not have any fields to initialize.
@@ -25,4 +26,5 @@ public abstract class Geometry {
      * @return the normal vector at the given point
      */
     public abstract Vector getNormal(Point point);
+
 }
