@@ -46,8 +46,12 @@ public class SphereTests {
 
     }
 
+    /**
+     * Test method for {@link Sphere#findIntersections(Ray)}.
+     * check that the intersection points are correct for rays that intersect the sphere in different ways, including rays that are tangent to the sphere and rays that do not intersect the sphere at all.
+     */
     @Test
-    void testFindIntersections(){
+    void testFindIntersections() {
         //============ Equivalence Partitions Tests ==============
 
         Sphere sphere = new Sphere(Point.ZERO, 7);
@@ -98,31 +102,30 @@ public class SphereTests {
         assertEquals(java.util.List.of(), sphere.findIntersections(new Ray(p3, Vector.AXIS_Z)),
                 "ERROR: Sphere findIntersections() wrong number");
 
-        Point p4 = new Point(0,0,-7);
+        Point p4 = new Point(0, 0, -7);
         //TC33: Ray start of the spara (1)
         assertEquals(java.util.List.of(p3), sphere.findIntersections(new Ray(p4, Vector.AXIS_Z)),
                 "ERROR: Sphere findIntersections() wrong number");
 
-        Point p5 = new Point(0,0,8);
+        Point p5 = new Point(0, 0, 8);
         //TC34: Ray start of the spara (1)
         assertEquals(java.util.List.of(), sphere.findIntersections(new Ray(p4, Vector.AXIS_Z)),
                 "ERROR: Sphere findIntersections() wrong number");
 
-        Point p6 = new Point(0,0,-8);
+        Point p6 = new Point(0, 0, -8);
         //TC35: Ray start of the spara (1)
         assertEquals(java.util.List.of(p3, p4), sphere.findIntersections(new Ray(p6, Vector.AXIS_Z)),
                 "ERROR: Sphere findIntersections() wrong number");
 
-        Point p7 = new Point(0,0,2);
+        Point p7 = new Point(0, 0, 2);
         //TC36: Ray start of the spara (1)
         assertEquals(java.util.List.of(p3), sphere.findIntersections(new Ray(p7, Vector.AXIS_Z)),
                 "ERROR: Sphere findIntersections() wrong number");
 
-        Point p8 = new Point(0,2,0);
+        Point p8 = new Point(0, 2, 0);
         //TC37: Ray start of the spara (1)
         assertEquals(java.util.List.of(p1), sphere.findIntersections(new Ray(p8, Vector.AXIS_Y)),
                 "ERROR: Sphere findIntersections() wrong number");
-
 
     }
 }

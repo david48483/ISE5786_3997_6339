@@ -3,6 +3,7 @@ package geometries;
 import geometries.impl.Plane;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -143,4 +144,26 @@ public class PlaneTests {
                 "ERROR: getNormal() should return a normal vector that is in the another direction as the normal vector used in the constructor");
     }
 
+    /**
+     * Test method for {@link Plane#findIntersections(Ray)}.
+     * validate that the method returns the correct intersection points for rays that intersect the plane in different ways, including rays that are parallel to the plane and rays that do not intersect the plane at all.
+     */
+    @Test
+    void testFindIntersections() {
+        Plane plane = new Plane(Point.ZERO, Vector.AXIS_Z);
+
+        Point p1 = new Point(3, 5, 0);
+
+        Vector v1 = new Vector(1, 2, 4);
+
+        // ============ Equivalence Partitions Tests ==============
+
+        // TC01: Ray intersects the plane (1 point)
+        assertEquals(java.util.List.of(p1), plane.findIntersections(new Ray(new Point(2, 3, -4), v1)),
+                "ERROR: Plane findIntersections() wrong number of points for a ray that intersects the plane");
+
+        // TC02: Ray's line intersects the plane, but the ray points away from it (0 points)
+        assertEquals(java.util.List.of(), plane.findIntersections(new Ray(new Point(1, 1, 1), v1)),
+                "ERROR: Plane findIntersections() wrong number of points for a ray that points away from the plane");
+    }
 }
