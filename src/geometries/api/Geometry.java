@@ -15,7 +15,7 @@ public abstract class Geometry extends Intersectable {
     /**
      * Constructs a geometry. This constructor is empty because the base class does not have any fields to initialize.
      */
-    public Geometry() {
+    protected Geometry() {
         // No initialization needed for the base class
     }
 

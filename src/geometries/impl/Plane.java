@@ -26,8 +26,8 @@ public class Plane extends Geometry {
 
     /**
      * Constructs a plane from three points.
-     * At this stage, one point is stored as a reference and the normal
-     * is intentionally initialized to {@code null}.
+     * The plane stores a reference point and computes the normalized normal vector
+     * from the cross product of two edge vectors formed by the three points.
      *
      * @param p1 first point on the plane
      * @param p2 second point on the plane

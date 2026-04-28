@@ -12,6 +12,14 @@ import primitives.Ray;
  * @author David &amp; Yehuda
  */
 public abstract class Intersectable {
+
+    /**
+     *  Constructs a geometry. This constructor is empty because the base class does not have any fields to initialize.
+     */
+    protected Intersectable() {
+        // No initialization needed for the base class
+    }
+
     /**
      * Finds all intersection points between a ray and this geometric shape.
      * Returns a list of intersection points in the order they are encountered along the ray direction.

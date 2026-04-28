@@ -11,7 +11,7 @@ import primitives.Ray;
 public class Cylinder extends Tube {
 
     /**
-     * Height of the cylinder.
+     * Height of the cylinder (distance along the axis from base to top).
      */
     private final double _height;
 

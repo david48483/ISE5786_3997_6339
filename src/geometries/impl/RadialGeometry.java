@@ -15,7 +15,7 @@ public abstract class RadialGeometry extends Geometry {
     protected final double _radius;
 
     /**
-     * The squared radius of the geometry.
+     * The squared radius of the geometry (pre-computed for optimization).
      */
     protected final double _radiusSquared;
 

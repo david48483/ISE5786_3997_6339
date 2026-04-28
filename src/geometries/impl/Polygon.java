@@ -22,16 +22,19 @@ import static primitives.Util.isZero;
  * @author Dan Zilberstein
  */
 public class Polygon extends Geometry {
+
     /**
-     * Ordered list of polygon vertices
+     * Ordered list of polygon vertices.
      */
     protected final List<Point> _vertices;
+
     /**
-     * Plane containing the polygon
+     * Plane containing the polygon.
      */
     protected final Plane _plane;
+
     /**
-     * Number of vertices
+     * Number of vertices.
      */
     private final int _size;
 
