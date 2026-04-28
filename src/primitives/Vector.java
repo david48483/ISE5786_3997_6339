@@ -117,6 +117,7 @@ public class Vector extends Point {
      * @return a new unit vector in the same direction
      */
     public Vector normalize() {
+
         return new Vector(_xyz.divide(length()));
     }
 
