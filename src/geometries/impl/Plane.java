@@ -6,6 +6,8 @@ import geometries.api.Geometry;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * Represents a plane in 3D space, defined by a point and a normal vector.
@@ -61,7 +63,13 @@ public class Plane extends Geometry {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return null;
+
+        double nv = _normal.dotProduct(ray.direction());
+// no intersection – the ray is parallel to the plane
+        if (isZero(nv)) return null;
+        double t = alignZero(_point.subtract(ray.origin()).dotProduct(_normal) / nv);
+// there is intersection only if it is in the direction of the ray
+        return t <= 0 ? null : List.of(ray.origin().add(ray.direction().scale(t)));
     }
 
     @Override
