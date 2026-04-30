@@ -104,7 +104,7 @@ public class TriangleTests {
         assertEquals(List.of(), triangle.findIntersections(ray5),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that misses the triangle opposite vertex");
 
-        //EP08 ray pa   rallel to the triangle, 0 point
+        //EP08 ray parallel to the triangle, 0 point [check like plane]
         Ray ray17 = new Ray(new Point(1, 1, -1), Vector.AXIS_X);
         assertEquals(List.of(), triangle.findIntersections(ray17),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that is parallel to the triangle");

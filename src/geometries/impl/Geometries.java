@@ -1,12 +1,12 @@
 package geometries.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import geometries.api.Intersectable;
 import primitives.Point;
 import primitives.Ray;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Composite geometry that groups any number of {@link Intersectable} objects.
@@ -17,11 +17,16 @@ import primitives.Ray;
  */
 public class Geometries extends Intersectable {
 
-    /** The collection of intersectable geometries managed by this composite. */
+    /**
+     * The collection of intersect geometries managed by this composite.
+     */
     private final List<Intersectable> _geometries = new ArrayList<>();
 
-    /** Constructs an empty composite with no geometries. */
-    public Geometries() {}
+    /**
+     * Constructs an empty composite with no geometries.
+     */
+    public Geometries() {
+    }
 
     /**
      * Constructs a composite and immediately adds the given geometries.
