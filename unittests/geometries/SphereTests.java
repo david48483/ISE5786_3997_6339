@@ -45,18 +45,6 @@ public class SphereTests {
     /** South pole of the unit-test sphere — on-axis surface point at z = −7. */
     private static final Point P4 = new Point(0, 0, -7);
 
-    /** On-axis point outside the sphere beyond the north pole, at z = 8. */
-    private static final Point P5 = new Point(0, 0, 8);
-
-    /** On-axis point outside the sphere beyond the south pole, at z = −8. */
-    private static final Point P6 = new Point(0, 0, -8);
-
-    /** On-axis point inside the sphere, at z = 2. */
-    private static final Point P7 = new Point(0, 0, 2);
-
-    /** Point inside the sphere on the y = 2 plane, at z = 0. */
-    private static final Point P8 = new Point(0, 2, 0);
-
     /**
      * Tests {@link Sphere#getNormal(Point)}.
      * Verifies that the normal at a point on the surface is the correct unit vector
@@ -70,7 +58,8 @@ public class SphereTests {
         Sphere sphere = new Sphere(Point.ZERO, 7);
 
         // TC01: Normal at the north pole of the sphere must equal +Z
-        assertEquals(Vector.AXIS_Z, sphere.getNormal(new Point(0, 0, 7)), ERR_GET_NORMAL);
+        assertEquals(Vector.AXIS_Z, sphere.getNormal(new Point(0, 0, 7)),
+                ERR_GET_NORMAL);
 
     }
 
@@ -136,19 +125,19 @@ public class SphereTests {
                 ERR_FIND_INTERSECTIONS);
 
         // TC34: Ray starts beyond the north pole going outward (0 points)
-        assertNull(sphere.findIntersections(new Ray(P5, Vector.AXIS_Z)),
+        assertNull(sphere.findIntersections(new Ray(new Point(0, 0, 8), Vector.AXIS_Z)),
                 ERR_FIND_INTERSECTIONS);
 
         // TC35: Ray starts outside before south pole and crosses through (2 points)
-        assertEquals(java.util.List.of(P4, P3), sphere.findIntersections(new Ray(P6, Vector.AXIS_Z)),
+        assertEquals(java.util.List.of(P4, P3), sphere.findIntersections(new Ray(new Point(0, 0, -8), Vector.AXIS_Z)),
                 ERR_FIND_INTERSECTIONS);
 
         // TC36: Ray starts inside on Z axis going toward north pole (1 point)
-        assertEquals(java.util.List.of(P3), sphere.findIntersections(new Ray(P7, Vector.AXIS_Z)),
+        assertEquals(java.util.List.of(P3), sphere.findIntersections(new Ray(new Point(0, 0, 2), Vector.AXIS_Z)),
                 ERR_FIND_INTERSECTIONS);
 
         // TC37: Ray starts inside on the Y=2 plane going in +Y direction (1 point)
-        assertEquals(java.util.List.of(new Point(0, 7, 0)), sphere.findIntersections(new Ray(P8, Vector.AXIS_Y)),
+        assertEquals(java.util.List.of(new Point(0, 7, 0)), sphere.findIntersections(new Ray(new Point(0, 2, 0), Vector.AXIS_Y)),
                 ERR_FIND_INTERSECTIONS);
 
     }
