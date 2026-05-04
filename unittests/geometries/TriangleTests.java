@@ -9,6 +9,7 @@ import primitives.Vector;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Unit tests for class {@link Triangle}.
@@ -75,83 +76,83 @@ public class TriangleTests {
         //  **** Group 2: ray intersecting the plane of the triangle but not intersecting the triangle, opposite edges
         // EP02: ray opposite edge PY-PX, 0 point
         Ray ray2 = new Ray(new Point(5, 5, -1), Vector.AXIS_Z);
-        assertEquals(List.of(), triangle.findIntersections(ray2),
+        assertNull(triangle.findIntersections(ray2),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that misses the triangle");
 
         //EP03 ray opposite edge Point.ZERO-PX, 0 point
         Ray ray6 = new Ray(new Point(5, -2, -1), Vector.AXIS_Z);
-        assertEquals(List.of(), triangle.findIntersections(ray6),
+        assertNull(triangle.findIntersections(ray6),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that misses the triangle");
 
         //  EP04 ray opposite edge Point.ZERO-PY, 0 point
         Ray ray7 = new Ray(new Point(-2, 5, -1), Vector.AXIS_Z);
-        assertEquals(List.of(), triangle.findIntersections(ray7),
+        assertNull(triangle.findIntersections(ray7),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that misses the triangle");
 
         // **** Group 3: ray intersecting the plane of the triangle but not intersecting the triangle, opposite vertices
         //  EP05 ray opposite vertex PX, 0 point
         Ray ray3 = new Ray(new Point(6, -1, -1), Vector.AXIS_Z);
-        assertEquals(List.of(), triangle.findIntersections(ray3),
+        assertNull(triangle.findIntersections(ray3),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that misses the triangle opposite vertex");
 
         //EP06 ray opposite vertex PY, 0 point
         Ray ray4 = new Ray(new Point(-1, 6, -1), Vector.AXIS_Z);
-        assertEquals(List.of(), triangle.findIntersections(ray4),
+        assertNull(triangle.findIntersections(ray4),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that misses the triangle opposite vertex");
 
         //  EP07 ray opposite vertex Point.ZERO, 0 point
         Ray ray5 = new Ray(new Point(-1, -1, -1), Vector.AXIS_Z);
-        assertEquals(List.of(), triangle.findIntersections(ray5),
+        assertNull(triangle.findIntersections(ray5),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that misses the triangle opposite vertex");
 
         //EP08 ray parallel to the triangle, 0 point [check like plane]
         Ray ray17 = new Ray(new Point(1, 1, -1), Vector.AXIS_X);
-        assertEquals(List.of(), triangle.findIntersections(ray17),
+        assertNull(triangle.findIntersections(ray17),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that is parallel to the triangle");
 
         // =========== Boundary Values Tests ==============
         //  **** Group 1: ray not intersecting the triangle, on the edges
         //BV11 ray on edge PX-PY, 0 point
         Ray ray8 = new Ray(new Point(2, 2, -1), Vector.AXIS_Z);
-        assertEquals(List.of(), triangle.findIntersections(ray8),
+        assertNull(triangle.findIntersections(ray8),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that misses the triangle on the edge");
 
         //BV12 ray on edge Point.ZERO -PY, 0 point
         Ray ray9 = new Ray(new Point(0, 2, -1), Vector.AXIS_Z);
-        assertEquals(List.of(), triangle.findIntersections(ray9),
+        assertNull(triangle.findIntersections(ray9),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that misses the triangle on the edge");
 
         //BV13 ray on edge Point.ZERO-PX, 0 point
         Ray ray10 = new Ray(new Point(2, 0, -1), Vector.AXIS_Z);
-        assertEquals(List.of(), triangle.findIntersections(ray10),
+        assertNull(triangle.findIntersections(ray10),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that misses the triangle on the edge");
 
         //****    Group 2: ray intersecting the triangle on the vertices
         //B V21 ray on vertex PX, 0 point
         Ray ray11 = new Ray(new Point(4, 0, -1), Vector.AXIS_Z);
-        assertEquals(List.of(), triangle.findIntersections(ray11),
+        assertNull(triangle.findIntersections(ray11),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that misses the triangle on the vertex");
         //BV22 ray on vertex PY, 0 point
         Ray ray12 = new Ray(new Point(0, 4, -1), Vector.AXIS_Z);
-        assertEquals(List.of(), triangle.findIntersections(ray12),
+        assertNull(triangle.findIntersections(ray12),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that misses the triangle on the vertex");
         //BV23 ray on vertex Point.ZERO, 0 point
         Ray ray13 = new Ray(new Point(0, 0, -1), Vector.AXIS_Z);
-        assertEquals(List.of(), triangle.findIntersections(ray13),
+        assertNull(triangle.findIntersections(ray13),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that misses the triangle on the vertex");
 
         //****    Group 3: ray intersecting the triangle on the edge's continuation
         //BV31 ray on edge's continuation of PX-PY, 0 point
         Ray ray14 = new Ray(new Point(5, -1, -1), Vector.AXIS_Z);
-        assertEquals(List.of(), triangle.findIntersections(ray14),
+        assertNull(triangle.findIntersections(ray14),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that misses the triangle on the edge's continuation");
         //BV32 ray on edge's continuation of Point.ZERO -PY , 0 point
         Ray ray15 = new Ray(new Point(0, 5, -1), Vector.AXIS_Z);
-        assertEquals(List.of(), triangle.findIntersections(ray15),
+        assertNull(triangle.findIntersections(ray15),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that misses the triangle on the edge's continuation");
         //BV33 ray on edge's continuation of Point.ZERO-PX, 0 point
         Ray ray16 = new Ray(new Point(5, 0, -1), Vector.AXIS_Z);
-        assertEquals(List.of(), triangle.findIntersections(ray16),
+        assertNull(triangle.findIntersections(ray16),
                 "ERROR: Triangle findIntersections() returned intersection points for a ray that misses the triangle on the edge's continuation");
 
     }
