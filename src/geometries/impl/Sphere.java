@@ -1,11 +1,12 @@
 package geometries.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static primitives.Util.alignZero;
 
 /**
@@ -57,7 +58,7 @@ public class Sphere extends RadialGeometry {
             // אם ראשית הקרן היא בדיוק מרכז הכדור
             return List.of(ray.origin().add(v.scale(_radius)));
         }
-
+        //היטל==ניצב של המשולש שיצרנו
         double tm = alignZero(l.dotProduct(v));
 
         // חישוב המרחק בריבוע ממרכז הכדור לקו הקרן (d^2)
@@ -70,15 +71,18 @@ public class Sphere extends RadialGeometry {
         // th הוא המרחק מנקודת ההיטל לנקודות החיתוך על פני הכדור
         double th = alignZero(Math.sqrt(rSquared - dSquared));
 
-        List<Point> intersections = new ArrayList<>(2);
-
         double t1 = alignZero(tm - th);
         double t2 = alignZero(tm + th);
+
+        if (t1 <= 0 && t2 <= 0) return null;
+
+        List<Point> intersections = new ArrayList<>(2);
 
         if (t1 > 0) intersections.add(ray.origin().add(v.scale(t1)));
         if (t2 > 0) intersections.add(ray.origin().add(v.scale(t2)));
 
-        return intersections.isEmpty() ? null : intersections;
+        //return intersections.isEmpty() ? null : intersections;
+        return intersections;
 
     }
 

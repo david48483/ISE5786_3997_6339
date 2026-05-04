@@ -44,6 +44,7 @@ public class GeometriesTests {
     void testAdd() {
         assertDoesNotThrow(() -> {
             Geometries geometries = new Geometries(plane, sphere);
+            
             geometries.add(triangle11, triangle2);
         }, "ERROR: Geometries add() method threw an exception when adding valid geometries");
 
