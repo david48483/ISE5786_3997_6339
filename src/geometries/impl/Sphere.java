@@ -56,7 +56,7 @@ public class Sphere extends RadialGeometry {
             l = _center.subtract(p0);
         } catch (IllegalArgumentException ignore) {
             // אם ראשית הקרן היא בדיוק מרכז הכדור
-            return List.of(ray.origin().add(v.scale(_radius)));
+            return List.of(ray.getPoint(_radius));
         }
         //היטל==ניצב של המשולש שיצרנו
         double tm = alignZero(l.dotProduct(v));
@@ -76,9 +76,9 @@ public class Sphere extends RadialGeometry {
 
         if (t2 <= 0) return null;
 
-        if (t1 <= 0) return List.of(ray.origin().add(v.scale(t2)));
+        if (t1 <= 0) return List.of(ray.getPoint(t2));
 
-        return List.of(ray.origin().add(v.scale(t1)), ray.origin().add(v.scale(t2)));
+        return List.of(ray.getPoint(t1), ray.getPoint(t2));
 
     }
 

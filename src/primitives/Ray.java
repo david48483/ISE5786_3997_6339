@@ -54,7 +54,12 @@ public class Ray {
      * @return the point at distance t along the ray
      */
     public Point getPoint(double t) {
-        return _origin.add(_direction.scale(t));
+      try {
+          return _origin.add(_direction.scale(t));
+      }catch (IllegalArgumentException e) {
+          throw new IllegalArgumentException("t results in a zero displacement vector", e);
+      }
+
     }
 
     @Override
