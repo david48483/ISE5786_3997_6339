@@ -49,9 +49,11 @@ public class Ray {
     }
 
     /**
-     *  Calculates a point along the ray at a distance t from the origin
-     * @param t the distance from the origin along the ray
-     * @return the point at distance t along the ray
+     * Calculates the point along the ray at a given parameter t from the origin.
+     *
+     * @param t the signed distance along the ray direction
+     * @return the point at parameter t along the ray
+     * @throws IllegalArgumentException if t produces a zero displacement vector
      */
     public Point getPoint(double t) {
       try {

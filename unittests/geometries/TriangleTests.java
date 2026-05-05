@@ -42,6 +42,9 @@ public class TriangleTests {
     private static final Point PY = new Point(0, 4, 0);
 
     //  create a simple triangle in the XY plane
+    /**
+     * A triangle in the XY plane with vertices at (4,0,0), (0,4,0) and the origin.
+     */
     private static final Triangle triangle = new Triangle(PX, PY, Point.ZERO);
 
     /**
@@ -59,8 +62,10 @@ public class TriangleTests {
     }
 
     /**
-     * Test method for {@link Triangle#Triangle(Point, Point, Point)}.
-     *
+     * Test method for {@link Triangle#findIntersections(Ray)}.
+     * Verifies intersection detection for rays that hit inside the triangle,
+     * miss it (opposite edge or vertex), lie on an edge or vertex,
+     * and hit the edge continuation.
      */
     @Test
     void findIntersections() {

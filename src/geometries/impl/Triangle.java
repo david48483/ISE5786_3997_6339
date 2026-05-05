@@ -27,12 +27,6 @@ public class Triangle extends Polygon {
         super(p1, p2, p3);
     }
 
-    /**
-     * Finds the intersection points of a ray with this triangle.
-     *
-     * @param ray the ray to find intersections with
-     * @return
-     */
     @Override
     public List<Point> findIntersections(Ray ray) {
 

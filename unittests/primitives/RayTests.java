@@ -28,15 +28,10 @@ class RayTests {
     }
 
     /**
-     * Vector (4,0,0) used in ray tests
+     * Vector (4,0,0) used in ray tests.
      */
     private static final Vector vector1 = new Vector(4, 0, 0);
 
-    /**
-     * Vector (0,0,4) used in ray tests
-     */
-
-    private static final Vector vector2 = new Vector(0, 0, 4);
 
     /**
      * Point (1,2,3) used in ray tests
@@ -99,11 +94,11 @@ class RayTests {
 
         //EP01 test for check return correct point (t>0)
         assertEquals(new Point(3, 2, 3), ray1.getPoint(2),
-                "ERROR: Ray getPoint() failed to return the correct point at distance t=1");
+                "ERROR: Ray getPoint() failed to return the correct point at distance t=2");
 
         //EP02 test for check return correct point (t<0)
         assertEquals(new Point(-1, 2, 3), ray1.getPoint(-2),
-                "ERROR: Ray getPoint() failed to return the correct point at distance t=2");
+                "ERROR: Ray getPoint() failed to return the correct point at distance t=-2");
 
         // =============== Boundary Values Tests ==================
 

@@ -4,7 +4,6 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static primitives.Util.alignZero;
@@ -55,20 +54,20 @@ public class Sphere extends RadialGeometry {
         try {
             l = _center.subtract(p0);
         } catch (IllegalArgumentException ignore) {
-            // אם ראשית הקרן היא בדיוק מרכז הכדור
+            // Ray origin is exactly the center of the sphere: only one intersection point ahead
             return List.of(ray.getPoint(_radius));
         }
-        //היטל==ניצב של המשולש שיצרנו
+        // tm: projection of l onto the ray direction (closest approach parameter)
         double tm = alignZero(l.dotProduct(v));
 
-        // חישוב המרחק בריבוע ממרכז הכדור לקו הקרן (d^2)
+        // dSquared: squared distance from the sphere center to the ray line
         double dSquared = alignZero(l.lengthSquared() - tm * tm);
         double rSquared = _radius * _radius;
 
-        // אם המרחק גדול מהרדיוס, אין חיתוך
+        // No intersection when the ray misses the sphere entirely
         if (alignZero(dSquared - rSquared) >= 0) return null;
 
-        // th הוא המרחק מנקודת ההיטל לנקודות החיתוך על פני הכדור
+        // th: half-chord length from the projection point to each surface intersection
         double th = alignZero(Math.sqrt(rSquared - dSquared));
 
         double t1 = alignZero(tm - th);
