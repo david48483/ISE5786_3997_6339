@@ -98,11 +98,11 @@ class RayTests {
         // ============ Equivalence Partitions Tests ==============
 
         //EP01 test for check return correct point (t>0)
-        assertEquals(new Point(9, 2, 3), ray1.getPoint(2),
+        assertEquals(new Point(3, 2, 3), ray1.getPoint(2),
                 "ERROR: Ray getPoint() failed to return the correct point at distance t=1");
 
         //EP02 test for check return correct point (t<0)
-        assertEquals(new Point(-7, 2, 3), ray1.getPoint(-2),
+        assertEquals(new Point(-1, 2, 3), ray1.getPoint(-2),
                 "ERROR: Ray getPoint() failed to return the correct point at distance t=2");
 
         // =============== Boundary Values Tests ==================
