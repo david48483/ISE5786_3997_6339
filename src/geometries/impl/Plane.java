@@ -66,11 +66,11 @@ public class Plane extends Geometry {
     public List<Point> findIntersections(Ray ray) {
 
         double nv = _normal.dotProduct(ray.direction());
-// no intersection – the ray is parallel to the plane
+        // no intersection – the ray is parallel to the plane
         if (isZero(nv)) return null;
         if (_point == ray.origin()) return null;
         double t = alignZero(_point.subtract(ray.origin()).dotProduct(_normal) / nv);//find t by the formula t = (Q-P)·N / v·N
-// there is intersection only if it is in the direction of the ray
+        // there is intersection only if it is in the direction of the ray
         return t <= 0 ? null : List.of(ray.origin().add(ray.direction().scale(t)));
     }
 

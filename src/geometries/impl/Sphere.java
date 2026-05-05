@@ -66,7 +66,7 @@ public class Sphere extends RadialGeometry {
         double rSquared = _radius * _radius;
 
         // אם המרחק גדול מהרדיוס, אין חיתוך
-        if (dSquared >= rSquared) return null;
+        if (alignZero(dSquared - rSquared) >= 0) return null;
 
         // th הוא המרחק מנקודת ההיטל לנקודות החיתוך על פני הכדור
         double th = alignZero(Math.sqrt(rSquared - dSquared));
@@ -74,15 +74,11 @@ public class Sphere extends RadialGeometry {
         double t1 = alignZero(tm - th);
         double t2 = alignZero(tm + th);
 
-        if (t1 <= 0 && t2 <= 0) return null;
+        if (t2 <= 0) return null;
 
-        List<Point> intersections = new ArrayList<>(2);
+        if (t1 <= 0) return List.of(ray.origin().add(v.scale(t2)));
 
-        if (t1 > 0) intersections.add(ray.origin().add(v.scale(t1)));
-        if (t2 > 0) intersections.add(ray.origin().add(v.scale(t2)));
-
-        //return intersections.isEmpty() ? null : intersections;
-        return intersections;
+        return List.of(ray.origin().add(v.scale(t1)), ray.origin().add(v.scale(t2)));
 
     }
 
