@@ -48,6 +48,15 @@ public class Ray {
         return _direction;
     }
 
+    /**
+     *  Calculates a point along the ray at a distance t from the origin
+     * @param t the distance from the origin along the ray
+     * @return the point at distance t along the ray
+     */
+    public Point getPoint(double t) {return null;
+       // return _origin.add(_direction.scale(t));
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * unit tests for {@link Ray} class
@@ -86,5 +87,27 @@ class RayTests {
         assertEquals(point, ray1.origin(),
                 "ERROR: Ray constructor failed to set the origin point correctly");
 
+    }
+
+    /**
+     * * Test method for {@link Ray#getPoint(double)}.
+     * Verifies that the getPoint method returns the correct point at a given distance along the ray.
+     */
+    @Test
+    void testGetpoint(){
+        // ============ Equivalence Partitions Tests ==============
+
+        //EP01 test for check return correct point (t>0)
+        assertEquals(new Point(9, 2, 3), ray1.getPoint(2),
+                "ERROR: Ray getPoint() failed to return the correct point at distance t=1");
+
+        //EP02 test for check return correct point (t<0)
+        assertEquals(new Point(-7, 2, 3), ray1.getPoint(-2),
+                "ERROR: Ray getPoint() failed to return the correct point at distance t=2");
+
+        // =============== Boundary Values Tests ==================
+
+        assertThrows(IllegalArgumentException.class, () -> ray1.getPoint(0  ),
+                "ERROR: Ray getPoint() with t=0 should throw exception");
     }
 }
