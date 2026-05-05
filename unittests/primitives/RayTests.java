@@ -7,12 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * unit tests for {@link Ray} class
+ * Unit tests for {@link Ray} class.
  * The tests verify:
  * <ul>
  * <li>Ray constructor validity</li>
  * <li>{@link Ray#origin()}</li>
  * <li>{@link Ray#direction()}</li>
+ * <li>{@link Ray#getPoint(double)}</li>
  * </ul>
  * Tests follow the methodology of Equivalence Partitions (EP) and Boundary Values (BVA).
  *
@@ -27,34 +28,63 @@ class RayTests {
     public RayTests() {
     }
 
-    /**
-     * Vector (4,0,0) used in ray tests.
-     */
-    private static final Vector vector1 = new Vector(4, 0, 0);
+    // ---- Error messages ----
 
+    /** Error message for {@link Ray#Ray(Point, Vector)} tests. */
+    private static final String ERR_CONSTRUCTOR =
+            "ERROR: Ray constructor failed to create the expected ray";
+
+    /** Error message for {@link Ray#direction()} tests. */
+    private static final String ERR_DIRECTION =
+            "ERROR: Ray constructor failed to normalize the direction vector";
+
+    /** Error message for {@link Ray#origin()} tests. */
+    private static final String ERR_ORIGIN =
+            "ERROR: Ray constructor failed to set the origin point correctly";
+
+    /** Error message for {@link Ray#getPoint(double)} tests. */
+    private static final String ERR_GET_POINT =
+            "ERROR: Ray getPoint() returned wrong point";
+
+    // ---- Shared points and vectors ----
 
     /**
-     * Point (1,2,3) used in ray tests
+     * Origin point (1,2,3) used in ray tests.
      */
-    private static final Point point = new Point(1, 2, 3);
+    private static final Point ORIGIN = new Point(1, 2, 3);
 
     /**
-     * Ray created from point and vector1, used in ray tests
+     * Direction vector (4,0,0) — normalizes to AXIS_X.
      */
-    private static final Ray ray1 = new Ray(point, vector1);
+    private static final Vector DIR = new Vector(4, 0, 0);
+
+    /**
+     * Expected point at t=2 along ray1: (1,2,3) + 2*(1,0,0) = (3,2,3).
+     */
+    private static final Point P_T2 = new Point(3, 2, 3);
+
+    /**
+     * Expected point at t=−2 along ray1: (1,2,3) + (−2)*(1,0,0) = (−1,2,3).
+     */
+    private static final Point P_T_NEG2 = new Point(-1, 2, 3);
+
+    /**
+     * Ray from ORIGIN in direction DIR (stored normalized as AXIS_X).
+     */
+    private static final Ray RAY = new Ray(ORIGIN, DIR);
+
+    // ---- Tests ----
 
     /**
      * Test method for {@link Ray#Ray(Point, Vector)}.
      * Verifies correct ray construction and normalization of the direction vector.
      */
-
     @Test
     void testConstructor() {
         // ============ Equivalence Partitions Tests ==============
 
-        // TC01 test for check constructor with valid inputs
-        assertDoesNotThrow(() -> new Ray(point, vector1),
-                "ERROR: Ray constructor failed to create the expected ray");
+        // EP01: Valid origin and non-zero direction — must not throw
+        assertDoesNotThrow(() -> new Ray(ORIGIN, DIR), ERR_CONSTRUCTOR);
     }
 
     /**
@@ -65,9 +95,8 @@ class RayTests {
     void testDirection() {
         // ============ Equivalence Partitions Tests ==============
 
-        //TC01 test for check return correct direction
-        assertEquals(Vector.AXIS_X, ray1.direction(),
-                "ERROR: Ray constructor failed to normalize the direction vector");
+        // EP01: Direction must equal the normalized form of the constructor argument
+        assertEquals(Vector.AXIS_X, RAY.direction(), ERR_DIRECTION);
     }
 
     /**
@@ -78,31 +107,27 @@ class RayTests {
     void testOrigin() {
         // ============ Equivalence Partitions Tests ==============
 
-        //TC01 test for check return correct origin
-        assertEquals(point, ray1.origin(),
-                "ERROR: Ray constructor failed to set the origin point correctly");
-
+        // EP01: Origin must equal the point passed to the constructor
+        assertEquals(ORIGIN, RAY.origin(), ERR_ORIGIN);
     }
 
     /**
-     * * Test method for {@link Ray#getPoint(double)}.
-     * Verifies that the getPoint method returns the correct point at a given distance along the ray.
+     * Test method for {@link Ray#getPoint(double)}.
+     * Verifies that the method returns the correct point at a given parameter t.
      */
     @Test
-    void testGetpoint(){
+    void testGetPoint() {
         // ============ Equivalence Partitions Tests ==============
 
-        //EP01 test for check return correct point (t>0)
-        assertEquals(new Point(3, 2, 3), ray1.getPoint(2),
-                "ERROR: Ray getPoint() failed to return the correct point at distance t=2");
+        // EP01: t > 0 — point ahead of origin
+        assertEquals(P_T2, RAY.getPoint(2), ERR_GET_POINT);
 
-        //EP02 test for check return correct point (t<0)
-        assertEquals(new Point(-1, 2, 3), ray1.getPoint(-2),
-                "ERROR: Ray getPoint() failed to return the correct point at distance t=-2");
+        // EP02: t < 0 — point behind origin
+        assertEquals(P_T_NEG2, RAY.getPoint(-2), ERR_GET_POINT);
 
         // =============== Boundary Values Tests ==================
 
-        assertThrows(IllegalArgumentException.class, () -> ray1.getPoint(0  ),
-                "ERROR: Ray getPoint() with t=0 should throw exception");
+        // BVA11: t = 0 — zero displacement, must throw
+        assertThrows(IllegalArgumentException.class, () -> RAY.getPoint(0), ERR_GET_POINT);
     }
 }

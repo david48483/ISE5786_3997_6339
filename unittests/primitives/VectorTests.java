@@ -24,237 +24,272 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author David &amp; Yehuda
  */
-
 public class VectorTests {
+
     /**
      * Default constructor for VectorTests.
      */
     public VectorTests() {
     }
 
+    // ---- Error messages ----
+
+    /** Error message for {@link Vector#Vector(double, double, double)} tests. */
+    private static final String ERR_CONSTRUCTOR   = "ERROR: Vector constructor failed";
+
+    /** Error message for {@link Vector#add(Vector)} tests. */
+    private static final String ERR_ADD           = "ERROR: Vector add(Vector) failed";
+
+    /** Error message for {@link Point#subtract(Point)} tests. */
+    private static final String ERR_SUBTRACT      = "ERROR: Vector subtract(Vector) failed";
+
+    /** Error message for {@link Vector#scale(double)} tests. */
+    private static final String ERR_SCALE         = "ERROR: Vector scale(double) failed";
+
+    /** Error message for {@link Vector#dotProduct(Vector)} tests. */
+    private static final String ERR_DOT_PRODUCT   = "ERROR: Vector dotProduct(Vector) failed";
+
+    /** Error message for {@link Vector#crossProduct(Vector)} tests. */
+    private static final String ERR_CROSS_PRODUCT = "ERROR: Vector crossProduct(Vector) failed";
+
+    /** Error message for {@link Vector#lengthSquared()} tests. */
+    private static final String ERR_LENGTH_SQ     = "ERROR: Vector lengthSquared() failed";
+
+    /** Error message for {@link Vector#length()} tests. */
+    private static final String ERR_LENGTH        = "ERROR: Vector length() failed";
+
+    /** Error message for {@link Vector#normalize()} tests. */
+    private static final String ERR_NORMALIZE     = "ERROR: Vector normalize() failed";
+
+    // ---- Numeric precision ----
+
     /**
      * Delta value for accuracy when comparing double values.
      */
     private static final double DELTA = 1e-6;
 
+    // ---- Shared vectors ----
+
     /**
-     * Vectors used in the tests
+     * Vector (1,2,3) — primary test vector.
      */
     private static final Vector V1 = new Vector(1, 2, 3);
 
     /**
-     * Another vector used in the tests
+     * Vector (4,5,6) — secondary test vector; equals V1 + V3.
      */
     private static final Vector V2 = new Vector(4, 5, 6);
 
     /**
-     * A vector with all components equal to 3, used in the tests
+     * Vector (3,3,3) — used to verify V1 + V3 = V2.
      */
     private static final Vector V3 = new Vector(3, 3, 3);
 
     /**
-     * A vector with components (3, 4, 0), used in the tests
+     * Vector (3,4,0) — has length 5, used in length tests.
      */
     private static final Vector V4 = new Vector(3, 4, 0);
 
     /**
-     * test method for {@link Vector#Vector(double, double, double)}.
-     * test method for {@link Vector#Vector(Double3)}.
+     * Negation of V1: (−1,−2,−3) — used as inverse in add/crossProduct BVA tests.
+     */
+    private static final Vector V1_NEG = new Vector(-1, -2, -3);
+
+    /**
+     * V1 scaled by 2: (2,4,6) — expected result of scale(2); parallel to V1.
+     */
+    private static final Vector V1_DOUBLE = new Vector(2, 4, 6);
+
+    /**
+     * V1 scaled by −2: (−2,−4,−6) — anti-parallel to V1, used in crossProduct BVA.
+     */
+    private static final Vector V1_NEG_DOUBLE = new Vector(-2, -4, -6);
+
+    /**
+     * Negation of V2: (−4,−5,−6) — used in dotProduct EP test (obtuse angle).
+     */
+    private static final Vector V2_NEG = new Vector(-4, -5, -6);
+
+    /**
+     * Vector (−4, 0.5, 1) — orthogonal to V1, used in dotProduct BVA test.
+     */
+    private static final Vector V1_ORTHO = new Vector(-4, 0.5, 1);
+
+    /**
+     * Vector (0,3,4) — lies in the YZ plane, has length 5.
+     */
+    private static final Vector V_YZ = new Vector(0, 3, 4);
+
+    /**
+     * Vector (0,−3,−4) — negation of V_YZ, has length 5.
+     */
+    private static final Vector V_YZ_NEG = new Vector(0, -3, -4);
+
+    // ---- Tests ----
+
+    /**
+     * Test method for {@link Vector#Vector(double, double, double)} and
+     * {@link Vector#Vector(Double3)}.
      */
     @Test
     void testConstructor() {
 
         // ============ Equivalence Partitions Tests ==============
 
-        //TC01 Testing a constructor that receives three doubles
-        assertDoesNotThrow(() -> new Vector(1, 2, 3),
-                "ERROR: Vector constructor with valid inputs should not throw exception");
+        // EP01: Valid non-zero components — must not throw
+        assertDoesNotThrow(() -> new Vector(1, 2, 3), ERR_CONSTRUCTOR);
 
         // =============== Boundary Values Tests ==================
 
-        //TC11 check exception to zero vector
-        assertThrows(IllegalArgumentException.class, () -> new Vector(Double3.ZERO),
-                "ERROR: Vector constructor with zero vector should throw exception");
+        // BVA11: Zero vector — must throw
+        assertThrows(IllegalArgumentException.class, () -> new Vector(Double3.ZERO), ERR_CONSTRUCTOR);
     }
 
     /**
-     * test method for {@link Vector#add(Vector)}.
+     * Test method for {@link Vector#add(Vector)}.
      */
     @Test
     void testAdd() {
         // ============ Equivalence Partitions Tests ==============
 
-        //TC01 Testing the add method of the vector class
-        assertEquals(V2, V1.add(V3),
-                "ERROR: Vector add(Vector) failed");
+        // EP01: Sum of two non-zero vectors
+        assertEquals(V2, V1.add(V3), ERR_ADD);
 
         // =============== Boundary Values Tests ==================
 
-        //TC11 Testing the add method of the vector class in case negative values
-        assertThrows(IllegalArgumentException.class, () -> V1.add(new Vector(-1, -2, -3)),
-                "ERROR: Vector add(Vector) with inverse vector should throw exception");
+        // BVA11: Adding inverse vector produces zero vector — must throw
+        assertThrows(IllegalArgumentException.class, () -> V1.add(V1_NEG), ERR_ADD);
     }
 
     /**
-     * test method for {@link Point#subtract(Point)}.
+     * Test method for {@link Point#subtract(Point)}.
      */
     @Test
     void testSubtract() {
         // ============ Equivalence Partitions Tests ==============
 
-        //TC01 Testing the subtract method of the vector class
-        assertEquals(V1, V2.subtract(V3),
-                "ERROR: Vector subtract(Vector) failed");
+        // EP01: Difference of two different vectors
+        assertEquals(V1, V2.subtract(V3), ERR_SUBTRACT);
 
         // =============== Boundary Values Tests ==================
 
-        //TC11 Testing the subtract method of the vector class in case subtracting a vector from itself should throw an exception
-        assertThrows(IllegalArgumentException.class, () -> V1.subtract(V1),
-                "ERROR: Vector subtract(Vector) with itself should throw exception");
+        // BVA11: Subtracting a vector from itself produces zero vector — must throw
+        assertThrows(IllegalArgumentException.class, () -> V1.subtract(V1), ERR_SUBTRACT);
     }
 
     /**
-     * test method for {@link Vector#scale(double)}.
+     * Test method for {@link Vector#scale(double)}.
      */
     @Test
     void testScale() {
         // ============ Equivalence Partitions Tests ==============
 
-        //TC01  Testing the scale method of the vector class with different factors
-        assertEquals(new Vector(2, 4, 6), V1.scale(2),
-                "ERROR: Vector scale(double) failed");
+        // EP01: Scale by positive factor
+        assertEquals(V1_DOUBLE, V1.scale(2), ERR_SCALE);
 
         // =============== Boundary Values Tests ==================
 
-        //TC11 Testing the scale method of the vector class with zero factor should throw an exception
-        assertThrows(IllegalArgumentException.class, () -> V1.scale(0),
-                "ERROR: Vector scale(double) with zero should throw exception");
+        // BVA11: Scale by zero produces zero vector — must throw
+        assertThrows(IllegalArgumentException.class, () -> V1.scale(0), ERR_SCALE);
     }
 
     /**
-     * test method for {@link Vector#dotProduct(Vector)}.
+     * Test method for {@link Vector#dotProduct(Vector)}.
      */
     @Test
     void testDotProduct() {
         // ============ Equivalence Partitions Tests ==============
 
-        //TC01  Testing the dotProduct method of the vector class with different vectors, acute angle
-        assertEquals(32, V1.dotProduct(V2), DELTA,
-                "ERROR: Vector dotProduct(Vector) failed");
+        // EP01: Acute angle — positive dot product
+        assertEquals(32, V1.dotProduct(V2), DELTA, ERR_DOT_PRODUCT);
 
-        //TC02  Testing the dotProduct method of the vector class with negative vector, obtuse angle
-        assertEquals(-32, V1.dotProduct(new Vector(-4, -5, -6)), DELTA,
-                "ERROR: Vector dotProduct(Vector) with negative vector failed");
+        // EP02: Obtuse angle — negative dot product
+        assertEquals(-32, V1.dotProduct(V2_NEG), DELTA, ERR_DOT_PRODUCT);
 
         // =============== Boundary Values Tests ==================
 
-        //TC11  Testing the dotProduct method of the vector class with orthogonal vectors should return zero
-        assertEquals(0, V1.dotProduct(new Vector(-4, 0.5, 1)), DELTA,
-                "ERROR: Vector dotProduct(Vector) with orthogonal vectors failed");
+        // BVA11: Orthogonal vectors — dot product must be zero
+        assertEquals(0, V1.dotProduct(V1_ORTHO), DELTA, ERR_DOT_PRODUCT);
     }
 
     /**
-     * test method for {@link Vector#crossProduct(Vector)}.
+     * Test method for {@link Vector#crossProduct(Vector)}.
      */
-
     @Test
     void testCrossProduct() {
         // ============ Equivalence Partitions Tests ==============
 
-        //TC01  Testing the crossProduct method of the vector class with different vectors
+        // EP01: Cross product of two non-parallel vectors — correct result vector
         Vector cross = V1.crossProduct(V2);
-        assertEquals(new Vector(-3, 6, -3), cross,
-                "ERROR: Vector crossProduct(Vector) failed");
+        assertEquals(new Vector(-3, 6, -3), cross, ERR_CROSS_PRODUCT);
 
-        // TC02 Testing the crossProduct method of the vector class with cross vector
-        assertEquals(0, cross.dotProduct(V1), DELTA,
-                "ERROR: Vector crossProduct(Vector) is not orthogonal to the first vector");
-
-        assertEquals(0, cross.dotProduct(V2), DELTA,
-                "ERROR: Vector crossProduct(Vector) is not orthogonal to the second vector");
+        // EP02: Result must be orthogonal to both operands
+        assertEquals(0, cross.dotProduct(V1), DELTA, ERR_CROSS_PRODUCT);
+        assertEquals(0, cross.dotProduct(V2), DELTA, ERR_CROSS_PRODUCT);
 
         // =============== Boundary Values Tests ==================
 
-        // TC11 Testing the crossProduct method of the vector class with parallel vectors should throw an exception
-        assertThrows(IllegalArgumentException.class, () -> V1.crossProduct(new Vector(-2, -4, -6)),
-                "ERROR: Vector crossProduct(Vector) with parallel vector should throw exception");
-
-        assertThrows(IllegalArgumentException.class, () -> V1.crossProduct(new Vector(-1, -2, -3)),
-                "ERROR: Vector crossProduct(Vector) with parallel vector should throw exception");
-
-        assertThrows(IllegalArgumentException.class, () -> V1.crossProduct(new Vector(2, 4, 6)),
-                "ERROR: Vector crossProduct(Vector) with parallel vector should throw exception");
+        // BVA11: Parallel vectors — cross product is zero vector, must throw
+        assertThrows(IllegalArgumentException.class, () -> V1.crossProduct(V1_NEG_DOUBLE), ERR_CROSS_PRODUCT);
+        assertThrows(IllegalArgumentException.class, () -> V1.crossProduct(V1_NEG),        ERR_CROSS_PRODUCT);
+        assertThrows(IllegalArgumentException.class, () -> V1.crossProduct(V1_DOUBLE),     ERR_CROSS_PRODUCT);
     }
 
     /**
-     * test method for {@link Vector#lengthSquared()}.
+     * Test method for {@link Vector#lengthSquared()}.
      */
-
     @Test
     void testLengthSquared() {
         // ============ Equivalence Partitions Tests ==============
 
-        //TC01  Testing the lengthSquared method of the vector class with different vectors
-        assertEquals(14, V1.lengthSquared(), DELTA,
-                "ERROR: Vector lengthSquared() failed");
+        // EP01: General non-unit vector
+        assertEquals(14, V1.lengthSquared(), DELTA, ERR_LENGTH_SQ);
 
-        //===== Boundary Values Tests ==================
+        // =============== Boundary Values Tests ==================
 
-        // TC11 Testing the lengthSquared method of the vector class with zero component
-        assertEquals(1, Vector.AXIS_X.lengthSquared(), DELTA,
-                "ERROR: Vector lengthSquared() with zero component failed");
+        // BVA11: Unit vector — squared length must equal 1
+        assertEquals(1, Vector.AXIS_X.lengthSquared(), DELTA, ERR_LENGTH_SQ);
     }
 
     /**
-     * test method for {@link Vector#length()}.
+     * Test method for {@link Vector#length()}.
      */
-
     @Test
     void testLength() {
         // ============ Equivalence Partitions Tests ==============
 
-        // TC01 Testing the length method of the vector class with different vectors
-        assertEquals(5, V4.length(), DELTA,
-                "ERROR: Vector length() failed");
+        // EP01: Vectors with integer length 5 in different planes
+        assertEquals(5, V4.length(),       DELTA, ERR_LENGTH);
+        assertEquals(5, V_YZ.length(),     DELTA, ERR_LENGTH);
+        assertEquals(5, V_YZ_NEG.length(), DELTA, ERR_LENGTH);
 
-        assertEquals(5, new Vector(0, 3, 4).length(), DELTA,
-                "ERROR: Vector length() failed");
+        // =============== Boundary Values Tests ==================
 
-        assertEquals(5, new Vector(0, -3, -4).length(), DELTA,
-                "ERROR: Vector length() failed");
-
-        //==Boundary Values Tests ==================
-
-        //  TC11 Testing the length method of the vector class with zero component
-        assertEquals(1, new Vector(0, 1, 0).length(), DELTA,
-                "ERROR: Vector length() with zero component failed");
+        // BVA11: Unit vector — length must equal 1
+        assertEquals(1, Vector.AXIS_Y.length(), DELTA, ERR_LENGTH);
     }
 
     /**
-     * test method for {@link Vector#normalize()}.
+     * Test method for {@link Vector#normalize()}.
      */
-
     @Test
     void testNormalize() {
         // ============ Equivalence Partitions Tests ==============
 
         Vector normlizeVector = V1.normalize();
-        //TC01  Testing the normalize method of the vector class with different vectors
-        assertEquals(1, normlizeVector.length(), DELTA,
-                "ERROR: Vector normalize() does not produce a unit vector");
 
-        //TC02  Testing the normalize method of the vector class with different vectors
-        assertThrows(IllegalArgumentException.class, () -> normlizeVector.crossProduct(V1),
-                "ERROR: Vector normalize() does not produce a vector orthogonal to the original vector");
+        // EP01: Result must be a unit vector
+        assertEquals(1, normlizeVector.length(), DELTA, ERR_NORMALIZE);
 
-        //check vector if is same direction as the original vector
-        assertTrue(normlizeVector.dotProduct(V1) > 0,
-                "ERROR: Vector normalize() does not produce a vector in the same direction as the original vector");
+        // EP02: Normalized vector is parallel to original — cross product must throw
+        assertThrows(IllegalArgumentException.class, () -> normlizeVector.crossProduct(V1), ERR_NORMALIZE);
 
-        //=== Boundary Values Tests ==================
+        // EP03: Normalized vector must point in the same direction as the original
+        assertTrue(normlizeVector.dotProduct(V1) > 0, ERR_NORMALIZE);
 
-        // TC11 Testing the normalize method of the vector class with zero component should throw an exception
-        assertEquals(Vector.AXIS_X, Vector.AXIS_X.normalize(),
-                "ERROR: vector normalize has not changed the vector");
+        // =============== Boundary Values Tests ==================
+
+        // BVA11: Normalizing an already-unit vector returns an equivalent unit vector
+        assertEquals(Vector.AXIS_X, Vector.AXIS_X.normalize(), ERR_NORMALIZE);
     }
 }

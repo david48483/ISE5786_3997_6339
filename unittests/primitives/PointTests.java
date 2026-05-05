@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Unit test class for {@link Point}.
+ * Unit tests for {@link Point}.
  * The tests verify:
  * <ul>
  * <li>{@link Point#add(Vector)}</li>
@@ -20,31 +20,71 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author Yehuda
  */
 class PointTests {
-    /**
-     * Shared point used in test cases.
-     */
-    private static final Point POINT = new Point(3, 4, 5);
-
-    /**
-     * Shared point used in test cases.
-     */
-    private static final Point POINT2 = new Point(6, 10, 7);
-    /**
-     * Shared vector used in test cases.
-     */
-    private static final Vector VECTOR = new Vector(3, 4, 5);
-
-    /**
-     * A small delta for comparing floating-point numbers
-     */
-    private static final double DELTA = 1e-6;
 
     /**
      * Default constructor to satisfy JavaDoc generator.
      */
     PointTests() {
-        // Empty by design.
     }
+
+    // ---- Error messages ----
+
+    /** Error message for {@link Point#add(Vector)} tests. */
+    private static final String ERR_ADD =
+            "ERROR: Point add(Vector) failed";
+
+    /** Error message for {@link Point#subtract(Point)} tests. */
+    private static final String ERR_SUBTRACT =
+            "ERROR: Point subtract(Point) failed";
+
+    /** Error message for {@link Point#distanceSquared(Point)} tests. */
+    private static final String ERR_DISTANCE_SQ =
+            "ERROR: Point distanceSquared(Point) failed";
+
+    /** Error message for {@link Point#distance(Point)} tests. */
+    private static final String ERR_DISTANCE =
+            "ERROR: Point distance(Point) failed";
+
+    // ---- Numeric precision ----
+
+    /**
+     * Delta value for accuracy when comparing floating-point numbers.
+     */
+    private static final double DELTA = 1e-6;
+
+    // ---- Shared points and vectors ----
+
+    /**
+     * Primary test point (3,4,5).
+     */
+    private static final Point P1 = new Point(3, 4, 5);
+
+    /**
+     * Secondary test point (6,10,7) — distance 7 from P1.
+     */
+    private static final Point P2 = new Point(6, 10, 7);
+
+    /**
+     * Translation vector (3,4,5) — equals the coordinates of P1.
+     */
+    private static final Vector V = new Vector(3, 4, 5);
+
+    /**
+     * Negation of V: (−3,−4,−5) — adding to P1 yields the origin.
+     */
+    private static final Vector V_NEG = new Vector(-3, -4, -5);
+
+    /**
+     * Expected result of P1 + V: (6,8,10).
+     */
+    private static final Point P1_PLUS_V = new Point(6, 8, 10);
+
+    /**
+     * Expected result of P1 − P2: (−3,−6,−2).
+     */
+    private static final Vector P1_MINUS_P2 = new Vector(-3, -6, -2);
+
+    // ---- Tests ----
 
     /**
      * Test method for {@link Point#add(Vector)}.
@@ -54,16 +94,13 @@ class PointTests {
     void testAdd() {
         // ============ Equivalence Partitions Tests ==============
 
-        // TC01: Adding a vector to a point should yield the expected translated point.
-        assertEquals(new Point(6, 8, 10), POINT.add(VECTOR),
-                "ERROR: Point add(Vector) failed");
+        // EP01: Adding a vector to a point yields the expected translated point
+        assertEquals(P1_PLUS_V, P1.add(V), ERR_ADD);
 
         // =============== Boundary Values Tests ==================
 
-        // TC11: Adding an inverse vector should yield the origin.
-        assertEquals(Point.ZERO, POINT.add(new Vector(-3, -4, -5)),
-                "ERROR: Point add(Vector) with inverse vector failed");
-
+        // BVA11: Adding the inverse vector yields the origin
+        assertEquals(Point.ZERO, P1.add(V_NEG), ERR_ADD);
     }
 
     /**
@@ -74,16 +111,13 @@ class PointTests {
     void testSubtract() {
         // ============ Equivalence Partitions Tests ==============
 
-        // TC01: Subtracting a different point should yield the expected vector.
-        assertEquals(new Vector(-3, -6, -2), POINT.subtract(POINT2),
-                "ERROR: Point subtract(Point) with different point failed");
+        // EP01: Subtracting a different point yields the expected vector
+        assertEquals(P1_MINUS_P2, P1.subtract(P2), ERR_SUBTRACT);
 
         // =============== Boundary Values Tests ==================
 
-        //TC11: Subtracting a point from itself should yield the zero vector.
-        assertThrows(IllegalArgumentException.class, () -> POINT.subtract(POINT),
-                "ERROR: Point subtract(Point) with itself should throw an exception");
-
+        // BVA11: Subtracting a point from itself produces zero vector — must throw
+        assertThrows(IllegalArgumentException.class, () -> P1.subtract(P1), ERR_SUBTRACT);
     }
 
     /**
@@ -94,15 +128,13 @@ class PointTests {
     void testDistanceSquared() {
         // ============ Equivalence Partitions Tests ==============
 
-        //TC01:  Squared distance between a point and a different point should be calculated correctly.
-        assertEquals(49, POINT.distanceSquared(POINT2), DELTA,
-                "ERROR: Point distanceSquared(Point) with different point failed");
+        // EP01: Squared distance between two different points
+        assertEquals(49, P1.distanceSquared(P2), DELTA, ERR_DISTANCE_SQ);
 
         // =============== Boundary Values Tests ==================
 
-        // TC11: Squared distance between a point and itself should be zero.
-        assertEquals(0, POINT.distanceSquared(POINT), DELTA,
-                "ERROR: Point distanceSquared(Point) with itself failed");
+        // BVA11: Squared distance from a point to itself must be zero
+        assertEquals(0, P1.distanceSquared(P1), DELTA, ERR_DISTANCE_SQ);
     }
 
     /**
@@ -113,15 +145,13 @@ class PointTests {
     void testDistance() {
         // ============ Equivalence Partitions Tests ==============
 
-        // TC01: Distance between two different points should be calculated correctly.
-        assertEquals(7, POINT.distance(POINT2), DELTA,
-                "ERROR: Point distance(Point) with different point failed");
+        // EP01: Distance between two different points
+        assertEquals(7, P1.distance(P2), DELTA, ERR_DISTANCE);
 
-        //  =============== Boundary Values Tests ==================
+        // =============== Boundary Values Tests ==================
 
-        // TC11: Distance between a point and itself should be zero.
-        assertEquals(0, POINT.distance(POINT), DELTA,
-                "ERROR: Point distance(Point) with itself failed");
+        // BVA11: Distance from a point to itself must be zero
+        assertEquals(0, P1.distance(P1), DELTA, ERR_DISTANCE);
     }
 
 }
