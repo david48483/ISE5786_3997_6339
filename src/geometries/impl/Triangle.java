@@ -37,36 +37,27 @@ public class Triangle extends Polygon {
     public List<Point> findIntersections(Ray ray) {
 
         List<Point> planeIntersections = _plane.findIntersections(ray);
-
         if (planeIntersections == null) return null;
 
         Point p0 = planeIntersections.get(0);
 
-        Point p1 = _vertices.get(0);
-        Point p2 = _vertices.get(1);
-        Point p3 = _vertices.get(2);
+        Vector v = ray.direction();
+        Point head = ray.origin();
 
-        Vector v1 = p1.subtract(ray.origin());
-        Vector v2 = p2.subtract(ray.origin());
-        Vector v3 = p3.subtract(ray.origin());
+        Vector v1 = _vertices.get(0).subtract(head);
+        Vector v2 = _vertices.get(1).subtract(head);
+        Vector v3 = _vertices.get(2).subtract(head);
 
-        Vector n1 = v1.crossProduct(v2);
-        Vector n2 = v2.crossProduct(v3);
-        Vector n3 = v3.crossProduct(v1);
+        double n1 = alignZero(v.dotProduct(v1.crossProduct(v2)));
+        if (n1 == 0) return null;
 
-        double s1 = alignZero(ray.direction().dotProduct(n1));
-        double s2 = alignZero(ray.direction().dotProduct(n2));
-        double s3 = alignZero(ray.direction().dotProduct(n3));
+        double n2 = alignZero(v.dotProduct(v2.crossProduct(v3)));
+        if (n1 * n2 <= 0) return null;
 
-        if (s1 == 0 || s2 == 0 || s3 == 0) return null;
+        double n3 = alignZero(v.dotProduct(v3.crossProduct(v1)));
+        if (n1 * n3 <= 0) return null;
 
-        if (s1 > 0 && s2 > 0 && s3 > 0)
-            return List.of(p0);
-
-        if (s1 < 0 && s2 < 0 && s3 < 0)
-            return List.of(p0);
-
-        return null;
+        return List.of(p0);
 
     }
 }
