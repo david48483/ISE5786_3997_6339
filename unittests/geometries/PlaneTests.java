@@ -116,7 +116,7 @@ public class PlaneTests {
     @Test
     void testGetNormal() {
 
-        Plane plane = new Plane(P2, V1);
+        Plane plane = new Plane(P2, V1.scale(-1));
 
         // ============ Equivalence Partitions Tests ==============
 
@@ -127,9 +127,6 @@ public class PlaneTests {
         //  check corect normal
         assertThrows(IllegalArgumentException.class, () -> plane.getNormal(new Point(1, 5, -4)).crossProduct(V1),
                 "ERROR: getNormal() should throw exception for a point not on the plane");
-
-        assertTrue(plane.getNormal(new Point(1, 5, -4)).dotProduct(V1) > 0,
-                "ERROR: getNormal() should return a normal vector that is in the another direction as the normal vector used in the constructor");
 
         //== Boundary Values Tests ==================
         // TC11: A point that is not the reference

@@ -33,18 +33,17 @@ public class Triangle extends Polygon {
         List<Point> planeIntersections = _plane.findIntersections(ray);
         if (planeIntersections == null) return null;
 
-        Point p0 = planeIntersections.get(0);
+        Point p0 = planeIntersections.getFirst();
 
         Vector v = ray.direction();
         Point head = ray.origin();
 
         Vector v1 = _vertices.get(0).subtract(head);
         Vector v2 = _vertices.get(1).subtract(head);
-        Vector v3 = _vertices.get(2).subtract(head);
-
         double n1 = alignZero(v.dotProduct(v1.crossProduct(v2)));
         if (n1 == 0) return null;
 
+        Vector v3 = _vertices.get(2).subtract(head);
         double n2 = alignZero(v.dotProduct(v2.crossProduct(v3)));
         if (n1 * n2 <= 0) return null;
 
@@ -52,6 +51,5 @@ public class Triangle extends Polygon {
         if (n1 * n3 <= 0) return null;
 
         return List.of(p0);
-
     }
 }

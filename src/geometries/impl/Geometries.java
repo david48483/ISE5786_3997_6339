@@ -5,7 +5,7 @@ import primitives.Point;
 import primitives.Ray;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -43,7 +43,7 @@ public class Geometries extends Intersectable {
      * @param geometries one or more intersectable geometries to add
      */
     public void add(Intersectable... geometries) {
-        _geometries.addAll(Arrays.asList(geometries));
+        Collections.addAll(_geometries, geometries);
     }
 
     @Override
@@ -52,10 +52,10 @@ public class Geometries extends Intersectable {
         for (Intersectable geometry : _geometries) {
             List<Point> points = geometry.findIntersections(ray);
             if (points != null) {
-                if (result == null) {
-                    result = new ArrayList<>();
-                }
-                result.addAll(points);
+                if (result == null)
+                    result = new ArrayList<>(points);
+                else
+                    result.addAll(points);
             }
         }
         return result;
