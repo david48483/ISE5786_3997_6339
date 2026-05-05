@@ -27,6 +27,22 @@ public class GeometriesTests {
     public GeometriesTests() {
     }
 
+    // ---- Error messages ----
+
+    /** Error message for {@link Geometries#Geometries(geometries.api.Intersectable...)} tests. */
+    private static final String ERR_CONSTRUCTOR =
+            "ERROR: Geometries constructor threw unexpectedly";
+
+    /** Error message for {@link Geometries#add(geometries.api.Intersectable...)} tests. */
+    private static final String ERR_ADD =
+            "ERROR: add() threw unexpectedly";
+
+    /** Error message when the wrong number of intersections is returned. */
+    private static final String ERR_INTERSECTIONS =
+            "ERROR: Geometries findIntersections() returned wrong number of intersections";
+
+    // ---- Shared geometries ----
+
     /**
      * Plane at z=0 with normal in the +Z direction.
      */
@@ -42,7 +58,34 @@ public class GeometriesTests {
      */
     private final Triangle _triangle = new Triangle(Point.ZERO, new Point(4, 0, 0), new Point(0, 4, 0));
 
-    // ---- Constructor & add ----
+    // ---- Shared rays ----
+
+    /**
+     * EP01 — from (3,0,−10) going +Z: hits sphere (2 pts) and plane (1 pt); misses triangle.
+     * Total expected intersections: 3.
+     */
+    private final Ray _raySome = new Ray(new Point(3, 0, -10), Vector.AXIS_Z);
+
+    /**
+     * BVA01 — from (10,0,6) going +X: passes entirely above and outside the sphere.
+     * Expected result: null.
+     */
+    private final Ray _rayNone = new Ray(new Point(10, 0, 6), Vector.AXIS_X);
+
+    /**
+     * BVA02 — from (0,0,3) going +X: starts inside the sphere and exits once (1 pt);
+     * travels at z=3 so it never reaches the z=0 plane or triangle.
+     * Total expected intersections: 1.
+     */
+    private final Ray _rayOne = new Ray(new Point(0, 0, 3), Vector.AXIS_X);
+
+    /**
+     * BVA03 — from (1,1,−10) going +Z: hits sphere (2 pts), plane (1 pt) and triangle (1 pt).
+     * Total expected intersections: 4.
+     */
+    private final Ray _rayAll = new Ray(new Point(1, 1, -10), Vector.AXIS_Z);
+
+    // ---- Tests ----
 
     /**
      * Test method for {@link Geometries#Geometries(geometries.api.Intersectable...)}.
@@ -52,7 +95,7 @@ public class GeometriesTests {
     void testConstructor() {
         assertDoesNotThrow(
                 () -> new Geometries(_plane, _sphere, _triangle),
-                "ERROR: Geometries constructor threw unexpectedly");
+                ERR_CONSTRUCTOR);
     }
 
     /**
@@ -64,10 +107,8 @@ public class GeometriesTests {
         assertDoesNotThrow(() -> {
             Geometries g = new Geometries(_plane);
             g.add(_sphere, _triangle);
-        }, "ERROR: add() threw unexpectedly");
+        }, ERR_ADD);
     }
-
-    // ---- findIntersections ----
 
     /**
      * Test method for {@link Geometries#findIntersections(Ray)}.
@@ -80,39 +121,18 @@ public class GeometriesTests {
 
         // ============ Equivalence Partitions Tests ============
 
-        // EP01: Some (but not all) geometries are intersected.
-        // Ray from (3,0,-10) going +Z:
-        //   Sphere  d²=9 < 25 → 2 intersection points
-        //   Plane   z=0 → 1 intersection point at (3,0,0)
-        //   Triangle: (3,0,0) lies on edge origin-PX (boundary) → not intersected
-        // Total expected: 3
-        assertEquals(3,
-                geometries.findIntersections(new Ray(new Point(3, 0, -10), Vector.AXIS_Z)).size(),
-                "EP01: wrong number of intersections when some geometries are hit");
+        // EP01: Some (but not all) geometries are intersected — sphere + plane, not triangle
+        assertEquals(3, geometries.findIntersections(_raySome).size(), ERR_INTERSECTIONS);
 
         // ============ Boundary Values Tests ============
 
-        // BVA01: No geometry is intersected → must return null.
-        // Ray from (10,0,6) going +X passes entirely above and outside the sphere.
-        assertNull(
-                geometries.findIntersections(new Ray(new Point(10, 0, 6), Vector.AXIS_X)),
-                "BVA01: expected null when no geometry is intersected");
+        // BVA01: No geometry is intersected → must return null
+        assertNull(geometries.findIntersections(_rayNone), ERR_INTERSECTIONS);
 
-        // BVA02: Exactly one geometry is intersected.
-        // Ray from (0,0,3) going +X: starts inside the sphere, exits once (1 point);
-        // travels at z=3 in the X direction → never reaches the z=0 plane or triangle.
-        assertEquals(1,
-                geometries.findIntersections(new Ray(new Point(0, 0, 3), Vector.AXIS_X)).size(),
-                "BVA02: wrong count when exactly one geometry is intersected");
+        // BVA02: Exactly one geometry is intersected — sphere only
+        assertEquals(1, geometries.findIntersections(_rayOne).size(), ERR_INTERSECTIONS);
 
-        // BVA03: All geometries are intersected.
-        // Ray from (1,1,-10) going +Z:
-        //   Sphere  d²=2 < 25 → 2 intersection points
-        //   Plane   z=0 → 1 intersection point at (1,1,0)
-        //   Triangle: (1,1,0) satisfies 1+1=2 < 4, strictly inside → 1 intersection point
-        // Total expected: 4
-        assertEquals(4,
-                geometries.findIntersections(new Ray(new Point(1, 1, -10), Vector.AXIS_Z)).size(),
-                "BVA03: wrong number of intersections when all geometries are hit");
+        // BVA03: All geometries are intersected — sphere (2) + plane (1) + triangle (1)
+        assertEquals(4, geometries.findIntersections(_rayAll).size(), ERR_INTERSECTIONS);
     }
 }
