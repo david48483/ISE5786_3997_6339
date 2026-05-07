@@ -82,11 +82,6 @@ public class Sphere extends RadialGeometry {
     }
 
     @Override
-    public int hashCode() {
-        return 31 * Double.hashCode(_radius) + _center.hashCode();
-    }
-
-    @Override
     public String toString() {
         return "Sphere{center=" + _center + ", radius=" + _radius + "}";
     }

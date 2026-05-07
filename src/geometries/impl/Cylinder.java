@@ -28,20 +28,6 @@ public class Cylinder extends Tube {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        if (!super.equals(obj)) return false;
-        Cylinder other = (Cylinder) obj;
-        return Double.compare(_height, other._height) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-        return 31 * super.hashCode() + Double.hashCode(_height);
-    }
-
-    @Override
     public String toString() {
         return "Cylinder{height=" + _height + ", base=" + super.toString() + "}";
     }

@@ -49,19 +49,6 @@ public class Tube extends RadialGeometry {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Tube other = (Tube) obj;
-        return Double.compare(_radius, other._radius) == 0 && _axis.equals(other._axis);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31 * Double.hashCode(_radius) + _axis.hashCode();
-    }
-
-    @Override
     public String toString() {
         return "Tube{radius=" + _radius + ", axis=" + _axis + "}";
     }
