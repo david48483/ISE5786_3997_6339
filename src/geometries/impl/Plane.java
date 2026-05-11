@@ -82,19 +82,6 @@ public class Plane extends Geometry {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Plane other = (Plane) obj;
-        return _point.equals(other._point) && _normal.equals(other._normal);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31 * _point.hashCode() + _normal.hashCode();
-    }
-
-    @Override
     public String toString() {
         return "Plane{point=" + _point + ", normal=" + _normal + "}";
     }
