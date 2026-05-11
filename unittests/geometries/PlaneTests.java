@@ -126,13 +126,8 @@ public class PlaneTests {
         assertEquals(1, normal.length(), DELTA,
                 "ERROR: getNormal() must return a unit vector");
 
-        // Normal is perpendicular to a vector lying in the plane (dot product = 0)
-        // AXIS_X lies in the plane (z=1 for all points), so normal · AXIS_X must be 0
-        //assertEquals(0, normal.dotProduct(Vector.AXIS_X), DELTA,
-        //      "ERROR: getNormal() must be perpendicular to vectors lying in the plane");
-
         //  Normal points in the correct direction (same direction as expected +Z)
-        assertEquals(1, Math.abs(normal.dotProduct(Vector.AXIS_Z)),
+        assertEquals(1, Math.abs(normal.dotProduct(Vector.AXIS_Z)), DELTA,
                 "ERROR: getNormal() must point in the Z direction for this plane");
 
         // ============ Boundary Values Tests ==================
@@ -141,15 +136,7 @@ public class PlaneTests {
         assertEquals(1, plane.getNormal(P101).length(), DELTA,
                 "ERROR: getNormal() at reference point must return a unit vector");
 
-        //  Normal at reference point is perpendicular to the plane
-        //assertEquals(0, plane.getNormal(P101).dotProduct(Vector.AXIS_X), DELTA,
-        // "ERROR: getNormal() at reference point must be perpendicular to the plane");
-
-        // Normal at reference point points in the correct direction
-        // assertTrue(plane.getNormal(P101).dotProduct(Vector.AXIS_Z) > 0,
-        // "ERROR: getNormal() at reference point must point in the +Z direction");
-
-        assertEquals(1, Math.abs(plane.getNormal(P101).dotProduct(Vector.AXIS_Z)),
+        assertEquals(1, Math.abs(plane.getNormal(P101).dotProduct(Vector.AXIS_Z)), DELTA,
                 "ERROR: getNormal() must point in the Z direction for this plane");
 
     }
