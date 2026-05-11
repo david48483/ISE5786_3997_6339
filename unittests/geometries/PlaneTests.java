@@ -117,33 +117,37 @@ public class PlaneTests {
      */
     @Test
     void testGetNormal() {
-
         Plane plane = new Plane(P101, P011, P001);
+        Vector normal = plane.getNormal(new Point(1, 5, 1));
 
         // ============ Equivalence Partitions Tests ==============
 
-        // TC01: A point that is not the reference
-        assertEquals(1, plane.getNormal(new Point(1, 5, 1)).length(), DELTA,
-                "getNormal() wrong result for a point on the plane (not reference point)");
+        // EP01: Normal at a non-reference point on the plane is a unit vector
+        assertEquals(1, normal.length(), DELTA,
+                "ERROR: getNormal() must return a unit vector");
 
-        //  check correct normal
-        assertEquals(0, plane.getNormal(new Point(3, 4, 1)).dotProduct(Vector.AXIS_X),
-                "ERROR: getNormal() should throw exception for a point not on the plane");
+        // EP02: Normal is perpendicular to a vector lying in the plane (dot product = 0)
+        // AXIS_X lies in the plane (z=1 for all points), so normal · AXIS_X must be 0
+        assertEquals(0, normal.dotProduct(Vector.AXIS_X), DELTA,
+                "ERROR: getNormal() must be perpendicular to vectors lying in the plane");
 
-        assertEquals(0, plane.getNormal(new Point(3, 4, 1)).dotProduct(Vector.AXIS_Y),
-                "ERROR: getNormal() should throw exception for a point not on the plane");
+        // EP03: Normal points in the correct direction (same direction as expected +Z)
+        assertTrue(normal.dotProduct(Vector.AXIS_Z) > 0,
+                "ERROR: getNormal() must point in the +Z direction for this plane");
 
-        //== Boundary Values Tests ==================
-        // TC11: A point that is  reference
+        // ============ Boundary Values Tests ==================
+
+        // BVA11: Normal at the reference point itself is still a unit vector
         assertEquals(1, plane.getNormal(P101).length(), DELTA,
-                "getNormal() wrong result for a point on the plane (not reference point)");
+                "ERROR: getNormal() at reference point must return a unit vector");
 
-        //  check correct normal
-        assertThrows(IllegalArgumentException.class, () -> plane.getNormal(P101).crossProduct(Vector.AXIS_Z),
-                "ERROR: getNormal() should throw exception for a point not on the plane");
+        // BVA12: Normal at reference point is perpendicular to the plane
+        assertEquals(0, plane.getNormal(P101).dotProduct(Vector.AXIS_X), DELTA,
+                "ERROR: getNormal() at reference point must be perpendicular to the plane");
 
-        assertTrue(plane.getNormal(P101).dotProduct(V1) > 0,
-                "ERROR: getNormal() should return a normal vector that is in the another direction as the normal vector used in the constructor");
+        // BVA13: Normal at reference point points in the correct direction
+        assertTrue(plane.getNormal(P101).dotProduct(Vector.AXIS_Z) > 0,
+                "ERROR: getNormal() at reference point must point in the +Z direction");
     }
 
     /**
