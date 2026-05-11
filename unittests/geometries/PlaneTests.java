@@ -37,12 +37,14 @@ public class PlaneTests {
     /**
      * Points used in the tests
      */
-    private static final Point P2 = new Point(1, 0, 0);
+    private static final Point P101 = new Point(1, 0, 1);
 
     /**
      * Another point used in the tests
      */
-    private static final Point P3 = new Point(0, 1, 0);
+    private static final Point P011 = new Point(0, 1, 1);
+
+    private static final Point P001 = new Point(0, 0, 1);
 
     /**
      * A vector used in the tests
@@ -61,29 +63,29 @@ public class PlaneTests {
         // ============ Equivalence Partitions Tests ==============
 
         //TC01 check constructor, different points
-        assertDoesNotThrow(() -> new Plane(Point.ZERO, P2, P3),
+        assertDoesNotThrow(() -> new Plane(P001, P101, P011),
                 "ERROR,Plane constructor failed to create the expected plane  ");
 
         // =============== Boundary Values Tests ==================
 
         //TC11 First and second points are the same.
-        assertThrows(IllegalArgumentException.class, () -> new Plane(P2, P2, P3),
+        assertThrows(IllegalArgumentException.class, () -> new Plane(P001, P001, P011),
                 "ERROR: Plane constructor should throw exception when first and second points are the same");
 
         //   First and third points are the same.
-        assertThrows(IllegalArgumentException.class, () -> new Plane(P2, P3, P2),
+        assertThrows(IllegalArgumentException.class, () -> new Plane(P001, P101, P001),
                 "ERROR: Plane constructor should throw exception when first and third points are the same");
 
         //   Second and third points are the same.
-        assertThrows(IllegalArgumentException.class, () -> new Plane(P3, P2, P2),
+        assertThrows(IllegalArgumentException.class, () -> new Plane(P001, P101, P101),
                 "ERROR: Plane constructor should throw exception when second and third points are the same");
 
         //  All three points are different but collinear.
-        assertThrows(IllegalArgumentException.class, () -> new Plane(P2, P2, P2),
+        assertThrows(IllegalArgumentException.class, () -> new Plane(P001, P001, P001),
                 "ERROR: Plane constructor should throw exception when all three points are different but collinear");
 
         //   All three points are the same collinear.
-        assertThrows(IllegalArgumentException.class, () -> new Plane(P2, new Point(4, 0, 0), Point.ZERO),
+        assertThrows(IllegalArgumentException.class, () -> new Plane(P101, new Point(4, 0, 1), new Point(2, 0, 1)),
                 "ERROR: Plane constructor should throw exception when all three points are the same collinear");
 
     }
@@ -99,12 +101,12 @@ public class PlaneTests {
         //idea...
         testGetNormal();
 
-        Plane plane = new Plane(P2, V1);
+        Plane plane = new Plane(P101, V1);
 
         //  ============ Equivalence Partitions Tests ==============
 
         //  TC01 check constructor.
-        assertEquals(1, plane.getNormal(P2).length(), DELTA,
+        assertEquals(1, plane.getNormal(P101).length(), DELTA,
                 "ERROR: Plane constructor failed to create the expected plane with point and normal vector");
 
     }
@@ -116,28 +118,31 @@ public class PlaneTests {
     @Test
     void testGetNormal() {
 
-        Plane plane = new Plane(P2, V1.scale(-1));
+        Plane plane = new Plane(P101, P011, P001);
 
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: A point that is not the reference
-        assertEquals(1, plane.getNormal(new Point(1, 5, -4)).length(), DELTA,
+        assertEquals(1, plane.getNormal(new Point(1, 5, 1)).length(), DELTA,
                 "getNormal() wrong result for a point on the plane (not reference point)");
 
-        //  check corect normal
-        assertThrows(IllegalArgumentException.class, () -> plane.getNormal(new Point(1, 5, -4)).crossProduct(V1),
+        //  check correct normal
+        assertEquals(0, plane.getNormal(new Point(3, 4, 1)).dotProduct(Vector.AXIS_X),
+                "ERROR: getNormal() should throw exception for a point not on the plane");
+
+        assertEquals(0, plane.getNormal(new Point(3, 4, 1)).dotProduct(Vector.AXIS_Y),
                 "ERROR: getNormal() should throw exception for a point not on the plane");
 
         //== Boundary Values Tests ==================
-        // TC11: A point that is not the reference
-        assertEquals(1, plane.getNormal(P2).length(), DELTA,
+        // TC11: A point that is  reference
+        assertEquals(1, plane.getNormal(P101).length(), DELTA,
                 "getNormal() wrong result for a point on the plane (not reference point)");
 
-        //  check corect normal
-        assertThrows(IllegalArgumentException.class, () -> plane.getNormal(P2).crossProduct(V1),
+        //  check correct normal
+        assertThrows(IllegalArgumentException.class, () -> plane.getNormal(P101).crossProduct(Vector.AXIS_Z),
                 "ERROR: getNormal() should throw exception for a point not on the plane");
 
-        assertTrue(plane.getNormal(P2).dotProduct(V1) > 0,
+        assertTrue(plane.getNormal(P101).dotProduct(V1) > 0,
                 "ERROR: getNormal() should return a normal vector that is in the another direction as the normal vector used in the constructor");
     }
 

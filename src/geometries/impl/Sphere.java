@@ -38,14 +38,6 @@ public class Sphere extends RadialGeometry {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Sphere other = (Sphere) obj;
-        return Double.compare(_radius, other._radius) == 0 && _center.equals(other._center);
-    }
-
-    @Override
     public List<Point> findIntersections(Ray ray) {
         Vector l;
         try {
