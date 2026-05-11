@@ -210,8 +210,8 @@ public class TriangleTests {
         assertNull(TRIANGLE.findIntersections(RAY_OPP_VERTEX_PY), ERR_FIND_INTERSECTIONS);
         // EP07: opposite vertex ZERO
         assertNull(TRIANGLE.findIntersections(RAY_OPP_VERTEX_ZERO), ERR_FIND_INTERSECTIONS);
-        // EP08: ray parallel to the triangle plane
-        assertNull(TRIANGLE.findIntersections(RAY_PARALLEL), ERR_FIND_INTERSECTIONS);
+
+        //**** Group 4: check of plane
 
         // ============ Boundary Values Tests ==============
 
@@ -238,6 +238,12 @@ public class TriangleTests {
         assertNull(TRIANGLE.findIntersections(RAY_CONT_ZERO_PY), ERR_FIND_INTERSECTIONS);
         // BVA33: continuation of edge ZERO–PX
         assertNull(TRIANGLE.findIntersections(RAY_CONT_ZERO_PX), ERR_FIND_INTERSECTIONS);
+
+        //****  Group 4: check of plane
+
+        // BV40: ray parallel to the triangle plane
+        assertNull(TRIANGLE.findIntersections(RAY_PARALLEL), ERR_FIND_INTERSECTIONS);
+
     }
 }
 
