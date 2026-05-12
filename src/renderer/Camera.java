@@ -47,6 +47,62 @@ public class Camera implements Cloneable {
 
         private final Camera _camera = null;
 
+        public Builder setLocation(Point location)){
+            return null;
+        }
+
+        public Builder setDirection(Vector to, Vector up){
+            return null;
+        }
+
+        public Builder setDirection(Point target, Vector up){
+            return null;
+        }
+
+        public Builder setDirection(Point target){
+            return null;
+        }
+
+        public  Builder setVpDistance(double distance){
+            return null;
+        }
+
+        public Builder setVpSize(double width, double height){
+            return null;
+        }
+
+        public Builder setResolution (int nX, int nY){
+            return null;
+        }
+
+        private calcVectors(){}
+
+        private calcVpCenter(){}
+
+        private checkAndSetResolution(){}
+
+        private checkAndSetOrientation(){}
+
+        private checkAndSetViewPlane(){}
+
+        private checkResolution(){}
+
+        private checkLocationAndDirection(){}
+
+        private checkViewPlane(){}
+
+        public Camera build(){
+            checkResolution();
+            checkLocationAndDirection();
+            checkViewPlane();
+            try {
+                return (Camera)_camera.clone();
+            } catch (CloneNotSupportedException _) {
+                return null;
+            }
+        }
+
+
     }
 
 }
