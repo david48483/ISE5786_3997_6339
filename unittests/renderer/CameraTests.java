@@ -8,7 +8,7 @@ import renderer.Camera.Builder;
 
 import java.util.MissingResourceException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for class {@link Camera}.

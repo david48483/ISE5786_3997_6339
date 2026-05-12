@@ -4,15 +4,17 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.MissingResourceException;
+
 public class Camera implements Cloneable {
 
-    private final Point _p0;
+    private Point _p0;
 
-    private final Vector _vUp;
+    private Vector _vUp;
 
-    private final Vector _vTo;
+    private Vector _vTo;
 
-    private final Vector _vRight;
+    private Vector _vRight;
 
     private Double _distance;
 
@@ -20,9 +22,9 @@ public class Camera implements Cloneable {
 
     private Double _height;
 
-    private int _nx;
+    private int _nX = 1;
 
-    private int _ny;
+    private int _nY = 1;
 
     private Point _vpCenter;
 
@@ -45,63 +47,115 @@ public class Camera implements Cloneable {
 
     public static class Builder {
 
-        private final Camera _camera = null;
+        private final Camera _camera;
 
-        public Builder setLocation(Point location)){
-            return null;
+        private Point _target;
+
+        private Vector _up;
+
+        private Vector _direction;
+
+        // private boolean _ttt;
+
+        public Builder() {
+            _camera = new Camera();
         }
 
-        public Builder setDirection(Vector to, Vector up){
-            return null;
+        public Builder setLocation(Point location) {
+            _camera._p0 = location;
+            return this;
         }
 
-        public Builder setDirection(Point target, Vector up){
-            return null;
+        public Builder setDirection(Vector to, Vector up) {
+
+            _camera._vTo = to;
+            _camera._vUp = up;
+
+            //v right
+            return this;
         }
 
-        public Builder setDirection(Point target){
-            return null;
+        public Builder setDirection(Point target, Vector up) {
+            _target = target;
+            _up = up;
+
+            return this;
         }
 
-        public  Builder setVpDistance(double distance){
-            return null;
+        public Builder setDirection(Point target) {
+
+            _target = target;
+            _up = Vector.AXIS_Y;
+            return this;
         }
 
-        public Builder setVpSize(double width, double height){
-            return null;
+        public Builder setVpDistance(double distance) {
+            _camera._distance = distance;
+            return this;
         }
 
-        public Builder setResolution (int nX, int nY){
-            return null;
+        public Builder setVpSize(double width, double height) {
+
+            _camera._width = width;
+            _camera._height = height;
+            return this;
         }
 
-        private calcVectors(){}
+        public Builder setResolution(int nX, int nY) {
 
-        private calcVpCenter(){}
+            _camera._nX = nX;
+            _camera._nY = nY;
+            return this;
+        }
 
-        private checkAndSetResolution(){}
+        private void calcVectors() {
+        }
 
-        private checkAndSetOrientation(){}
+        private void calcVpCenter() {
+        }
 
-        private checkAndSetViewPlane(){}
+        private void checkAndSetResolution() {
+        }
 
-        private checkResolution(){}
+        private void checkAndSetOrientation() {
+        }
 
-        private checkLocationAndDirection(){}
+        private void checkAndSetViewPlane() {
+        }
 
-        private checkViewPlane(){}
+        private void checkResolution() {
+            if (_camera._nX <= 0 || _camera._nY <= 0) {
+                throw new IllegalArgumentException("Resolution must be positive");
+            }
 
-        public Camera build(){
+        }
+
+        private void checkLocationAndDirection() {
+
+            if (_camera._p0 == null)
+                throw new MissingResourceException("Camera location is not set", "Camera", "location");
+
+            if (_camera._vTo == null)
+
+                throw new MissingResourceException("Camera direction is not set", "Camera", "direction");
+            if (_camera._vUp == null)
+                MissingResourceException("Camera up vector is not set");
+
+        }
+
+        private void checkViewPlane() {
+        }
+
+        public Camera build() {
             checkResolution();
             checkLocationAndDirection();
             checkViewPlane();
             try {
-                return (Camera)_camera.clone();
+                return (Camera) _camera.clone();
             } catch (CloneNotSupportedException _) {
                 return null;
             }
         }
-
 
     }
 
