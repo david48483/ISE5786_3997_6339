@@ -135,11 +135,8 @@ public class Camera implements Cloneable {
             if (_camera._p0 == null)
                 throw new MissingResourceException("Camera location is not set", "Camera", "location");
 
-            if (_camera._vTo == null)
-
-                throw new MissingResourceException("Camera direction is not set", "Camera", "direction");
-            if (_camera._vUp == null)
-                MissingResourceException("Camera up vector is not set");
+            _camera._vTo = _target.subtract(_camera._p0).normalize();
+            _camera._vUp = _up.normalize();
 
         }
 
