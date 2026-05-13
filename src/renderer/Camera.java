@@ -6,6 +6,8 @@ import primitives.Vector;
 
 import java.util.MissingResourceException;
 
+import static primitives.Util.isZero;
+
 public class Camera implements Cloneable {
 
     private Point _p0;
@@ -39,8 +41,19 @@ public class Camera implements Cloneable {
         return new Builder();
     }
 
-    public Ray constructRay(int column, int raw) {
-        return null;
+    public Ray constructRay(int xIndex, int yIndex) {
+        Point pIJ = _vpCenter;
+
+        double xJ = (xIndex - (_nX - 1) / 2.0) * _pixelWidth;
+        double yI = -(yIndex - (_nY - 1) / 2.0) * _pixelHeight;
+
+        if (!isZero(xJ))
+            pIJ = pIJ.add(_vRight.scale(xJ));
+        if (!isZero(yI))
+            pIJ = pIJ.add(_vUp.scale(yI));
+
+        return new Ray(_p0, pIJ.subtract(_p0).normalize());
+
     }
 
     ;
