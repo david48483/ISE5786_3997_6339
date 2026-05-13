@@ -34,6 +34,10 @@ public class Camera implements Cloneable {
 
     private double _pixelHeight;
 
+    private double _halfNx;
+
+    private double _halfNy;
+
     private Camera() {
     }
 
@@ -44,8 +48,8 @@ public class Camera implements Cloneable {
     public Ray constructRay(int xIndex, int yIndex) {
         Point pIJ = _vpCenter;
 
-        double xJ = (xIndex - (_nX - 1) / 2.0) * _pixelWidth;
-        double yI = -(yIndex - (_nY - 1) / 2.0) * _pixelHeight;
+        double xJ = (xIndex - _halfNx) * _pixelWidth;
+        double yI = -(yIndex - _halfNy) * _pixelHeight;
 
         if (!isZero(xJ))
             pIJ = pIJ.add(_vRight.scale(xJ));
@@ -164,6 +168,9 @@ public class Camera implements Cloneable {
             }
             _camera._pixelWidth = _camera._width / _camera._nX;
             _camera._pixelHeight = _camera._height / _camera._nY;
+
+            _camera._halfNx = (_camera._nX - 1) / 2.0;
+            _camera._halfNy = (_camera._nY - 1) / 2.0;
 
             _camera._vpCenter = _camera._p0.add(_camera._vTo.scale(_camera._distance));
         }
