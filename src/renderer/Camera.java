@@ -16,11 +16,11 @@ public class Camera implements Cloneable {
 
     private Vector _vRight;
 
-    private Double _distance;
+    private double _distance;
 
-    private Double _width;
+    private double _width;
 
-    private Double _height;
+    private double _height;
 
     private int _nX = 1;
 
@@ -28,15 +28,15 @@ public class Camera implements Cloneable {
 
     private Point _vpCenter;
 
-    private Double _pixelWidth;
+    private double _pixelWidth;
 
-    private Double _pixelHeight;
+    private double _pixelHeight;
 
     private Camera() {
     }
 
     public static Builder getBuilder() {
-        return null;
+        return new Builder();
     }
 
     public Ray constructRay(int column, int raw) {
@@ -49,62 +49,64 @@ public class Camera implements Cloneable {
 
         private final Camera _camera;
 
-        private Point _target;
-
-        private Vector _up;
-
         private Vector _direction;
-
-        // private boolean _ttt;
+        private Point _target;
+        private Vector _up;
 
         public Builder() {
             _camera = new Camera();
         }
 
         public Builder setLocation(Point location) {
+
             _camera._p0 = location;
             return this;
         }
 
         public Builder setDirection(Vector to, Vector up) {
 
-            _camera._vTo = to;
-            _camera._vUp = up;
+            _direction = to;
+            _up = up;
+            _target = null;
 
-            //v right
             return this;
         }
 
         public Builder setDirection(Point target, Vector up) {
-            _target = target;
+
+            _direction = null;
             _up = up;
+            _target = target;
 
             return this;
         }
 
         public Builder setDirection(Point target) {
 
-            _target = target;
+            _direction = null;
             _up = Vector.AXIS_Y;
+            _target = target;
+
             return this;
         }
 
         public Builder setVpDistance(double distance) {
-            _camera._distance = distance;
+
+            this._camera._distance = distance;
             return this;
         }
 
         public Builder setVpSize(double width, double height) {
 
-            _camera._width = width;
-            _camera._height = height;
+            this._camera._width = width;
+            this._camera._height = height;
             return this;
         }
 
         public Builder setResolution(int nX, int nY) {
 
-            _camera._nX = nX;
-            _camera._nY = nY;
+            this._camera._nX = nX;
+            this._camera._nY = nY;
             return this;
         }
 
@@ -114,33 +116,43 @@ public class Camera implements Cloneable {
         private void calcVpCenter() {
         }
 
-        private void checkAndSetResolution() {
-        }
+        private void checkLocationAndDirection() {
+            if (_camera._p0 == null || _up == null || (_target == null && _direction == null))
+                throw new MissingResourceException("Camera location and direction must be set", Camera.class.getName(), "");
 
-        private void checkAndSetOrientation() {
-        }
+            if (_direction == null) {
+                _camera._vTo = _target.subtract(_camera._p0).normalize();
+            } else {
+                _camera._vTo = _direction.normalize();
+            }
+            try {
+                _camera._vRight = _camera._vTo.crossProduct(_up).normalize();
 
-        private void checkAndSetViewPlane() {
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Up vector cannot be parallel to the direction vector");
+            }
+
+            _camera._vUp = _camera._vRight.crossProduct(_camera._vTo).normalize();
+
         }
 
         private void checkResolution() {
+
             if (_camera._nX <= 0 || _camera._nY <= 0) {
                 throw new IllegalArgumentException("Resolution must be positive");
+
             }
-
-        }
-
-        private void checkLocationAndDirection() {
-
-            if (_camera._p0 == null)
-                throw new MissingResourceException("Camera location is not set", "Camera", "location");
-
-            _camera._vTo = _target.subtract(_camera._p0).normalize();
-            _camera._vUp = _up.normalize();
-
         }
 
         private void checkViewPlane() {
+
+            if (_camera._width <= 0 || _camera._height <= 0 || _camera._distance <= 0) {
+                throw new IllegalArgumentException("View plane size must be positive");
+            }
+            _camera._pixelWidth = _camera._width / _camera._nX;
+            _camera._pixelHeight = _camera._height / _camera._nY;
+
+            _camera._vpCenter = _camera._p0.add(_camera._vTo.scale(_camera._distance));
         }
 
         public Camera build() {
