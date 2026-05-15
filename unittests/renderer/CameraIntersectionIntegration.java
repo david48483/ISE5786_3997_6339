@@ -38,15 +38,7 @@ public class CameraIntersectionIntegration {
     void testCameraRaySphereIntegration() {
 
         Sphere sphere = new Sphere(Point.ZERO, 1);
-        int i, j, sum = 0;
-        for (i = 0; i < 3; i++)
-            for (j = 0; j < 3; j++) {
-                Ray ray = cam1.constructRay(j, i);
-                List<Point> intersections = sphere.findIntersections(ray);
-                if (intersections != null)
-                    sum = sum + intersections.size();
-            }
-        assertEquals(9, sum, "ERROR: Camera-Sphere integration test failed");
+        assertIntersectionsCount(cam1, sphere, 9, "Camera-Ray-Sphere Integration Test");
     }
 
     @Test
