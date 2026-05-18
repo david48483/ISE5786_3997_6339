@@ -44,6 +44,10 @@ public class PlaneTests {
      */
     private static final Point P011 = new Point(0, 1, 1);
 
+    /**
+     * Another point used in the tests
+     */
+
     private static final Point P001 = new Point(0, 0, 1);
 
     /**
