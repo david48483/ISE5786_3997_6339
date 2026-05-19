@@ -252,8 +252,24 @@ public class Camera implements Cloneable {
          */
         //====================================================================================================================================================================
         private void checkLocationAndDirection() {
-            if (_camera._p0 == null || _up == null || (_target == null && _direction == null))
-                throw new MissingResourceException("Camera location and direction must be set", Camera.class.getName(), "");
+
+            if (_camera._p0 == null)
+                throw new MissingResourceException(
+                        "Camera location is missing",
+                        Camera.class.getName(),
+                        "_p0");
+
+            if (_up == null)
+                throw new MissingResourceException(
+                        "Up vector is missing",
+                        Camera.class.getName(),
+                        "_up");
+
+            if (_target == null && _direction == null)
+                throw new MissingResourceException(
+                        "Camera direction is missing",
+                        Camera.class.getName(),
+                        "_direction");
 
             if (_direction == null) {
                 _camera._vTo = _target.subtract(_camera._p0).normalize();
@@ -297,6 +313,7 @@ public class Camera implements Cloneable {
             if (_camera._width <= 0 || _camera._height <= 0 || _camera._distance <= 0) {
                 throw new IllegalArgumentException("View plane size must be positive");
             }
+
             _camera._pixelWidth = _camera._width / _camera._nX;
             _camera._pixelHeight = _camera._height / _camera._nY;
 
