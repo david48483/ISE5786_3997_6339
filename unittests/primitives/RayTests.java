@@ -2,9 +2,9 @@ package primitives;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link Ray} class.
@@ -30,19 +30,27 @@ class RayTests {
 
     // ---- Error messages ----
 
-    /** Error message for {@link Ray#Ray(Point, Vector)} tests. */
+    /**
+     * Error message for {@link Ray#Ray(Point, Vector)} tests.
+     */
     private static final String ERR_CONSTRUCTOR =
             "ERROR: Ray constructor failed to create the expected ray";
 
-    /** Error message for {@link Ray#direction()} tests. */
+    /**
+     * Error message for {@link Ray#direction()} tests.
+     */
     private static final String ERR_DIRECTION =
             "ERROR: Ray constructor failed to normalize the direction vector";
 
-    /** Error message for {@link Ray#origin()} tests. */
+    /**
+     * Error message for {@link Ray#origin()} tests.
+     */
     private static final String ERR_ORIGIN =
             "ERROR: Ray constructor failed to set the origin point correctly";
 
-    /** Error message for {@link Ray#getPoint(double)} tests. */
+    /**
+     * Error message for {@link Ray#getPoint(double)} tests.
+     */
     private static final String ERR_GET_POINT =
             "ERROR: Ray getPoint() returned wrong point";
 
@@ -129,5 +137,40 @@ class RayTests {
 
         // BVA11: t = 0 — zero displacement, must throw
         assertThrows(IllegalArgumentException.class, () -> RAY.getPoint(0), ERR_GET_POINT);
+    }
+
+    /**
+     * Test method for {@link Ray#findClosestPoint(List)}.
+     * Verifies that the method correctly identifies the closest point from a list of points.
+     */
+    @Test
+    void findClosestPoint() {
+
+        List<Point> points = List.of(
+                new Point(0, 0, 7),
+                new Point(0, 0, 1),
+                new Point(0, 0, 4)
+
+        );
+
+        // ============ Equivalence Partitions Tests ==============
+        //EP01  : A list of points where the closest point is in the middle of the list should return the closest point
+        Ray ray = new Ray(Point.ZERO, Vector.AXIS_Z);
+        Point closest = ray.findClosestPoint(points);
+        assertEquals(points.get(1), closest, "ERROR: findClosetPoint() did not return the expected closest point");
+
+        //= ============== Boundary Values Tests ==================
+        //BVA01: An empty list of points should return null
+        List<Point> emptyPoints = List.of();
+        assertNull(ray.findClosestPoint(emptyPoints), "ERROR: findClosetPoint() should return null for an empty list of points");
+
+        //BVA02: A list of points where the closest point is behind the ray's origin should return the closest point
+        ray = new Ray(new Point(0, 0, 6), Vector.AXIS_Z);
+        assertEquals(points.get(0), ray.findClosestPoint(points), "ERROR: findClosetPoint() did not return the expected closest point when the closest point is behind the ray's origin");
+
+        //BVA03: A list of points where the closest point is ahead of the ray's origin should return the closest point
+        ray = new Ray(new Point(0, 0, 3), Vector.AXIS_Z);
+        assertEquals(points.get(2), ray.findClosestPoint(points), "ERROR: findClosetPoint() did not return the expected closest point when the closest point is ahead of the ray's origin");
+
     }
 }

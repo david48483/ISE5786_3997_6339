@@ -1,5 +1,7 @@
 package primitives;
 
+import java.util.List;
+
 /**
  * Represents a ray (half-line) in 3D space, defined by an origin point and a direction vector.
  * The direction vector is always stored normalized.
@@ -56,11 +58,33 @@ public class Ray {
      * @throws IllegalArgumentException if t produces a zero displacement vector
      */
     public Point getPoint(double t) {
-      try {
-          return _origin.add(_direction.scale(t));
-      }catch (IllegalArgumentException e) {
-          throw new IllegalArgumentException("t results in a zero displacement vector", e);
-      }
+        try {
+            return _origin.add(_direction.scale(t));
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("t results in a zero displacement vector", e);
+        }
+
+    }
+
+    /**
+     * Finds the point in the given list that is closest to the ray's origin.
+     *
+     * @param points the list of points to search
+     * @return the point closest to the ray's origin, or null if the list is empty
+     */
+    public Point findClosestPoint(List<Point> points) {
+
+        Double minDistance = Double.POSITIVE_INFINITY;
+        Point closestPoint = null;
+        for (Point p : points) {
+            Double currentDistance = p.distanceSquared(_origin);
+            if (currentDistance < minDistance) {
+                minDistance = currentDistance;
+                closestPoint = p;
+
+            }
+        }
+        return closestPoint;
 
     }
 
