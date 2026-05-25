@@ -1,8 +1,10 @@
 package renderer;
 
+import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import scene.Scene;
 
 import java.util.MissingResourceException;
 
@@ -15,33 +17,61 @@ import static primitives.Util.isZero;
  */
 public class Camera implements Cloneable {
 
-    /** The position of the camera in 3D space. */
+    /**
+     * The position of the camera in 3D space.
+     */
     private Point _p0;
-    /** The up vector of the camera, defining the vertical orientation. */
+    /**
+     * The up vector of the camera, defining the vertical orientation.
+     */
     private Vector _vUp;
-    /** The direction vector of the camera, pointing from the camera towards the scene. */
+    /**
+     * The direction vector of the camera, pointing from the camera towards the scene.
+     */
     private Vector _vTo;
-    /** The right vector of the camera, perpendicular to both the direction and up vectors. */
+    /**
+     * The right vector of the camera, perpendicular to both the direction and up vectors.
+     */
     private Vector _vRight;
-    /** The distance from the camera to the view plane. */
+    /**
+     * The distance from the camera to the view plane.
+     */
     private double _distance;
-    /** The width of the view plane. */
+    /**
+     * The width of the view plane.
+     */
     private double _width;
-    /** The height of the view plane. */
+    /**
+     * The height of the view plane.
+     */
     private double _height;
-    /** The number of pixels in the X direction (horizontal resolution). */
+    /**
+     * The number of pixels in the X direction (horizontal resolution).
+     */
     private int _nX = 1;
-    /** The number of pixels in the Y direction (vertical resolution). */
+    /**
+     * The number of pixels in the Y direction (vertical resolution).
+     */
     private int _nY = 1;
-    /** The center point of the view plane. */
+    /**
+     * The center point of the view plane.
+     */
     private Point _vpCenter;
-    /** The width of a single pixel on the view plane. */
+    /**
+     * The width of a single pixel on the view plane.
+     */
     private double _pixelWidth;
-    /** The height of a single pixel on the view plane. */
+    /**
+     * The height of a single pixel on the view plane.
+     */
     private double _pixelHeight;
-    /** The half of the number of pixels in the X direction, used for calculating pixel positions. */
+    /**
+     * The half of the number of pixels in the X direction, used for calculating pixel positions.
+     */
     private double _halfNx;
-    /** The half of the number of pixels in the Y direction, used for calculating pixel positions. */
+    /**
+     * The half of the number of pixels in the Y direction, used for calculating pixel positions.
+     */
     private double _halfNy;
 
     /**
@@ -50,6 +80,20 @@ public class Camera implements Cloneable {
      */
     private Camera() {
     }
+
+    //*******************************************************************************************
+    public Camera renderImage() {
+        return this;
+    }
+
+    public Camera printGrid(int a, Color color) {
+        return this;
+    }
+
+    public void writeToImage(String imageName) {
+
+    }
+    //******************************************************************************************
 
     /**
      * Returns a new Builder instance for constructing a Camera object.
@@ -85,13 +129,21 @@ public class Camera implements Cloneable {
      * Builder class for constructing Camera instances with a fluent interface.
      */
     public static class Builder {
-        /** The Camera instance being built. */
+        /**
+         * The Camera instance being built.
+         */
         private final Camera _camera;
-        /** The direction vector for the camera, if set directly. */
+        /**
+         * The direction vector for the camera, if set directly.
+         */
         private Vector _direction;
-        /** The target point for the camera, if set using a target point. */
+        /**
+         * The target point for the camera, if set using a target point.
+         */
         private Point _target;
-        /** The up vector for the camera, defining its vertical orientation. */
+        /**
+         * The up vector for the camera, defining its vertical orientation.
+         */
         private Vector _up;
 
         /**
@@ -188,6 +240,13 @@ public class Camera implements Cloneable {
             this._camera._nY = nY;
             return this;
         }
+
+        //*****************************************************************************************************************************************
+        public Builder setRayTracer(Scene scene, RayTracerType type) {
+
+            return this;
+        }
+        // **********************************************************************************************************************************************
 
         /**
          * Computes the orthonormal camera basis vectors.
