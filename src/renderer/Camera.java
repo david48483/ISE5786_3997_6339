@@ -74,6 +74,10 @@ public class Camera implements Cloneable {
      */
     private double _halfNy;
 
+    private ImageWriter _imageWriter;
+
+    private RayTracerBase _rayTracer;
+
     /**
      * Default constructor for Camera. Initializes the camera with default values.
      * The camera's position, orientation, and view plane parameters must be set using the Builder before use.
@@ -83,15 +87,35 @@ public class Camera implements Cloneable {
 
     //*******************************************************************************************
     public Camera renderImage() {
+
+        for(int i =0 ; i < _nX; i++){
+            for(int j =0 ; j < _nY; j++){
+                castRay(i,j);
+
+            }
+        }
         return this;
     }
 
-    public Camera printGrid(int a, Color color) {
+    public Camera printGrid(int interval, Color color) {
+        for(int i =0 ; i < _nX; i++){
+            for(int j =0 ; j < _nY; j++){
+                if(i % interval == 0 || j % interval == 0){
+                    _imageWriter.writePixel(i,j,color);
+                }
+            }
+        }
         return this;
     }
 
     public void writeToImage(String imageName) {
 
+    }
+
+    private void castRay(int xIndex, int yIndex) {
+         Ray ray = constructRay(xIndex, yIndex);
+         Color color = _rayTracer.traceRay(ray);
+         _imageWriter.writePixel(xIndex, yIndex, color);
     }
     //******************************************************************************************
 

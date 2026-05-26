@@ -13,7 +13,6 @@ public class Scene {
 
     public Scene(String name) {
         this.name = name;
-
     }
 
     public Scene setBackground(Color background) {
