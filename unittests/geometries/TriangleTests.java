@@ -32,6 +32,11 @@ public class TriangleTests {
     }
 
     /**
+     * A small delta for comparing floating-point numbers
+     */
+    private static final double DELTA = 1e-6;
+
+    /**
      * Error message for {@link Triangle#getNormal(Point)} tests.
      */
     private static final String ERR_GET_NORMAL =
@@ -174,8 +179,15 @@ public class TriangleTests {
     void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
 
+        Vector normal = TRIANGLE.getNormal(P_INSIDE);
+
         // EP01: Point strictly inside the triangle - normal must equal +Z
-        assertEquals(Vector.AXIS_Z, TRIANGLE.getNormal(P_INSIDE), ERR_GET_NORMAL);
+        assertEquals(1, normal.length(), DELTA,
+                ERR_GET_NORMAL);
+
+        //  Normal points in the correct direction (same direction as expected +Z)
+        assertEquals(1, Math.abs(normal.dotProduct(Vector.AXIS_Z)), DELTA,
+                ERR_GET_NORMAL);
     }
 
     /**

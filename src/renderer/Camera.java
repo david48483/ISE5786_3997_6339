@@ -8,6 +8,7 @@ import scene.Scene;
 
 import java.util.MissingResourceException;
 
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
@@ -110,11 +111,11 @@ public class Camera implements Cloneable {
     }
 
     public void writeToImage(String imageName) {
-
+        _imageWriter.writeToImage(imageName);
     }
 
     private void castRay(int xIndex, int yIndex) {
-         Ray ray = constructRay(xIndex, yIndex);
+        Ray ray = constructRay(xIndex, yIndex);
          Color color = _rayTracer.traceRay(ray);
          _imageWriter.writePixel(xIndex, yIndex, color);
     }
@@ -350,7 +351,7 @@ public class Camera implements Cloneable {
          * @throws IllegalArgumentException if any of the view plane parameters are not valid
          */
         private void checkViewPlane() {
-            if (_camera._width <= 0 || _camera._height <= 0 || _camera._distance <= 0) {
+            if ( alignZero(_camera._width) <= 0 || alignZero(_camera._height) <= 0 || alignZero(_camera._distance) <= 0) {
                 throw new IllegalArgumentException("View plane size must be positive");
             }
             calcVpCenter();

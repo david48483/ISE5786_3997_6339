@@ -276,20 +276,21 @@ public class VectorTests {
     void testNormalize() {
         // ============ Equivalence Partitions Tests ==============
 
-        Vector normlizeVector = V1.normalize();
+        // EP01: Test normal vector normalization
+        Vector normalizedVector = V1.normalize();
 
-        // EP01: Result must be a unit vector
-        assertEquals(1, normlizeVector.length(), DELTA, ERR_NORMALIZE);
+        // Result must be a unit vector (length equals 1)
+        assertEquals(1, normalizedVector.length(), DELTA, ERR_NORMALIZE);
 
-        // EP02: Normalized vector is parallel to original — cross product must throw
-        assertThrows(IllegalArgumentException.class, () -> normlizeVector.crossProduct(V1), ERR_NORMALIZE);
+        // Normalized vector is parallel to the original — cross product must be zero (throws exception for zero-vector)
+        assertThrows(IllegalArgumentException.class, () -> normalizedVector.crossProduct(V1), ERR_NORMALIZE);
 
-        // EP03: Normalized vector must point in the same direction as the original
-        assertTrue(normlizeVector.dotProduct(V1) > 0, ERR_NORMALIZE);
+        // Normalized vector must point in the same direction as the original (dot product is positive)
+        assertTrue(normalizedVector.dotProduct(V1) > 0, ERR_NORMALIZE);
 
         // =============== Boundary Values Tests ==================
 
-        // BVA11: Normalizing an already-unit vector returns an equivalent unit vector
+        // BVA01: Normalizing an already-unit vector returns an equivalent unit vector
         assertEquals(Vector.AXIS_X, Vector.AXIS_X.normalize(), ERR_NORMALIZE);
     }
 }
