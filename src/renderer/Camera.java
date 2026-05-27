@@ -78,6 +78,7 @@ public class Camera implements Cloneable {
 
     private RayTracerBase _rayTracer;
 
+
     /**
      * Default constructor for Camera. Initializes the camera with default values.
      * The camera's position, orientation, and view plane parameters must be set using the Builder before use.
@@ -267,7 +268,11 @@ public class Camera implements Cloneable {
 
         //*****************************************************************************************************************************************
         public Builder setRayTracer(Scene scene, RayTracerType type) {
-
+            if (type == RayTracerType.SIMPLE) {
+                this._camera._rayTracer = new SimpleRayTracer(scene);
+            } else {
+                throw new IllegalArgumentException(type + " ray tracer is not supported");
+            }
             return this;
         }
         // **********************************************************************************************************************************************
@@ -335,6 +340,7 @@ public class Camera implements Cloneable {
             if (_camera._nX <= 0 || _camera._nY <= 0) {
                 throw new IllegalArgumentException("Resolution must be positive");
             }
+            _camera._imageWriter = new ImageWriter(_camera._nX, _camera._nY);
         }
 
         /**
@@ -350,6 +356,12 @@ public class Camera implements Cloneable {
             calcVpCenter();
         }
 
+        private void checkRayTracer(){
+            if(_camera._rayTracer == null) {
+                setRayTracer(new Scene("test"), RayTracerType.SIMPLE);
+            }
+        }
+
         /**
          * Validates the camera parameters and builds the final Camera object.
          *
@@ -359,6 +371,7 @@ public class Camera implements Cloneable {
             checkResolution();
             checkLocationAndDirection();
             checkViewPlane();
+            checkRayTracer();
             try {
                 return (Camera) _camera.clone();
             } catch (CloneNotSupportedException _) {
