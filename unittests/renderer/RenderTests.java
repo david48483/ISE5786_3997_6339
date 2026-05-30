@@ -13,45 +13,45 @@ import static java.awt.Color.YELLOW;
 /**
  * End-to-end rendering tests.
  * <p>
- * These tests demonstrate the full rendering pipeline:
- * scene construction ג†’ camera setup ג†’ ray tracing ג†’ image generation.
- * <p>
- * The first test produces a simple scene intended as a reference image
- * for validating Camera and Renderer implementations.
+ * These tests exercise the full rendering flow:
+ * scene setup -> camera setup -> ray tracing -> image output.
+ * </p>
+ *
+ * @author David &amp; Yehuda
  */
 @SuppressWarnings("java:S109")
 class RenderTests {
     /**
-     * Default constructor to satisfy JavaDoc generator
+     * Default constructor to satisfy documentation tools.
      */
     RenderTests() { /* to satisfy JavaDoc generator */ }
 
     /**
-     * Physical size of View Plane (it is a square: SIZExSIZE)
+     * Physical view-plane size (square: SIZE x SIZE).
      */
     static final double VP_SIZE = 500;
     /**
-     * Distance from Camera to View Plane
+     * Distance from camera to view plane.
      */
     static final double VP_DISTANCE = 100;
 
     /**
-     * Camera location point
+     * Camera location.
      */
     static final Point LOCATION = Point.ZERO;
     /**
-     * Camera direction target point
+     * Camera look-at target point.
      */
     static final Point LOOK_AT = new Point(0, 0, -1);
     /**
-     * Image resolution (it is a square: NxN)
+     * Image resolution (square: N x N).
      */
     static final int RESOLUTION = 1000;
 
     /**
-     * Creates a base camera builder for the tests.
+     * Creates a base camera builder used by rendering tests.
      *
-     * @return camera builder configured with the common test settings
+     * @return camera builder configured with common test parameters
      */
     private static Camera.Builder baseCameraBuilder() {
         return Camera.getBuilder() //
@@ -61,8 +61,7 @@ class RenderTests {
     }
 
     /**
-     * Produce a scene with basic 3D model and render it into a png image with a
-     * grid
+     * Renders a basic two-color scene and overlays a grid.
      */
     @Test
     void testBasicRenderTwoColors() {
@@ -103,18 +102,19 @@ class RenderTests {
     /**
      * Renders a scene loaded from an XML file.
      * <p>
-     * Note: parsing logic should not be implemented inside tests.
+     * Parsing logic should be implemented in dedicated production code,
+     * not inside unit tests.
+     * </p>
      *
-     * @param builder the camera builder to use
-     * @param xmlName the XML scene file name
-     * @return the camera after rendering
+     * @param builder camera builder to use
+     * @param xmlName XML scene file name
+     * @return the rendered camera instance
      */
     Camera renderSceneXML(Camera.Builder builder, String xmlName) {
         Scene scene = new Scene("Using XML");
         // Parse from XML file into scene object instead of the new Scene above,
-        // Use the code you added in appropriate packages.
-        // ...
-        // NB: unit tests is not the correct place to put XML parsing code.
+        // using the code added in dedicated parser packages.
+        // NB: unit tests are not the right place to implement XML parsing.
 
         return builder //
                 .setRayTracer(scene, RayTracerType.SIMPLE) //
@@ -125,18 +125,19 @@ class RenderTests {
     /**
      * Renders a scene loaded from a JSON file.
      * <p>
-     * Note: parsing logic should not be implemented inside tests.
+     * Parsing logic should be implemented in dedicated production code,
+     * not inside unit tests.
+     * </p>
      *
-     * @param builder  the camera builder to use
-     * @param jsonName the JSON scene file name
-     * @return the camera after rendering
+     * @param builder camera builder to use
+     * @param jsonName JSON scene file name
+     * @return the rendered camera instance
      */
     static Camera renderSceneJSON(Camera.Builder builder, String jsonName) {
         Scene scene = new Scene("Using JSON");
         // Parse from JSON file into scene object instead of the new Scene above,
-        // Use the code you added in appropriate packages.
-        // ...
-        // NB: unit tests is not the correct place to put JSON parsing code.
+        // using the code added in dedicated parser packages.
+        // NB: unit tests are not the right place to implement JSON parsing.
 
         return builder //
                 .setRayTracer(scene, RayTracerType.SIMPLE) //
@@ -145,7 +146,7 @@ class RenderTests {
     }
 
     /**
-     * Test for XML based scene - for bonus
+     * Bonus test for XML-based scene rendering.
      */
     @Test
     void testBasicRenderXml() {
@@ -155,7 +156,7 @@ class RenderTests {
     }
 
     /**
-     * Test for JSON based scene - for bonus
+     * Bonus test for JSON-based scene rendering.
      */
     @Test
     void testBasicRenderJson() {

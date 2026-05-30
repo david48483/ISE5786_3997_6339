@@ -67,16 +67,22 @@ public class Camera implements Cloneable {
      */
     private double _pixelHeight;
     /**
-     * The half of the number of pixels in the X direction, used for calculating pixel positions.
+     * Half of the X resolution value used for pixel-center calculations.
      */
     private double _halfNx;
     /**
-     * The half of the number of pixels in the Y direction, used for calculating pixel positions.
+     * Half of the Y resolution value used for pixel-center calculations.
      */
     private double _halfNy;
 
+    /**
+     * Image writer used to store rendered pixel colors.
+     */
     private ImageWriter _imageWriter;
 
+    /**
+     * Ray tracer used to compute color from cast rays.
+     */
     private RayTracerBase _rayTracer;
 
 
@@ -88,6 +94,11 @@ public class Camera implements Cloneable {
     }
 
     //*******************************************************************************************
+    /**
+     * Renders the current scene by casting one ray through each pixel.
+     *
+     * @return this camera instance
+     */
     public Camera renderImage() {
 
         for(int i =0 ; i < _nX; i++){
@@ -99,6 +110,13 @@ public class Camera implements Cloneable {
         return this;
     }
 
+    /**
+     * Draws a grid on top of the rendered image.
+     *
+     * @param interval line spacing in pixels
+     * @param color grid color
+     * @return this camera instance
+     */
     public Camera printGrid(int interval, Color color) {
         for(int i =0 ; i < _nX; i++){
             for(int j =0 ; j < _nY; j++){
@@ -110,10 +128,21 @@ public class Camera implements Cloneable {
         return this;
     }
 
+    /**
+     * Writes the current image buffer to a file.
+     *
+     * @param imageName output image file name without extension
+     */
     public void writeToImage(String imageName) {
         _imageWriter.writeToImage(imageName);
     }
 
+    /**
+     * Casts a single ray through one pixel and writes the traced color.
+     *
+     * @param xIndex pixel column index
+     * @param yIndex pixel row index
+     */
     private void castRay(int xIndex, int yIndex) {
         Ray ray = constructRay(xIndex, yIndex);
          Color color = _rayTracer.traceRay(ray);
@@ -267,7 +296,13 @@ public class Camera implements Cloneable {
             return this;
         }
 
-        //*****************************************************************************************************************************************
+        /**
+         * Sets the ray tracer implementation for the camera.
+         *
+         * @param scene the scene used by the ray tracer
+         * @param type the requested ray tracer type
+         * @return the Builder instance for method chaining
+         */
         public Builder setRayTracer(Scene scene, RayTracerType type) {
             if (type == RayTracerType.SIMPLE) {
                 this._camera._rayTracer = new SimpleRayTracer(scene);
@@ -276,7 +311,6 @@ public class Camera implements Cloneable {
             }
             return this;
         }
-        // **********************************************************************************************************************************************
 
         /**
          * Computes the orthonormal camera basis vectors.
@@ -357,6 +391,9 @@ public class Camera implements Cloneable {
             calcVpCenter();
         }
 
+        /**
+         * Validates that a ray tracer is configured; if missing, sets a default tracer.
+         */
         private void checkRayTracer(){
             if(_camera._rayTracer == null) {
                 setRayTracer(new Scene("test"), RayTracerType.SIMPLE);

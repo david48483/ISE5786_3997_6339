@@ -3,29 +3,29 @@ package primitives;
 import java.util.List;
 
 /**
- * Represents a ray (half-line) in 3D space, defined by an origin point and a direction vector.
- * The direction vector is always stored normalized.
+ * Represents a ray (half-line) in 3D space by an origin point and a direction vector.
+ * The direction vector is stored in normalized form.
  *
  * @author David &amp; Yehuda
  */
 public class Ray {
 
     /**
-     * The origin point of the ray.
+     * Origin point of the ray.
      */
     private final Point _origin;
 
     /**
-     * The normalized direction vector of the ray.
+     * Normalized direction vector of the ray.
      */
     private final Vector _direction;
 
     /**
-     * Constructs a ray from an origin point and a direction vector.
-     * The direction vector is normalized before being stored.
+     * Creates a ray from an origin point and a direction vector.
+     * The direction vector is normalized before storage.
      *
-     * @param origin    the starting point of the ray
-     * @param direction the direction of the ray (need not be normalized)
+     * @param origin starting point of the ray
+     * @param direction direction of the ray (does not have to be normalized)
      */
     public Ray(Point origin, Vector direction) {
         _origin = origin;
@@ -51,11 +51,11 @@ public class Ray {
     }
 
     /**
-     * Calculates the point along the ray at a given parameter t from the origin.
+     * Computes a point on the ray at parameter {@code t}.
      *
-     * @param t the signed distance along the ray direction
-     * @return the point at parameter t along the ray
-     * @throws IllegalArgumentException if t produces a zero displacement vector
+     * @param t signed distance along the ray direction
+     * @return point at parameter {@code t}
+     * @throws IllegalArgumentException if {@code t} yields a zero displacement vector
      */
     public Point getPoint(double t) {
         try {
@@ -67,10 +67,10 @@ public class Ray {
     }
 
     /**
-     * Finds the point in the given list that is closest to the ray's origin.
+     * Finds the closest point to the ray origin from a given list.
      *
-     * @param points the list of points to search
-     * @return the point closest to the ray's origin, or null if the list is empty
+     * @param points list of candidate points
+     * @return closest point to the ray origin, or {@code null} if the list is empty
      */
     public Point findClosestPoint(List<Point> points) {
 

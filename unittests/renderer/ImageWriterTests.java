@@ -4,30 +4,54 @@ import org.junit.jupiter.api.Test;
 import primitives.Color;
 
 /**
- * Unit tests for {@link ImageWriter} class.
- * The tests verify:
- * <ul>
- * <li>{@link ImageWriter#writePixel(int, int, Color)}</li>
- * <li>{@link ImageWriter#writeToImage(String)}</li>
- * </ul>
- * Tests create a grid pattern on the image and save it to a file for visual verification
+ * Unit tests for {@link ImageWriter}.
+ * Tests grid drawing by writing pixels and exporting the result to an image file.
+ *
+ * @author David &amp; Yehuda
  */
-
 public class ImageWriterTests {
 
+    /**
+     * Default constructor to satisfy JavaDoc generation tools.
+     */
+    public ImageWriterTests() {
+    }
+
+    /**
+     * Image width in pixels.
+     */
     static final int WIDTH = 800;
+
+    /**
+     * Image height in pixels.
+     */
     static final int HEIGHT = 500;
+
+    /**
+     * Grid cell size in pixels.
+     */
     static final int SQUARE_SIZE = 50;
+
+    /**
+     * Grid line color.
+     */
     static final Color RED = new Color(255, 0, 0);
+
+    /**
+     * Grid background color.
+     */
     static final Color YELLOW = new Color(255, 255, 0);
 
+    /**
+     * Image writer used by the test.
+     */
     ImageWriter image = new ImageWriter(WIDTH, HEIGHT);
 
     /**
-     * Test for {@link ImageWriter#writePixel(int, int, Color)} and {@link ImageWriter#writeToImage(String)}.
-     * <p>
-     * This test creates a grid pattern on the image and saves it to a file named "testImageWriter.png".
-     * The pattern consists of red grid lines on a yellow background, with cells defined by SQUARE_SIZE.
+     * Tests {@link ImageWriter#writePixel(int, int, Color)} and
+     * {@link ImageWriter#writeToImage(String)}.
+     * Creates a red grid on a yellow background and saves the image as
+     * {@code testImageWriter.png}.
      */
     @Test
     void testImageWriter() {

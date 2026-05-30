@@ -11,14 +11,11 @@ import java.util.MissingResourceException;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for class {@link Camera}.
- * <p>
- * The tests verify:
- * </p>
- * <ul>
- * <li>Camera construction validity using {@link renderer.Camera.Builder}</li>
- * <li>{@link Camera#constructRay(int, int)}</li>
- * </ul>
+ * Unit tests for {@link Camera}.
+ * Verifies camera build validation through {@link Builder}
+ * and ray construction via {@link Camera#constructRay(int, int)}.
+ *
+ * @author David &amp; Yehuda
  */
 class CameraTests {
 
@@ -84,11 +81,8 @@ class CameraTests {
     }
 
     /**
-     * Test method for {@link renderer.Camera.Builder}.
-     * <p>
-     * Verifies build validity only. The test checks whether camera construction
-     * succeeds or fails with an exception, without checking geometric correctness.
-     * </p>
+     * Tests camera building scenarios.
+     * Covers valid build flows (EP) and missing/invalid parameter cases (BVA).
      */
     @Test
     void testBuild() {
@@ -114,21 +108,21 @@ class CameraTests {
 
         // =============== Boundary Values Tests ==================
 
-        // BV01: Build fails when camera location is missing
+        // BVA01: Build fails when camera location is missing
         Builder builderBV01 = Camera.getBuilder()
                 .setDirection(V_TO, V_UP)
                 .setVpDistance(VP_DISTANCE)
                 .setVpSize(8, 8);
         assertThrows(MissingResourceException.class, builderBV01::build, ERROR_MISSING_RESOURCE);
 
-        // BV02: Build fails when camera direction is missing
+        // BVA02: Build fails when camera direction is missing
         Builder builderBV02 = Camera.getBuilder()
                 .setLocation(LOCATION)
                 .setVpDistance(VP_DISTANCE)
                 .setVpSize(8, 8);
         assertThrows(MissingResourceException.class, builderBV02::build, ERROR_MISSING_RESOURCE);
 
-        // BV03: Build fails when view-plane size is missing
+        // BVA03: Build fails when view-plane size is missing
         Builder builderBV03 = Camera.getBuilder()
                 .setLocation(LOCATION)
                 .setDirection(V_TO, V_UP)
@@ -136,7 +130,7 @@ class CameraTests {
         assertThrows(IllegalArgumentException.class, builderBV03::build,
                 "Build should fail when view-plane size was not set");
 
-        // BV04: Build fails when view-plane distance is missing
+        // BVA04: Build fails when view-plane distance is missing
         Builder builderBV04 = Camera.getBuilder()
                 .setLocation(LOCATION)
                 .setDirection(V_TO, V_UP)
@@ -144,31 +138,31 @@ class CameraTests {
         assertThrows(IllegalArgumentException.class, builderBV04::build,
                 "Build should fail when view-plane distance from camera was not set");
 
-        // BV05: Build fails with zero view-plane width
+        // BVA05: Build fails with zero view-plane width
         Builder builderBV05 = baseBuilder()
                 .setDirection(V_TO, V_UP)
                 .setVpSize(0, 8);
         assertThrows(IllegalArgumentException.class, builderBV05::build, ERROR_INVALID_ARGUMENT);
 
-        // BV06: Build fails with zero view-plane height
+        // BVA06: Build fails with zero view-plane height
         Builder builderBV06 = baseBuilder()
                 .setDirection(V_TO, V_UP)
                 .setVpSize(8, 0);
         assertThrows(IllegalArgumentException.class, builderBV06::build, ERROR_INVALID_ARGUMENT);
 
-        // BV07: Build fails with negative view-plane width
+        // BVA07: Build fails with negative view-plane width
         Builder builderBV07 = baseBuilder()
                 .setDirection(V_TO, V_UP)
                 .setVpSize(-8, 8);
         assertThrows(IllegalArgumentException.class, builderBV07::build, ERROR_INVALID_ARGUMENT);
 
-        // BV08: Build fails with negative view-plane height
+        // BVA08: Build fails with negative view-plane height
         Builder builderBV08 = baseBuilder()
                 .setDirection(V_TO, V_UP)
                 .setVpSize(8, -8);
         assertThrows(IllegalArgumentException.class, builderBV08::build, ERROR_INVALID_ARGUMENT);
 
-        // BV09: Build fails with zero view-plane distance
+        // BVA09: Build fails with zero view-plane distance
         Builder builderBV09 = Camera.getBuilder()
                 .setLocation(LOCATION)
                 .setDirection(V_TO, V_UP)
@@ -176,7 +170,7 @@ class CameraTests {
                 .setVpSize(8, 8);
         assertThrows(IllegalArgumentException.class, builderBV09::build, ERROR_INVALID_ARGUMENT);
 
-        // BV10: Build fails with negative view-plane distance
+        // BVA10: Build fails with negative view-plane distance
         Builder builderBV10 = Camera.getBuilder()
                 .setLocation(LOCATION)
                 .setDirection(V_TO, V_UP)
@@ -184,28 +178,28 @@ class CameraTests {
                 .setVpSize(8, 8);
         assertThrows(IllegalArgumentException.class, builderBV10::build, ERROR_INVALID_ARGUMENT);
 
-        // BV11: Build fails with zero horizontal resolution
+        // BVA11: Build fails with zero horizontal resolution
         Builder builderBV11 = baseBuilder()
                 .setDirection(V_TO, V_UP)
                 .setVpSize(8, 8)
                 .setResolution(0, 1);
         assertThrows(IllegalArgumentException.class, builderBV11::build, ERROR_INVALID_ARGUMENT);
 
-        // BV12: Build fails with zero vertical resolution
+        // BVA12: Build fails with zero vertical resolution
         Builder builderBV12 = baseBuilder()
                 .setDirection(V_TO, V_UP)
                 .setVpSize(8, 8)
                 .setResolution(1, 0);
         assertThrows(IllegalArgumentException.class, builderBV12::build, ERROR_INVALID_ARGUMENT);
 
-        // BV13: Build fails with negative horizontal resolution
+        // BVA13: Build fails with negative horizontal resolution
         Builder builderBV13 = baseBuilder()
                 .setDirection(V_TO, V_UP)
                 .setVpSize(8, 8)
                 .setResolution(-1, 1);
         assertThrows(IllegalArgumentException.class, builderBV13::build, ERROR_INVALID_ARGUMENT);
 
-        // BV14: Build fails with negative vertical resolution
+        // BVA14: Build fails with negative vertical resolution
         Builder builderBV14 = baseBuilder()
                 .setDirection(V_TO, V_UP)
                 .setVpSize(8, 8)
@@ -214,11 +208,8 @@ class CameraTests {
     }
 
     /**
-     * Test method for {@link Camera#constructRay(int, int)}.
-     * <p>
-     * Verifies ray construction through representative pixels in 3x3 and 4x4
-     * view planes, including all three direction-setting overloads.
-     * </p>
+     * Tests {@link Camera#constructRay(int, int)} on representative pixels.
+     * Covers interior and boundary pixels in 4x4 and 3x3 view planes.
      */
     @Test
     void testConstructRay() {
@@ -265,27 +256,27 @@ class CameraTests {
 
         // =============== Boundary Values Tests ==================
 
-        // BV01: Construct ray through a corner pixel in a 4x4 view plane
+        // BVA01: Construct ray through a corner pixel in a 4x4 view plane
         Ray rayBV01 = camera4x4ByVectors.constructRay(0, 0);
         assertEquals(new Ray(LOCATION, new Vector(-3, 3, -10)), rayBV01, ERROR_CONSTRUCT_RAY);
 
-        // BV02: Construct ray through a side pixel in a 4x4 view plane
+        // BVA02: Construct ray through a side pixel in a 4x4 view plane
         Ray rayBV02 = camera4x4ByVectors.constructRay(1, 0);
         assertEquals(new Ray(LOCATION, new Vector(-1, 3, -10)), rayBV02, ERROR_CONSTRUCT_RAY);
 
-        // BV03: Construct ray through the center pixel in a 3x3 view plane
+        // BVA03: Construct ray through the center pixel in a 3x3 view plane
         Ray rayBV03 = camera3x3.constructRay(1, 1);
         assertEquals(new Ray(LOCATION, new Vector(0, 0, -10)), rayBV03, ERROR_CONSTRUCT_RAY);
 
-        // BV04: Construct ray through the upper side middle pixel in a 3x3 view plane
+        // BVA04: Construct ray through the upper side middle pixel in a 3x3 view plane
         Ray rayBV04 = camera3x3.constructRay(1, 0);
         assertEquals(new Ray(LOCATION, new Vector(0, 2, -10)), rayBV04, ERROR_CONSTRUCT_RAY);
 
-        // BV05: Construct ray through the left side middle pixel in a 3x3 view plane
+        // BVA05: Construct ray through the left side middle pixel in a 3x3 view plane
         Ray rayBV05 = camera3x3.constructRay(0, 1);
         assertEquals(new Ray(LOCATION, new Vector(-2, 0, -10)), rayBV05, ERROR_CONSTRUCT_RAY);
 
-        // BV06: Construct ray through a corner pixel in a 3x3 view plane
+        // BVA06: Construct ray through a corner pixel in a 3x3 view plane
         Ray rayBV06 = camera3x3.constructRay(0, 0);
         assertEquals(new Ray(LOCATION, new Vector(-2, 2, -10)), rayBV06, ERROR_CONSTRUCT_RAY);
     }

@@ -8,30 +8,29 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Writes pixel data to an image file.
+ * Writes rendered pixel colors to an image file.
  * <p>
- * This class wraps a {@link BufferedImage}, allows setting individual pixel
- * colors, and exports the result as a PNG file.
+ * This class wraps a {@link BufferedImage}, supports writing individual pixels,
+ * and exports the final image as a PNG file.
  *
  * @author Dan Zilberstein
  */
 final class ImageWriter {
     /**
-     * Output directory for generated image files, relative to the working
-     * directory.
+     * Output directory for generated images, relative to the working directory.
      */
     private static final String FOLDER_PATH = System.getProperty("user.dir") + "/images";
 
     /**
-     * Internal image buffer (matrix of pixel colors)
+     * Internal image buffer.
      */
     private final BufferedImage _image;
 
     /**
-     * Creates an image writer for the given resolution.
+     * Creates an image writer with the given pixel resolution.
      *
-     * @param nX the horizontal resolution, in pixels
-     * @param nY the vertical resolution, in pixels
+     * @param nX horizontal resolution in pixels
+     * @param nY vertical resolution in pixels
      * @throws IllegalArgumentException if {@code nX} or {@code nY} is not positive
      */
     ImageWriter(int nX, int nY) {
@@ -41,10 +40,9 @@ final class ImageWriter {
     }
 
     /**
-     * Writes the buffered image to a PNG file in the images directory.
+     * Writes the buffered image to a PNG file in the output directory.
      *
-     * @param fileName the output file name, without the {@code .png}
-     *                 extension
+     * @param fileName output file name without the {@code .png} extension
      * @throws IllegalStateException if the image cannot be written
      */
     void writeToImage(String fileName) {
@@ -61,11 +59,11 @@ final class ImageWriter {
     }
 
     /**
-     * Writes a color to the specified pixel.
+     * Writes a color value to the specified pixel.
      *
-     * @param xIndex the pixel x-coordinate
-     * @param yIndex the pixel y-coordinate
-     * @param color  the color to write
+     * @param xIndex pixel column index
+     * @param yIndex pixel row index
+     * @param color color to write
      */
     void writePixel(int xIndex, int yIndex, Color color) {
         _image.setRGB(xIndex, yIndex, color.getColor().getRGB());
