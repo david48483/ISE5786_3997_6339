@@ -100,11 +100,9 @@ public class Camera implements Cloneable {
      * @return this camera instance
      */
     public Camera renderImage() {
-
         for(int i =0 ; i < _nX; i++){
             for(int j =0 ; j < _nY; j++){
                 castRay(i,j);
-
             }
         }
         return this;
