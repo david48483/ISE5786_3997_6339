@@ -85,7 +85,6 @@ public class Camera implements Cloneable {
      */
     private RayTracerBase _rayTracer;
 
-
     /**
      * Default constructor for Camera. Initializes the camera with default values.
      * The camera's position, orientation, and view plane parameters must be set using the Builder before use.
@@ -94,15 +93,16 @@ public class Camera implements Cloneable {
     }
 
     //*******************************************************************************************
+
     /**
      * Renders the current scene by casting one ray through each pixel.
      *
      * @return this camera instance
      */
     public Camera renderImage() {
-        for(int i =0 ; i < _nX; i++){
-            for(int j =0 ; j < _nY; j++){
-                castRay(i,j);
+        for (int j = 0; j < _nY; j++) {
+            for (int i = 0; i < _nX; i++) {
+                castRay(i, j);
             }
         }
         return this;
@@ -112,14 +112,14 @@ public class Camera implements Cloneable {
      * Draws a grid on top of the rendered image.
      *
      * @param interval line spacing in pixels
-     * @param color grid color
+     * @param color    grid color
      * @return this camera instance
      */
     public Camera printGrid(int interval, Color color) {
-        for(int i =0 ; i < _nX; i++){
-            for(int j =0 ; j < _nY; j++){
-                if(i % interval == 0 || j % interval == 0){
-                    _imageWriter.writePixel(i,j,color);
+        for (int j = 0; j < _nY; j++) {
+            for (int i = 0; i < _nX; i++) {
+                if (i % interval == 0 || j % interval == 0) {
+                    _imageWriter.writePixel(i, j, color);
                 }
             }
         }
@@ -143,8 +143,8 @@ public class Camera implements Cloneable {
      */
     private void castRay(int xIndex, int yIndex) {
         Ray ray = constructRay(xIndex, yIndex);
-         Color color = _rayTracer.traceRay(ray);
-         _imageWriter.writePixel(xIndex, yIndex, color);
+        Color color = _rayTracer.traceRay(ray);
+        _imageWriter.writePixel(xIndex, yIndex, color);
     }
     //******************************************************************************************
 
@@ -298,7 +298,7 @@ public class Camera implements Cloneable {
          * Sets the ray tracer implementation for the camera.
          *
          * @param scene the scene used by the ray tracer
-         * @param type the requested ray tracer type
+         * @param type  the requested ray tracer type
          * @return the Builder instance for method chaining
          */
         public Builder setRayTracer(Scene scene, RayTracerType type) {
@@ -383,7 +383,7 @@ public class Camera implements Cloneable {
          * @throws IllegalArgumentException if any of the view plane parameters are not valid
          */
         private void checkViewPlane() {
-            if ( alignZero(_camera._width) <= 0 || alignZero(_camera._height) <= 0 || alignZero(_camera._distance) <= 0) {
+            if (alignZero(_camera._width) <= 0 || alignZero(_camera._height) <= 0 || alignZero(_camera._distance) <= 0) {
                 throw new IllegalArgumentException("View plane size must be positive");
             }
             calcVpCenter();
@@ -392,8 +392,8 @@ public class Camera implements Cloneable {
         /**
          * Validates that a ray tracer is configured; if missing, sets a default tracer.
          */
-        private void checkRayTracer(){
-            if(_camera._rayTracer == null) {
+        private void checkRayTracer() {
+            if (_camera._rayTracer == null) {
                 setRayTracer(new Scene("test"), RayTracerType.SIMPLE);
             }
         }
