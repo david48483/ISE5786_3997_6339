@@ -1,6 +1,7 @@
 package geometries.api;
 
 import java.util.List;
+import java.util.Objects;
 
 import primitives.Point;
 import primitives.Ray;
@@ -14,10 +15,9 @@ import primitives.Ray;
 public abstract class Intersectable {
 
     /**
-     *  Constructs a geometry. This constructor is empty because the base class does not have any fields to initialize.
+     * Constructs a geometry. This constructor is empty because the base class does not have any fields to initialize.
      */
     protected Intersectable() {
-        // No initialization needed for the base class
     }
 
     /**
@@ -27,5 +27,62 @@ public abstract class Intersectable {
      * @param ray the ray to find intersections with
      * @return a list of intersection points, or null if no intersections exist
      */
-    public abstract List<Point> findIntersections(Ray ray);
+    public final List<Point> findIntersections(Ray ray) {
+        var intersections = calcIntersections(ray);
+        return intersections == null ? null
+                : intersections.stream()
+                .map(intersection -> intersection.point)
+                .toList();
+    }
+
+    protected abstract List<Intersection> calcIntersectionsHelper(Ray ray);
+
+    public final List<Intersection> calcIntersections(Ray ray) {
+        return calcIntersectionsHelper(ray);
+    }
+
+    /**
+     * Represents a single intersection between a ray and a geometry,
+     * pairing the intersection point with the intersected geometry.
+     */
+    public static final class Intersection {
+
+        /**
+         * The intersection point in 3D space.
+         */
+        public final Point point;
+
+        /**
+         * The geometry that was intersected.
+         */
+        public final Geometry geometry;
+
+        /**
+         * Creates an intersection record for the given point and geometry.
+         *
+         * @param point    the intersection point
+         * @param geometry the intersected geometry
+         */
+        public Intersection(Point point, Geometry geometry) {
+            this.point = point;
+            this.geometry = geometry;
+        }
+
+        @Override
+        public String toString() {
+            return "Intersection{point=" + point + ", geometry=" + geometry + '}';
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof Intersection other)) return false;
+            return this.point.equals(other.point) && this.geometry == other.geometry;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(point, System.identityHashCode(geometry));
+        }
+    }
 }
