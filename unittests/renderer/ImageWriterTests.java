@@ -56,8 +56,8 @@ public class ImageWriterTests {
     @Test
     void testImageWriter() {
 
-        for (int i = 0; i < WIDTH; i++) {
-            for (int j = 0; j < HEIGHT; j++) {
+        for (int j = 0; j < HEIGHT; j++) {
+            for (int i = 0; i < WIDTH; i++) {
                 image.writePixel(i, j, (i % SQUARE_SIZE == 0 || j % SQUARE_SIZE == 0) ? RED : YELLOW);
 
             }
