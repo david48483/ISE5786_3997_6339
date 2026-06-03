@@ -1,6 +1,5 @@
-package geometries;
+package geometries.impl;
 
-import geometries.impl.Polygon;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Vector;
@@ -83,7 +82,7 @@ class PolygonTests {
         // TC02: Wrong vertices order
         assertThrows(IllegalArgumentException.class, () -> new Polygon(POINT_Z, POINT_Y, POINT_X, POINT1),
                 "Constructed a polygon with wrong order of vertices");
-
+ 
         // TC03: Vertices not in the same plane
         assertThrows(IllegalArgumentException.class, () -> new Polygon(POINT_Z, POINT_X, POINT_Y, POINT2),
                 "Constructed a polygon with vertices that are not in the same plane");

@@ -1,6 +1,5 @@
-package geometries;
+package geometries.impl;
 
-import geometries.impl.Sphere;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
@@ -109,7 +108,7 @@ public class SphereTests {
         // TC11: Ray starts on the sphere surface and goes inside (1 point)
         assertEquals(List.of(P1), sphere.findIntersections(new Ray(P2, Vector.AXIS_Z)),
                 ERR_FIND_INTERSECTIONS);
-
+        
         // TC12: Ray starts on the sphere surface and goes outside (0 points)
         assertNull(sphere.findIntersections(new Ray(P1, Vector.AXIS_Z)),
                 ERR_FIND_INTERSECTIONS);

@@ -1,6 +1,5 @@
-package geometries;
+package geometries.impl;
 
-import geometries.impl.Plane;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
@@ -108,7 +107,7 @@ public class PlaneTests {
         Plane plane = new Plane(P101, V1);
 
         //  ============ Equivalence Partitions Tests ==============
-
+ 
         //  TC01 check constructor.
         assertEquals(1, plane.getNormal(P101).length(), DELTA,
                 "ERROR: Plane constructor failed to create the expected plane with point and normal vector");

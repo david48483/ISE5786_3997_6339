@@ -1,9 +1,5 @@
-package geometries;
+package geometries.impl;
 
-import geometries.impl.Geometries;
-import geometries.impl.Plane;
-import geometries.impl.Sphere;
-import geometries.impl.Triangle;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
@@ -29,15 +25,21 @@ public class GeometriesTests {
 
     // ---- Error messages ----
 
-    /** Error message for {@link Geometries#Geometries(geometries.api.Intersectable...)} tests. */
+    /**
+     * Error message for {@link Geometries#Geometries(geometries.api.Intersectable...)} tests.
+     */
     private static final String ERR_CONSTRUCTOR =
             "ERROR: Geometries constructor threw unexpectedly";
 
-    /** Error message for {@link Geometries#add(geometries.api.Intersectable...)} tests. */
+    /**
+     * Error message for {@link Geometries#add(geometries.api.Intersectable...)} tests.
+     */
     private static final String ERR_ADD =
             "ERROR: add() threw unexpectedly";
 
-    /** Error message when the wrong number of intersections is returned. */
+    /**
+     * Error message when the wrong number of intersections is returned.
+     */
     private static final String ERR_INTERSECTIONS =
             "ERROR: Geometries findIntersections() returned wrong number of intersections";
 

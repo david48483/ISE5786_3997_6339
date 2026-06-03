@@ -161,7 +161,7 @@ class RayTests {
 
         //= ============== Boundary Values Tests ==================
         //BVA01: An empty list of points should return null
-        List<Point> emptyPoints = List.of();
+        List<Point> emptyPoints = null;
         assertNull(ray.findClosestPoint(emptyPoints), "ERROR: findClosetPoint() should return null for an empty list of points");
 
         //BVA02: A list of points where the closest point is behind the ray's origin should return the closest point

@@ -1,6 +1,5 @@
-package geometries;
+package geometries.impl;
 
-import geometries.impl.Triangle;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;

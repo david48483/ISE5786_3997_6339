@@ -20,12 +20,12 @@ public class ImageWriterTests {
     /**
      * Image width in pixels.
      */
-    static final int WIDTH = 800;
+    static final int WIDTH = 801;
 
     /**
      * Image height in pixels.
      */
-    static final int HEIGHT = 500;
+    static final int HEIGHT = 501;
 
     /**
      * Grid cell size in pixels.
