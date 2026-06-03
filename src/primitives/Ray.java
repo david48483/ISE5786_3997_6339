@@ -1,5 +1,7 @@
 package primitives;
 
+import geometries.api.Intersectable.Intersection;
+
 import java.util.List;
 
 /**
@@ -24,7 +26,7 @@ public class Ray {
      * Creates a ray from an origin point and a direction vector.
      * The direction vector is normalized before storage.
      *
-     * @param origin starting point of the ray
+     * @param origin    starting point of the ray
      * @param direction direction of the ray (does not have to be normalized)
      */
     public Ray(Point origin, Vector direction) {
@@ -72,20 +74,43 @@ public class Ray {
      * @param points list of candidate points
      * @return closest point to the ray origin, or {@code null} if the list is empty
      */
-    public Point findClosestPoint(List<Point> points) {
 
-        Double minDistance = Double.POSITIVE_INFINITY;
-        Point closestPoint = null;
-        for (Point p : points) {
-            Double currentDistance = p.distanceSquared(_origin);
+    public Point findClosestPoint(List<Point> points) {
+        return points == null ? null
+                : findClosestIntersection(
+                points.stream()
+                        .map(point -> new Intersection(point, null))/// //////////////////////////////////////////////////////////////////////////////////דן סיפק את הנקודה אחרי הנול, אבל הבנאי לשנו הפוך משום מה, שיניתי כאן
+                        .toList()
+        ).point;
+    }
+
+    //    public Point findClosestPoint(List<Point> points) {
+//
+//        Double minDistance = Double.POSITIVE_INFINITY;
+//        Point closestPoint = null;
+//        for (Point p : points) {
+//            Double currentDistance = p.distanceSquared(_origin);
+//            if (currentDistance < minDistance) {
+//                minDistance = currentDistance;
+//                closestPoint = p;
+//
+//            }
+//        }
+//        return closestPoint;
+//
+//    }
+    public Intersection findClosestIntersection(List<Intersection> intersections) {
+        double minDistance = Double.POSITIVE_INFINITY;
+        Intersection closestIntersection = null;
+        for (Intersection i : intersections) {
+            double currentDistance = i.point.distanceSquared(_origin);
             if (currentDistance < minDistance) {
                 minDistance = currentDistance;
-                closestPoint = p;
+                closestIntersection = i;
 
             }
         }
-        return closestPoint;
-
+        return closestIntersection;
     }
 
     @Override
