@@ -79,26 +79,11 @@ public class Ray {
         return points == null ? null
                 : findClosestIntersection(
                 points.stream()
-                        .map(point -> new Intersection(point, null))/// //////////////////////////////////////////////////////////////////////////////////דן סיפק את הנקודה אחרי הנול, אבל הבנאי לשנו הפוך משום מה, שיניתי כאן
+                        .map(point -> new Intersection(point, null))
                         .toList()
         ).point;
     }
 
-    //    public Point findClosestPoint(List<Point> points) {
-//
-//        Double minDistance = Double.POSITIVE_INFINITY;
-//        Point closestPoint = null;
-//        for (Point p : points) {
-//            Double currentDistance = p.distanceSquared(_origin);
-//            if (currentDistance < minDistance) {
-//                minDistance = currentDistance;
-//                closestPoint = p;
-//
-//            }
-//        }
-//        return closestPoint;
-//
-//    }
     public Intersection findClosestIntersection(List<Intersection> intersections) {
         double minDistance = Double.POSITIVE_INFINITY;
         Intersection closestIntersection = null;

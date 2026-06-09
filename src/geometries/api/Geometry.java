@@ -1,8 +1,8 @@
 package geometries.api;
 
 import primitives.Color;
+import primitives.Material;
 import primitives.Point;
-import primitives.Ray;
 import primitives.Vector;
 
 /**
@@ -21,26 +21,37 @@ public abstract class Geometry extends Intersectable {
     }
 
     /**
-     *  The emission color of the geometry, which represents the color that the geometry emits as light.
-     *  By default, it is set to black, meaning that the geometry does not emit any light.
+     * The emission color of the geometry, which represents the color that the geometry emits as light.
+     * By default, it is set to black, meaning that the geometry does not emit any light.
      */
     private Color _emission = Color.BLACK;
 
+    private Material _material = new Material();
+
     /**
-     *  Returns the emission color of the geometry.
-     * @return
+     * @return the emission color of the geometry
      */
     public Color getEmission() {
         return _emission;
     }
 
+    public Material getMaterial() {
+        return _material;
+    }
+
     /**
-     *  Sets the emission color of the geometry and returns the geometry itself for method chaining.
+     * Sets the emission color of the geometry and returns the geometry itself for method chaining.
+     *
      * @param color
      * @return
      */
-    public Geometry setEmission(Color color){
+    public Geometry setEmission(Color color) {
         _emission = color;
+        return this;
+    }
+
+    public Geometry setMaterial(Material material) {
+        _material = material;
         return this;
     }
 

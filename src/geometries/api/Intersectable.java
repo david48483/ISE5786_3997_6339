@@ -1,10 +1,11 @@
 package geometries.api;
 
-import java.util.List;
-import java.util.Objects;
-
+import primitives.Material;
 import primitives.Point;
 import primitives.Ray;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Abstract base class for all geometric bodies that can be intersected by rays.
@@ -57,6 +58,8 @@ public abstract class Intersectable {
          */
         public final Geometry geometry;
 
+        public final Material material;
+
         /**
          * Creates an intersection record for the given point and geometry.
          *
@@ -66,6 +69,7 @@ public abstract class Intersectable {
         public Intersection(Point point, Geometry geometry) {
             this.point = point;
             this.geometry = geometry;
+            this.material = geometry != null ? geometry.getMaterial() : new Material();
         }
 
         @Override
