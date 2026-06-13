@@ -84,6 +84,13 @@ public class Ray {
         ).point;
     }
 
+    /**
+     * Finds the closest intersection to the ray origin from a given list of intersections.
+     *
+     * @param intersections list of candidate intersections
+     * @return closest intersection to the ray origin, or {@code null} if the list is empty
+     */
+
     public Intersection findClosestIntersection(List<Intersection> intersections) {
         double minDistance = Double.POSITIVE_INFINITY;
         Intersection closestIntersection = null;

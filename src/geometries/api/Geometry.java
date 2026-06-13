@@ -26,14 +26,26 @@ public abstract class Geometry extends Intersectable {
      */
     private Color _emission = Color.BLACK;
 
+    /**
+     * The material of the geometry, which contains properties that affect how the geometry interacts with light, such as its ambient reflection coefficient (kA).
+     * By default, it is initialized to a new Material instance with default properties.
+     */
     private Material _material = new Material();
 
     /**
+     * Returns the emission color of the geometry.
+     *
      * @return the emission color of the geometry
      */
     public Color getEmission() {
         return _emission;
     }
+
+    /**
+     * Returns the material of the geometry, which contains properties that affect how the geometry interacts with light, such as its ambient reflection coefficient (kA).
+     *
+     * @return the material of the geometry
+     */
 
     public Material getMaterial() {
         return _material;
@@ -42,13 +54,20 @@ public abstract class Geometry extends Intersectable {
     /**
      * Sets the emission color of the geometry and returns the geometry itself for method chaining.
      *
-     * @param color
-     * @return
+     * @param color the new emission color to set for the geometry
+     * @return the geometry with the updated emission color
      */
     public Geometry setEmission(Color color) {
         _emission = color;
         return this;
     }
+
+    /**
+     * Sets the material of the geometry and returns the geometry itself for method chaining.
+     *
+     * @param material the new material to set for the geometry
+     * @return the geometry with the updated material
+     */
 
     public Geometry setMaterial(Material material) {
         _material = material;

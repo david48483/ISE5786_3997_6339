@@ -36,8 +36,21 @@ public abstract class Intersectable {
                 .toList();
     }
 
+    /**
+     * Finds all intersections between a ray and this geometric shape, returning detailed information about each intersection.
+     *
+     * @param ray the ray to find intersections with
+     * @return a list of Intersection objects, or null if no intersections exist
+     */
+
     protected abstract List<Intersection> calcIntersectionsHelper(Ray ray);
 
+    /**
+     * Finds all intersections between a ray and this geometric shape, returning detailed information about each intersection.
+     *
+     * @param ray the ray to find intersections with
+     * @return a list of Intersection objects, or null if no intersections exist
+     */
     public final List<Intersection> calcIntersections(Ray ray) {
         return calcIntersectionsHelper(ray);
     }
@@ -57,6 +70,10 @@ public abstract class Intersectable {
          * The geometry that was intersected.
          */
         public final Geometry geometry;
+
+        /**
+         * The material of the intersected geometry, which can be used for shading calculations.
+         */
 
         public final Material material;
 
