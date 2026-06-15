@@ -2,7 +2,7 @@ package renderer;
 
 import geometries.impl.Sphere;
 import geometries.impl.Triangle;
-import lighting.AmbientLight;
+import lighting.impl.AmbientLight;
 import org.junit.jupiter.api.Test;
 import primitives.Color;
 import primitives.Point;
@@ -129,7 +129,7 @@ class RenderTests {
      * not inside unit tests.
      * </p>
      *
-     * @param builder camera builder to use
+     * @param builder  camera builder to use
      * @param jsonName JSON scene file name
      * @return the rendered camera instance
      */

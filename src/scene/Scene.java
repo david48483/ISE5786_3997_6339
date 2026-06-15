@@ -1,7 +1,7 @@
 package scene;
 
 import geometries.impl.Geometries;
-import lighting.AmbientLight;
+import lighting.impl.AmbientLight;
 import primitives.Color;
 
 /**

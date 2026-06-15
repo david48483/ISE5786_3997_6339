@@ -2,7 +2,7 @@ package renderer;
 
 import geometries.impl.Sphere;
 import geometries.impl.Triangle;
-import lighting.AmbientLight;
+import lighting.impl.AmbientLight;
 import org.junit.jupiter.api.Test;
 import primitives.*;
 import scene.Scene;
