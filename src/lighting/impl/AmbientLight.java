@@ -1,5 +1,6 @@
-package lighting;
+package lighting.impl;
 
+import lighting.api.Light;
 import primitives.Color;
 
 /**
@@ -8,12 +9,12 @@ import primitives.Color;
  *
  * @author David &amp; Yehuda
  */
-public final class AmbientLight {
+public final class AmbientLight extends Light {
 
     /**
      * Ambient light intensity as a color value.
      */
-    private final Color _intensity;
+    // private final Color _intensity;
 
     /**
      * Constant instance representing no ambient light.
@@ -26,7 +27,8 @@ public final class AmbientLight {
      * @param color intensity color of the ambient light
      */
     public AmbientLight(Color color) {
-        _intensity = color;
+        // _intensity = color;
+        super(color);
     }
 
     /**
@@ -34,8 +36,8 @@ public final class AmbientLight {
      *
      * @return ambient light intensity color
      */
-    public Color getIntensity() {
-        return _intensity;
-    }
+    // public Color getIntensity() {
+    //   return _intensity;
+    //}
 
 }
