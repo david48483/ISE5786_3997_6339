@@ -1,15 +1,52 @@
 package renderer;
 
+import lighting.impl.PointLight;
 import org.junit.jupiter.api.Test;
+import primitives.Color;
+import primitives.Point;
+import primitives.Vector;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PointLightTests {
 
     @Test
     void TestGetL() {
+        PointLight light = new PointLight(new Color(100, 100, 100), Point.ZERO);
+
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Regular point in space.
+        assertEquals(Vector.AXIS_X, light.getL(new Point(2, 0, 0)),
+                "getL should return normalized vector from light to point");
+
+        // =============== Boundary Values Tests ==================
+        // TC02: Very close point (non-zero distance).
+        assertThrows(IllegalArgumentException.class, () -> light.getL(Point.ZERO),
+                "getL should throw exception for point at light position");
 
     }
 
     void TestGetIntensity() {
+        Color base = new Color(100, 100, 100);
+
+        // ============ Equivalence Partitions Tests ==============
+        // TC11: Only constant attenuation -> no distance effect.
+        PointLight onlyKc = new PointLight(base, Point.ZERO).setKc(1.0).setKl(0.0).setKq(0.0);
+        assertEquals(base, onlyKc.getIntensity(new Point(10, 0, 0)),
+                "With only kC=1, intensity should remain unchanged");
+
+        // TC12: Linear attenuation.
+        PointLight linear = new PointLight(base, Point.ZERO).setKc(1.0).setKl(0.5).setKq(0.0);
+        // d=2 => attenuation = 1 + 0.5*2 = 2 -> scale 0.5
+        assertEquals(base.scale(0.5), linear.getIntensity(new Point(2, 0, 0)),
+                "Linear attenuation should reduce intensity by expected factor");
+
+        // =============== Boundary Values Tests ==================
+        // TC13: Quadratic attenuation with very close point.
+        // מקרה קצה של הנקודה במיקום של המנורה צריך לחזור ללא מקדם ההנחתה
+        assertEquals(Vector.AXIS_X, light.getL(new Point(2, 0, 0)),
+                "getL should return normalized vector from light to point");
+
 
     }
 }
