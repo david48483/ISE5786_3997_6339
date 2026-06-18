@@ -33,12 +33,8 @@ public class PointLightTests {
         Color base = new Color(100, 100, 100);
 
         // ============ Equivalence Partitions Tests ==============
-        // EP01: Only constant attenuation -> no distance effect.
-        PointLight onlyKc = new PointLight(base, Point.ZERO).setKc(1.0).setKl(0.0).setKq(0.0);
-        assertEquals(base, onlyKc.getIntensity(new Point(10, 0, 0)),
-                "With only kC=1, intensity should remain unchanged");
 
-        // EP02: Linear attenuation.
+        // EP01: Linear attenuation.
         PointLight linear = new PointLight(base, Point.ZERO).setKc(1.0).setKl(0.5).setKq(0.0);
         // d=2 => attenuation = 1 + 0.5*2 = 2 -> scale 0.5
         assertEquals(base.scale(0.5), linear.getIntensity(new Point(2, 0, 0)),

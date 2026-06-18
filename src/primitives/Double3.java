@@ -106,7 +106,10 @@ public record Double3(double _d1, double _d2, double _d3) {
      * @return a new {@code Double3} containing the reduced values
      */
     public Double3 divide(double rhs) {
-        return new Double3(_d1 / rhs, _d2 / rhs, _d3 / rhs);
+        double temp = 1 / rhs;
+        return this.scale(temp);
+        // return new Double3(_d1 / rhs, _d2 / rhs, _d3 / rhs);
+
     }
 
     /**

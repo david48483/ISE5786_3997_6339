@@ -1,6 +1,5 @@
 package renderer;
 
-import lighting.impl.PointLight;
 import lighting.impl.SpotLight;
 import org.junit.jupiter.api.Test;
 import primitives.Color;
@@ -12,10 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SpotLightTests {
 
+    Color base = new Color(100, 100, 100);
+
+    SpotLight light = new SpotLight(base, Point.ZERO, Vector.AXIS_Z);
+
     @Test
     void TestGetL() {
-
-        PointLight light = new SpotLight(new Color(100, 100, 100), Point.ZERO, Vector.AXIS_Z);
 
         // ============ Equivalence Partitions Tests ==============
         // EP01: Regular point in space.
@@ -36,13 +37,27 @@ public class SpotLightTests {
                 "getL should throw exception for point at light position");
 
         //BV02 The object is at 90 degrees to the direction of the light.
-        assertEquals(new Vector(0, 1, 0), light.getL(new Point(0, 1, 0)),
+        assertEquals(Vector.AXIS_Y, light.getL(new Point(0, 1, 0)),
                 "getL should return normalized vector from light to point");
 
     }
 
     @Test
     void TestGetIntensity() {
+        //============ Equivalence Partitions Tests ==============
+        //EP01
+        light.setKc(1.0).setKl(0.5).setKq(0.0);
+
+        assertEquals(base.scale(0.5), light.getIntensity(new Point(0, 0, 2)),
+                "Intensity should be base color when point is in the direction of the light");
+        //EP02
+        assertEquals(Color.BLACK, light.getIntensity(new Point(0, 0, -2)),
+                "Intensity should be black when point is opposite to the direction of the light");
+
+        //=== Boundary Values Tests ===
+        //BV01: The object is at 90 degrees to the direction of the light.
+        assertEquals(Color.BLACK, light.getIntensity(new Point(0, 1, 0)),
+                "Intensity should be black when point is at 90 degrees to the direction of the light");
 
     }
 }
