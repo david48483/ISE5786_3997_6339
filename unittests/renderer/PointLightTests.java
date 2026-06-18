@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -27,6 +28,7 @@ public class PointLightTests {
 
     }
 
+    @Test
     void TestGetIntensity() {
         Color base = new Color(100, 100, 100);
 
@@ -46,7 +48,6 @@ public class PointLightTests {
         // VB01: Quadratic attenuation with very close point.
         assertEquals(base, linear.getIntensity(Point.ZERO),
                 "With only kC=1, intensity should remain unchanged");
-
 
     }
 }

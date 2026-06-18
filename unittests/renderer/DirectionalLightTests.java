@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DirectionalLightTests {
 
+    private final double DELTA = 1e-10;
+
     DirectionalLight DL1 = new DirectionalLight(Color.BLACK, Vector.AXIS_Z);
 
     @Test
@@ -19,6 +21,7 @@ public class DirectionalLightTests {
 
     }
 
+    @Test
     void TestGetIntensity() {
         assertEquals(Color.BLACK, DL1.getIntensity(Point.ZERO));
 

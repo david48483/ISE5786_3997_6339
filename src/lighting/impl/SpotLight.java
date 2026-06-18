@@ -8,8 +8,8 @@ public class SpotLight extends PointLight {
 
     private final Vector _direction;
 
-    SpotLight(Color color, Point point, Vector vector) {
-        super(color, point);
+    public SpotLight(Color color, Point position, Vector vector) {
+        super(color, position);
         _direction = vector.normalize();
     }
 }
