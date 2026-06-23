@@ -1,8 +1,12 @@
 package scene;
 
 import geometries.impl.Geometries;
+import lighting.api.LightSource;
 import lighting.impl.AmbientLight;
 import primitives.Color;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a 3D scene configuration used by the renderer.
@@ -32,6 +36,8 @@ public class Scene {
      * Collection of geometries in the scene.
      */
     public Geometries geometries = new Geometries();
+
+    public List<LightSource> lights = new ArrayList<>();
 
     /**
      * Creates a scene with the given name.

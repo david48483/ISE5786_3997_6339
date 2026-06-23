@@ -7,7 +7,6 @@ import primitives.Point;
 import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SpotLightTests {
 
@@ -59,6 +58,10 @@ public class SpotLightTests {
         //BV01: The object is at 90 degrees to the direction of the light.
         assertEquals(Color.BLACK, light.getIntensity(new Point(0, 1, 0)),
                 "Intensity should be black when point is at 90 degrees to the direction of the light");
+
+        //  BV02:   The object is at the position of the light.
+        assertEquals(base, light.getIntensity(Point.ZERO),
+                "Intensity should be base color when point is at the position of the light");
 
     }
 }

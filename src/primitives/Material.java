@@ -21,6 +21,10 @@ public class Material {
 
     public Double3 kA = Double3.ONE;
 
+    public Double3 ks = Double3.ZERO;
+    public Double3 kd = Double3.ZERO;
+    public int nShininess;
+
     /**
      * Returns the ambient reflection coefficient (kA) of the material, which represents how much ambient light the material reflects.
      *
