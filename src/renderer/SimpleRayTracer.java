@@ -5,9 +5,12 @@ import lighting.api.LightSource;
 import primitives.Color;
 import primitives.Double3;
 import primitives.Ray;
+import primitives.Vector;
 import scene.Scene;
 
 import java.util.List;
+
+import static primitives.Util.alignZero;
 
 /**
  * Basic ray tracer implementation that shades visible intersections
@@ -33,10 +36,11 @@ class SimpleRayTracer extends RayTracerBase {
      * @param intersection the closest intersection point
      * @return the resulting color at the intersection
      */
-    private Color calcColor(Intersection intersection) {
-        return _scene.ambientLight.getIntensity()
+    private Color calcColor(Intersection intersection, Vector v) {
+        return !preprocessIntersection(intersection, v)? Color.BLACK :
+                _scene.ambientLight.getIntensity()
                 .scale(intersection.geometry.getMaterial().kA)
-                .add(intersection.geometry.getEmission());
+                .add(calcLocalEffects(intersection));
 
     }
 
@@ -47,19 +51,38 @@ class SimpleRayTracer extends RayTracerBase {
         return intersections == null ?
                 _scene.background :
                 //  calcColor(ray.findClosestPoint(points));
-                calcColor(ray.findClosestIntersection(intersections));
+                calcColor(ray.findClosestIntersection(intersections), ray.direction());
     }
 
     private Color calcLocalEffects(Intersection intersection) {
-        return null;
+        Color color = intersection.geometry.getEmission();
+
+        for (LightSource lightSource : _scene.lights) {
+            if (setLightSource(intersection, lightSource)) {
+                color = color.add(
+                        lightSource.getIntensity(intersection.point)
+                                .scale(calcDiffuse(intersection, lightSource)
+                                .add(calcSpecular(intersection)))
+                );
+            }
+        }
+
+        return color;
+
     }
 
     private Double3 calcDiffuse(Intersection intersection, LightSource light) {
-        return null;
+        return intersection.material.kD.scale(Math.abs(intersection.lNormal));
     }
 
     private Double3 calcSpecular(Intersection intersection) {
-        return null;
+        Vector r = intersection.l.add(intersection.normal.scale(-2 * intersection.lNormal));
+        double minusVR = alignZero(-intersection.v.dotProduct(r));
+
+        return minusVR <= 0
+                ? Double3.ZERO
+                : intersection.material.kS.scale(Math.pow(minusVR, intersection.material.nShininess));
+
     }
 
 }
