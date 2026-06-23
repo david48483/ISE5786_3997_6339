@@ -249,6 +249,58 @@ class LightsTests {
     }
 
     /**
+     * Produce a picture of a sphere lighted by multiple light sources (Directional, Point, Spot)
+     */
+    @Test
+    @SuppressWarnings("java:S109")
+    void testSphereMulti() {
+        _scene1.geometries.add(SPHERE);
+
+        // 1. תאורה כיוונית - אור אדמדם חלש המאיר מזווית אחורית
+        _scene1.lights.add(new DirectionalLight(new Color(255, 255, 0), new Vector(1, -1, -1)));
+
+        // 2. תאורה נקודתית - אור ירוק הממוקם בחלקה העליון-ימני של הסצנה
+        _scene1.lights.add(new PointLight(new Color(0, 300, 0), new Point(50, 50, 50)) //
+                .setKl(0.0001));
+
+        // 3. תאורת ספוט - אור אדום ממוקד המאיר מלמעלה משמאל כלפי מרכז הכדור
+        _scene1.lights.add(new SpotLight(new Color(300, 0, 00), new Point(-50, 50, 50), new Vector(1, -1, -2)) //
+                .setKl(0.0001).setKq(0.00001));
+
+        _camera1 //
+                .setResolution(RESOLUTION, RESOLUTION) //
+                .build() //
+                .renderImage() //
+                .writeToImage("lightSphereMulti");
+    }
+
+    /**
+     * Produce a picture of two triangles lighted by multiple light sources (Directional, Point, Spot)
+     */
+    @Test
+    @SuppressWarnings("java:S109")
+    void testTrianglesMulti() {
+        _scene2.geometries.add(TRIANGLE1, TRIANGLE2);
+
+        // 1. תאורה כיוונית - אור ירוק חלש המאיר באלכסון מלמעלה
+        _scene2.lights.add(new DirectionalLight(new Color(50, 150, 50), new Vector(0, -1, -1)));
+
+        // 2. תאורה נקודתית - אור אדום הממוקם מעל המשולשים מצד ימין
+        _scene2.lights.add(new PointLight(new Color(300, 0, 0), new Point(40, -40, -130)) //
+                .setKl(0.001));
+
+        // 3. תאורת ספוט - אור כחול ממוקד המאיר על המשולשים מצד שמאל
+        _scene2.lights.add(new SpotLight(new Color(0, 0, 300), new Point(-40, -40, -130), new Vector(2, 2, -1)) //
+                .setKl(0.0001));
+
+        _camera2 //
+                .setResolution(RESOLUTION, RESOLUTION) //
+                .build() //
+                .renderImage() //
+                .writeToImage("lightTrianglesMulti");
+    }
+
+    /**
      * Produce a picture of a sphere lighted by a narrow spotlight
      */
 //    @Test
