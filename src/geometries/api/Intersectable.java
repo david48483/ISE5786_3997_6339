@@ -76,14 +76,31 @@ public abstract class Intersectable {
         /**
          * The material of the intersected geometry, which can be used for shading calculations.
          */
-
         public final Material material;
 
+        /**
+         * Surface normal at the intersection point.
+         */
         public Vector normal;
+        /**
+         * View direction vector used for shading.
+         */
         public Vector v;
+        /**
+         * Dot product between the view direction and the surface normal.
+         */
         public double vNormal;
+        /**
+         * Active light source used for local shading.
+         */
         public LightSource light;
+        /**
+         * Direction vector from the light source to the intersection point.
+         */
         public Vector l;
+        /**
+         * Dot product between the light direction and the surface normal.
+         */
         public double lNormal;
 
         /**

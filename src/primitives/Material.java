@@ -18,11 +18,19 @@ public class Material {
      * The ambient reflection coefficient (kA) of the material, which represents how much ambient light the material reflects.
      * By default, it is set to 1 for all color channels, meaning that the material fully reflects ambient light.
      */
-
     public Double3 kA = Double3.ONE;
 
+    /**
+     * Specular reflection coefficient.
+     */
     public Double3 kS = Double3.ZERO;
+    /**
+     * Diffuse reflection coefficient.
+     */
     public Double3 kD = Double3.ZERO;
+    /**
+     * Shininess exponent for specular highlights.
+     */
     public int nShininess;
 
     /**
@@ -37,26 +45,56 @@ public class Material {
         return this;
     }
 
+    /**
+     * Sets the specular reflection coefficient.
+     *
+     * @param obj specular reflection coefficient
+     * @return this material instance
+     */
     public Material setKS(Double3 obj) {
         kS = obj;
 
         return this;
     }
 
+    /**
+     * Sets the specular reflection coefficient uniformly for all channels.
+     *
+     * @param obj uniform specular reflection coefficient
+     * @return this material instance
+     */
     public Material setKS(double obj) {
         return setKS(new Double3(obj));
     }
 
+    /**
+     * Sets the diffuse reflection coefficient.
+     *
+     * @param obj diffuse reflection coefficient
+     * @return this material instance
+     */
     public Material setKD(Double3 obj) {
         kD = obj;
 
         return this;
     }
 
+    /**
+     * Sets the diffuse reflection coefficient uniformly for all channels.
+     *
+     * @param obj uniform diffuse reflection coefficient
+     * @return this material instance
+     */
     public Material setKD(double obj) {
         return setKD(new Double3(obj));
     }
 
+    /**
+     * Sets the shininess exponent.
+     *
+     * @param n shininess exponent
+     * @return this material instance
+     */
     public Material setShininess(int n) {
         nShininess = n;
         return this;

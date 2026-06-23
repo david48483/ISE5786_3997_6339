@@ -14,7 +14,7 @@ import static primitives.Util.alignZero;
 
 /**
  * Basic ray tracer implementation that shades visible intersections
- * using ambient light only.
+ * using ambient and local lighting effects.
  *
  * @author David &amp; Yehuda
  */
@@ -34,13 +34,14 @@ class SimpleRayTracer extends RayTracerBase {
      * Calculates the color at an intersection point.
      *
      * @param intersection the closest intersection point
+     * @param v            normalized view direction
      * @return the resulting color at the intersection
      */
     private Color calcColor(Intersection intersection, Vector v) {
-        return !preprocessIntersection(intersection, v)? Color.BLACK :
+        return !preprocessIntersection(intersection, v) ? Color.BLACK :
                 _scene.ambientLight.getIntensity()
-                .scale(intersection.geometry.getMaterial().kA)
-                .add(calcLocalEffects(intersection));
+                        .scale(intersection.geometry.getMaterial().kA)
+                        .add(calcLocalEffects(intersection));
 
     }
 
@@ -54,6 +55,13 @@ class SimpleRayTracer extends RayTracerBase {
                 calcColor(ray.findClosestIntersection(intersections), ray.direction());
     }
 
+    /**
+     * Calculates local lighting effects (emission, diffuse, and specular)
+     * at the given intersection.
+     *
+     * @param intersection the prepared intersection data
+     * @return resulting local color contribution
+     */
     private Color calcLocalEffects(Intersection intersection) {
         Color color = intersection.geometry.getEmission();
 
@@ -62,7 +70,7 @@ class SimpleRayTracer extends RayTracerBase {
                 color = color.add(
                         lightSource.getIntensity(intersection.point)
                                 .scale(calcDiffuse(intersection, lightSource)
-                                .add(calcSpecular(intersection)))
+                                        .add(calcSpecular(intersection)))
                 );
             }
         }
@@ -71,10 +79,23 @@ class SimpleRayTracer extends RayTracerBase {
 
     }
 
+    /**
+     * Calculates the diffuse reflection coefficient for the current light.
+     *
+     * @param intersection the prepared intersection data
+     * @param light        active light source
+     * @return diffuse coefficient per channel
+     */
     private Double3 calcDiffuse(Intersection intersection, LightSource light) {
         return intersection.material.kD.scale(Math.abs(intersection.lNormal));
     }
 
+    /**
+     * Calculates the specular reflection coefficient.
+     *
+     * @param intersection the prepared intersection data
+     * @return specular coefficient per channel
+     */
     private Double3 calcSpecular(Intersection intersection) {
         Vector r = intersection.l.add(intersection.normal.scale(-2 * intersection.lNormal));
         double minusVR = alignZero(-intersection.v.dotProduct(r));

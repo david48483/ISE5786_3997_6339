@@ -9,8 +9,22 @@ import primitives.Vector;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Unit tests for {@link lighting.impl.PointLight}.
+ *
+ * @author David &amp; Yehuda
+ */
 public class PointLightTests {
 
+    /**
+     * Default constructor for the test suite.
+     */
+    public PointLightTests() {
+    }
+
+    /**
+     * Verifies direction vector behavior returned by {@code getL}.
+     */
     @Test
     void TestGetL() {
 
@@ -28,6 +42,9 @@ public class PointLightTests {
 
     }
 
+    /**
+     * Verifies point-light attenuation behavior in {@code getIntensity}.
+     */
     @Test
     void TestGetIntensity() {
         Color base = new Color(100, 100, 100);

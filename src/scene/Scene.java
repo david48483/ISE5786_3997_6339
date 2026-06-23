@@ -37,6 +37,9 @@ public class Scene {
      */
     public Geometries geometries = new Geometries();
 
+    /**
+     * Collection of light sources in the scene.
+     */
     public List<LightSource> lights = new ArrayList<>();
 
     /**

@@ -8,12 +8,32 @@ import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Unit tests for {@link lighting.impl.SpotLight}.
+ *
+ * @author David &amp; Yehuda
+ */
 public class SpotLightTests {
 
+    /**
+     * Base light color used across spotlight tests.
+     */
     Color base = new Color(100, 100, 100);
 
+    /**
+     * Spotlight fixture used by the tests.
+     */
     SpotLight light = new SpotLight(base, Point.ZERO, Vector.AXIS_Z);
 
+    /**
+     * Default constructor for the test suite.
+     */
+    public SpotLightTests() {
+    }
+
+    /**
+     * Verifies direction vector behavior returned by {@code getL}.
+     */
     @Test
     void TestGetL() {
 
@@ -42,6 +62,9 @@ public class SpotLightTests {
 
     }
 
+    /**
+     * Verifies spotlight intensity behavior in {@code getIntensity}.
+     */
     @Test
     void TestGetIntensity() {
         //============ Equivalence Partitions Tests ==============

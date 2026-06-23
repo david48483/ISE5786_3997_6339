@@ -39,6 +39,13 @@ abstract class RayTracerBase {
         _scene = scene;
     }
 
+    /**
+     * Prepares view-dependent shading data at a specific intersection.
+     *
+     * @param intersection the intersection to prepare
+     * @param v            normalized view direction
+     * @return {@code true} if the view direction is not orthogonal to the normal
+     */
     protected boolean preprocessIntersection(Intersectable.Intersection intersection, Vector v) {
         intersection.v = v;
         intersection.normal = intersection.geometry.getNormal(intersection.point);
@@ -46,6 +53,13 @@ abstract class RayTracerBase {
         return intersection.vNormal != 0;
     }
 
+    /**
+     * Prepares light-dependent shading data for an intersection and a light source.
+     *
+     * @param intersection the intersection to prepare
+     * @param light        active light source
+     * @return {@code true} if the light and view are on the same side of the surface
+     */
     protected boolean setLightSource(Intersectable.Intersection intersection, LightSource light) {
         intersection.light = light;
         intersection.l = light.getL(intersection.point);
