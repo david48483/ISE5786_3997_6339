@@ -22,12 +22,12 @@ import static java.awt.Color.YELLOW;
 @SuppressWarnings("java:S109")
 class RenderTests {
     /**
-     * Default constructor to satisfy documentation tools.
+     * Creates a render test suite instance.
      */
     RenderTests() { /* to satisfy JavaDoc generator */ }
 
     /**
-     * Physical view-plane size (square: SIZE x SIZE).
+     * Physical view-plane size in scene units (square: SIZE x SIZE).
      */
     static final double VP_SIZE = 500;
     /**
@@ -44,7 +44,7 @@ class RenderTests {
      */
     static final Point LOOK_AT = new Point(0, 0, -1);
     /**
-     * Image resolution (square: N x N).
+     * Image resolution in pixels (square: N x N).
      */
     static final int RESOLUTION = 1000;
 
@@ -107,7 +107,7 @@ class RenderTests {
      * </p>
      *
      * @param builder camera builder to use
-     * @param xmlName XML scene file name
+     * @param xmlName XML scene file name to parse
      * @return the rendered camera instance
      */
     Camera renderSceneXML(Camera.Builder builder, String xmlName) {
@@ -130,7 +130,7 @@ class RenderTests {
      * </p>
      *
      * @param builder  camera builder to use
-     * @param jsonName JSON scene file name
+     * @param jsonName JSON scene file name to parse
      * @return the rendered camera instance
      */
     static Camera renderSceneJSON(Camera.Builder builder, String jsonName) {

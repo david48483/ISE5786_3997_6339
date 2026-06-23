@@ -9,7 +9,7 @@ import primitives.Vector;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Unit tests for {@link lighting.impl.SpotLight}.
+ * Unit tests for {@link SpotLight}.
  *
  * @author David &amp; Yehuda
  */
@@ -26,13 +26,13 @@ public class SpotLightTests {
     SpotLight light = new SpotLight(base, Point.ZERO, Vector.AXIS_Z);
 
     /**
-     * Default constructor for the test suite.
+     * Creates a spotlight test suite instance.
      */
     public SpotLightTests() {
     }
 
     /**
-     * Verifies direction vector behavior returned by {@code getL}.
+     * Verifies direction-vector behavior returned by {@link SpotLight#getL(Point)}.
      */
     @Test
     void TestGetL() {
@@ -63,7 +63,7 @@ public class SpotLightTests {
     }
 
     /**
-     * Verifies spotlight intensity behavior in {@code getIntensity}.
+     * Verifies spotlight-intensity behavior returned by {@link SpotLight#getIntensity(Point)}.
      */
     @Test
     void TestGetIntensity() {
@@ -77,7 +77,7 @@ public class SpotLightTests {
         assertEquals(Color.BLACK, light.getIntensity(new Point(0, 0, -2)),
                 "Intensity should be black when point is opposite to the direction of the light");
 
-        //=== Boundary Values Tests ===
+        //============ Boundary Values Tests ==============
         //BV01: The object is at 90 degrees to the direction of the light.
         assertEquals(Color.BLACK, light.getIntensity(new Point(0, 1, 0)),
                 "Intensity should be black when point is at 90 degrees to the direction of the light");

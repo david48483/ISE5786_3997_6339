@@ -10,20 +10,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Unit tests for {@link lighting.impl.PointLight}.
+ * Unit tests for {@link PointLight}.
  *
  * @author David &amp; Yehuda
  */
 public class PointLightTests {
 
     /**
-     * Default constructor for the test suite.
+     * Creates a point-light test suite instance.
      */
     public PointLightTests() {
     }
 
     /**
-     * Verifies direction vector behavior returned by {@code getL}.
+     * Verifies direction-vector behavior returned by {@link PointLight#getL(Point)}.
      */
     @Test
     void TestGetL() {
@@ -43,7 +43,7 @@ public class PointLightTests {
     }
 
     /**
-     * Verifies point-light attenuation behavior in {@code getIntensity}.
+     * Verifies attenuation behavior returned by {@link PointLight#getIntensity(Point)}.
      */
     @Test
     void TestGetIntensity() {
