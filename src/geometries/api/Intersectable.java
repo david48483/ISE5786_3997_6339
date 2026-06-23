@@ -1,8 +1,10 @@
 package geometries.api;
 
+import lighting.api.LightSource;
 import primitives.Material;
 import primitives.Point;
 import primitives.Ray;
+import primitives.Vector;
 
 import java.util.List;
 import java.util.Objects;
@@ -76,6 +78,13 @@ public abstract class Intersectable {
          */
 
         public final Material material;
+
+        public Vector normal;
+        public Vector v;
+        public double vNormal;
+        public LightSource light;
+        public Vector l;
+        public double lNormal;
 
         /**
          * Creates an intersection record for the given point and geometry.

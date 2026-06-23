@@ -1,7 +1,9 @@
 package renderer;
 
 import geometries.api.Intersectable.Intersection;
+import lighting.api.LightSource;
 import primitives.Color;
+import primitives.Double3;
 import primitives.Ray;
 import scene.Scene;
 
@@ -46,6 +48,18 @@ class SimpleRayTracer extends RayTracerBase {
                 _scene.background :
                 //  calcColor(ray.findClosestPoint(points));
                 calcColor(ray.findClosestIntersection(intersections));
+    }
+
+    private Color calcLocalEffects(Intersection intersection) {
+        return null;
+    }
+
+    private Double3 calcDiffuse(Intersection intersection, LightSource light) {
+        return null;
+    }
+
+    private Double3 calcSpecular(Intersection intersection) {
+        return null;
     }
 
 }

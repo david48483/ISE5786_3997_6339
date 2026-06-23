@@ -21,8 +21,8 @@ public class Material {
 
     public Double3 kA = Double3.ONE;
 
-    public Double3 ks = Double3.ZERO;
-    public Double3 kd = Double3.ZERO;
+    public Double3 kS = Double3.ZERO;
+    public Double3 kD = Double3.ZERO;
     public int nShininess;
 
     /**
@@ -34,6 +34,31 @@ public class Material {
     public Material setKA(Double3 obj) {
         kA = obj;
 
+        return this;
+    }
+
+    public Material setKS(Double3 obj) {
+        kS = obj;
+
+        return this;
+    }
+
+    public Material setKS(double obj) {
+        return setKS(new Double3(obj));
+    }
+
+    public Material setKD(Double3 obj) {
+        kD = obj;
+
+        return this;
+    }
+
+    public Material setKD(double obj) {
+        return setKD(new Double3(obj));
+    }
+
+    public Material setShininess(int n) {
+        nShininess = n;
         return this;
     }
 
