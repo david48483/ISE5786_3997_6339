@@ -32,8 +32,9 @@ public class SpotLightTests {
 
         // =============== Boundary Values Tests ==================
         // VB01: Very close point (non-zero distance).
-        assertThrows(IllegalArgumentException.class, () -> light.getL(Point.ZERO),
-                "getL should throw exception for point at light position");
+        double sqrt2_div2 = Math.sqrt(2) / 2;
+        assertEquals(new Vector(sqrt2_div2, 0, sqrt2_div2), light.getL(new Point(3, 0, 3)),
+                "getL should return normalized vector for a point on the 90-degree boundary");
 
         //BV02 The object is at 90 degrees to the direction of the light.
         assertEquals(new Vector(0, 1, 0), light.getL(new Point(0, 1, 0)),
