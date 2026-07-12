@@ -4,6 +4,8 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
 
+import static primitives.Util.alignZero;
+
 /**
  * Spot light source with directional focus and point-light attenuation.
  *
@@ -30,30 +32,28 @@ public class SpotLight extends PointLight {
 
     @Override
     public SpotLight setKc(double kC) {
-        super.setKc(kC);
-        return this;
+        return (SpotLight) super.setKc(kC);
     }
 
     @Override
     public SpotLight setKl(double kL) {
-        super.setKl(kL);
-        return this;
+        return (SpotLight) super.setKl(kL);
     }
 
     @Override
     public SpotLight setKq(double kQ) {
-        super.setKq(kQ);
-        return this;
+        return (SpotLight) super.setKq(kQ);
     }
 
     @Override
     public Color getIntensity(Point p) {
+        Vector l;
         try {
-            double projection = _direction.dotProduct(getL(p));
-            return projection <= 0 ? Color.BLACK : super.getIntensity(p).scale(projection);
-        } catch (Exception e) {
+            l = getL(p);
+        } catch (Exception _) {
             return _intensity;
         }
-
+        double projection = alignZero(_direction.dotProduct(l));
+        return projection <= 0 ? Color.BLACK : super.getIntensity(p).scale(projection);
     }
 }

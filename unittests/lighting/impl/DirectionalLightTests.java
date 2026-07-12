@@ -1,6 +1,5 @@
-package renderer;
+package lighting.impl;
 
-import lighting.impl.DirectionalLight;
 import org.junit.jupiter.api.Test;
 import primitives.Color;
 import primitives.Point;
@@ -14,12 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author David &amp; Yehuda
  */
 public class DirectionalLightTests {
-
-    /**
-     * Tolerance constant reserved for floating-point comparisons in this suite.
-     */
-    private final double DELTA = 1e-10;
-
+    
     /**
      * Directional light fixture used by the tests.
      */

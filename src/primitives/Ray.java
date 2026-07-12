@@ -92,6 +92,9 @@ public class Ray {
      */
 
     public Intersection findClosestIntersection(List<Intersection> intersections) {
+        if (intersections == null || intersections.isEmpty()) {
+            return null;
+        }
         double minDistance = Double.POSITIVE_INFINITY;
         Intersection closestIntersection = null;
         for (Intersection i : intersections) {

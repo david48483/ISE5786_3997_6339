@@ -30,6 +30,16 @@ class SimpleRayTracer extends RayTracerBase {
 
     }
 
+    @Override
+    Color traceRay(Ray ray) {
+        List<Intersection> intersections = _scene.geometries.calcIntersections(ray);
+        //List<Point> points = _scene.geometries.findIntersections(ray);
+        return intersections == null ?
+                _scene.background :
+                //  calcColor(ray.findClosestPoint(points));
+                calcColor(ray.findClosestIntersection(intersections), ray.direction());
+    }
+
     /**
      * Calculates the color at an intersection point.
      *
@@ -39,20 +49,8 @@ class SimpleRayTracer extends RayTracerBase {
      */
     private Color calcColor(Intersection intersection, Vector v) {
         return !preprocessIntersection(intersection, v) ? Color.BLACK :
-                _scene.ambientLight.getIntensity()
-                        .scale(intersection.geometry.getMaterial().kA)
+                _scene.ambientLight.getIntensity().scale(intersection.geometry.getMaterial().kA)
                         .add(calcLocalEffects(intersection));
-
-    }
-
-    @Override
-    Color traceRay(Ray ray) {
-        List<Intersection> intersections = _scene.geometries.calcIntersections(ray);
-        //List<Point> points = _scene.geometries.findIntersections(ray);
-        return intersections == null ?
-                _scene.background :
-                //  calcColor(ray.findClosestPoint(points));
-                calcColor(ray.findClosestIntersection(intersections), ray.direction());
     }
 
     /**
@@ -76,7 +74,6 @@ class SimpleRayTracer extends RayTracerBase {
         }
 
         return color;
-
     }
 
     /**
@@ -98,12 +95,11 @@ class SimpleRayTracer extends RayTracerBase {
      */
     private Double3 calcSpecular(Intersection intersection) {
         Vector r = intersection.l.add(intersection.normal.scale(-2 * intersection.lNormal));
-        double minusVR = alignZero(-intersection.v.dotProduct(r));
 
+        double minusVR = alignZero(-intersection.v.dotProduct(r));
         return minusVR <= 0
                 ? Double3.ZERO
                 : intersection.material.kS.scale(Math.pow(minusVR, intersection.material.nShininess));
-
     }
 
 }
