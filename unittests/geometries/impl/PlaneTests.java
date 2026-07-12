@@ -205,4 +205,73 @@ public class PlaneTests {
                 "ERROR: Plane findIntersections() wrong number of points for a ray that starts in the reference point of the plane");
 
     }
+
+    /**
+     * Test method for {@link Plane#calcIntersections(Ray)}.
+     * validate that the method returns the correct intersection points and geometries
+     * for rays that intersect the plane in different ways, including rays that are parallel
+     * to the plane and rays that do not intersect the plane at all.
+     */
+    @Test
+    void testCalcIntersections() {
+        Plane plane = new Plane(Point.ZERO, Vector.AXIS_Z);
+
+        Point p1 = new Point(3, 5, 0);
+
+        Vector v1 = new Vector(1, 2, 4);
+
+        Point p110 = new Point(1, 1, 0);
+
+        Point p111 = new Point(1, 1, 1);
+
+        // ============ Equivalence Partitions Tests ==============
+
+        // EP01: Ray intersects the plane (1 point)
+        var resultEP01 = plane.calcIntersections(new Ray(new Point(2, 3, -4), v1));
+        assertEquals(1, resultEP01.size(),
+                "ERROR: Plane calcIntersections() wrong number of points for a ray that intersects the plane");
+        assertSame(plane, resultEP01.getFirst().geometry, "ERROR: Plane calcIntersections() wrong geometry");
+        assertEquals(p1, resultEP01.getFirst().point, "ERROR: Plane calcIntersections() wrong point");
+
+        // EP02: Ray's line intersects the plane, but the ray points away from it (0 points)
+        assertNull(plane.calcIntersections(new Ray(p111, v1)),
+                "ERROR: Plane calcIntersections() wrong number of points for a ray that points away from the plane");
+
+        // =============== Boundary Values Tests ==================
+
+        // **** Group 1: Ray's line is parallel to the plane
+        // BV11: Ray is parallel and included in the plane (0 points)
+        assertNull(plane.calcIntersections(new Ray(p110, Vector.AXIS_X)),
+                "ERROR: Plane calcIntersections() wrong number of points for a ray that is parallel and included in the plane");
+
+        //BV12 :ray is parallel and not included in the plane (0 points)
+        assertNull(plane.calcIntersections(new Ray(p111, Vector.AXIS_X)),
+                "ERROR: Plane calcIntersections() wrong number of points for a ray that is parallel and not included in the plane");
+
+        // **** Group 2: Ray's line is orthogonal to the plane
+        // BV21: Ray is orthogonal to the plane and starts before the plane (1 point)
+        var resultBV21 = plane.calcIntersections(new Ray(new Point(1, 1, -1), Vector.AXIS_Z));
+        assertEquals(1, resultBV21.size(),
+                "ERROR: Plane calcIntersections() wrong number of points for a ray that is orthogonal to the plane and starts before the plane");
+        assertSame(plane, resultBV21.getFirst().geometry, "ERROR: Plane calcIntersections() wrong geometry");
+        assertEquals(p110, resultBV21.getFirst().point, "ERROR: Plane calcIntersections() wrong point");
+
+        // BV22: Ray is orthogonal to the plane and starts in the plane (0 points)
+        assertNull(plane.calcIntersections(new Ray(p110, Vector.AXIS_Z)),
+                "ERROR: Plane calcIntersections() wrong number of points for a ray that is orthogonal to the plane and starts in the plane");
+
+        // BV23: Ray is orthogonal to the plane and starts after the plane (0 points)
+        assertNull(plane.calcIntersections(new Ray(p111, Vector.AXIS_Z)),
+                "ERROR: Plane calcIntersections() wrong number of points for a ray that is orthogonal to the plane and starts after the plane");
+
+        // **** Group 3: Ray's line is not parallel and not orthogonal to the plane, start in plane
+        //  BV31: Ray starts in the plane (0 points)
+        assertNull(plane.calcIntersections(new Ray(p110, v1)),
+                "ERROR: Plane calcIntersections() wrong number of points for a ray that starts in the plane");
+
+        // **** Group 4: Ray's line start in the reference point of the plane
+        //  BV41: Ray starts in the reference point of the plane (0 points)
+        assertNull(plane.calcIntersections(new Ray(Point.ZERO, v1)),
+                "ERROR: Plane calcIntersections() wrong number of points for a ray that starts in the reference point of the plane");
+    }
 }

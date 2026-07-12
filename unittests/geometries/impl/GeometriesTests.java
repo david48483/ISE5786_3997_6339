@@ -137,4 +137,42 @@ public class GeometriesTests {
         // BVA03: All geometries are intersected — sphere (2) + plane (1) + triangle (1)
         assertEquals(4, geometries.findIntersections(_rayAll).size(), ERR_INTERSECTIONS);
     }
+
+    /**
+     * Error message when the wrong number of intersections is returned by calcIntersections.
+     */
+    private static final String ERR_CALC_INTERSECTIONS =
+            "ERROR: Geometries calcIntersections() returned wrong number of intersections";
+
+    /**
+     * Test method for {@link Geometries#calcIntersections(Ray)}.
+     * Covers the cases where some geometries are hit (EP), no geometry is hit,
+     * exactly one geometry is hit, and all geometries are hit (BVA).
+     */
+    @Test
+    void testCalcIntersections() {
+        Geometries geometries = new Geometries(_plane, _sphere, _triangle);
+
+        // ============ Equivalence Partitions Tests ============
+
+        // EP01: Some (but not all) geometries are intersected — sphere + plane, not triangle
+        var resultEP01 = geometries.calcIntersections(_raySome);
+        assertNotNull(resultEP01, ERR_CALC_INTERSECTIONS);
+        assertEquals(3, resultEP01.size(), ERR_CALC_INTERSECTIONS);
+
+        // ============ Boundary Values Tests ============
+
+        // BVA01: No geometry is intersected → must return null
+        assertNull(geometries.calcIntersections(_rayNone), ERR_CALC_INTERSECTIONS);
+
+        // BVA02: Exactly one geometry is intersected — sphere only
+        var resultBVA02 = geometries.calcIntersections(_rayOne);
+        assertNotNull(resultBVA02, ERR_CALC_INTERSECTIONS);
+        assertEquals(1, resultBVA02.size(), ERR_CALC_INTERSECTIONS);
+
+        // BVA03: All geometries are intersected — sphere (2) + plane (1) + triangle (1)
+        var resultBVA03 = geometries.calcIntersections(_rayAll);
+        assertNotNull(resultBVA03, ERR_CALC_INTERSECTIONS);
+        assertEquals(4, resultBVA03.size(), ERR_CALC_INTERSECTIONS);
+    }
 }
