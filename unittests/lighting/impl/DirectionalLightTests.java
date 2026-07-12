@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author David &amp; Yehuda
  */
 public class DirectionalLightTests {
-    
+
     /**
      * Directional light fixture used by the tests.
      */
@@ -30,6 +30,8 @@ public class DirectionalLightTests {
      */
     @Test
     void TestGetL() {
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Regular point in space.
 
         assertEquals(Vector.AXIS_Z, DL1.getL(Point.ZERO));
 
@@ -40,6 +42,8 @@ public class DirectionalLightTests {
      */
     @Test
     void TestGetIntensity() {
+        // ============ Equivalence Partitions Tests ==============
+        //  TC01: Regular point in space.
         assertEquals(Color.BLACK, DL1.getIntensity(Point.ZERO));
 
     }
