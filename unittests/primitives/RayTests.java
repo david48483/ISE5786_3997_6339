@@ -1,5 +1,6 @@
 package primitives;
 
+import geometries.api.Intersectable;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -172,5 +173,40 @@ class RayTests {
         ray = new Ray(new Point(0, 0, 3), Vector.AXIS_Z);
         assertEquals(points.get(2), ray.findClosestPoint(points), "ERROR: findClosetPoint() did not return the expected closest point when the closest point is ahead of the ray's origin");
 
+    }
+
+    /**
+     * Test method for {@link Ray#findClosestIntersection(List)}.
+     * Verifies that the method correctly identifies the closest Intersection from a list of Intersections.
+     */
+
+    private final Intersectable.Intersection INT_2 = new Intersectable.Intersection(new Point(0, 0, 2), null);
+    private final Intersectable.Intersection INT_4 = new Intersectable.Intersection(new Point(0, 0, 4), null);
+    private final Intersectable.Intersection INT_7 = new Intersectable.Intersection(new Point(0, 0, 7), null);
+
+    @Test
+    void findClosestIntersection() {
+        Ray ray = new Ray(Point.ZERO, Vector.AXIS_Z);
+
+        // ============ Equivalence Partitions Tests ==============
+        // EP01: A list of intersections where the closest intersection is in the middle of the list
+        List<Intersectable.Intersection> intersections = List.of(INT_7, INT_2, INT_4);
+        Intersectable.Intersection closest = ray.findClosestIntersection(intersections);
+        assertEquals(INT_2, closest, "ERROR: findClosestIntersection() did not return the expected closest intersection");
+
+        // =============== Boundary Values Tests ==================
+        // BVA01: A null list of intersections should return null
+        assertNull(ray.findClosestIntersection(null), "ERROR: findClosestIntersection() should return null for a null list");
+
+        // BVA02: An empty list of intersections should return null
+        assertNull(ray.findClosestIntersection(List.of()), "ERROR: findClosestIntersection() should return null for an empty list");
+
+        // BVA03: A list where the closest intersection is the first element
+        List<Intersectable.Intersection> firstIsClosest = List.of(INT_2, INT_7, INT_4);
+        assertEquals(INT_2, ray.findClosestIntersection(firstIsClosest), "ERROR: findClosestIntersection() did not return the correct intersection when it's the first element");
+
+        // BVA04: A list where the closest intersection is the last element
+        List<Intersectable.Intersection> lastIsClosest = List.of(INT_7, INT_4, INT_2);
+        assertEquals(INT_2, ray.findClosestIntersection(lastIsClosest), "ERROR: findClosestIntersection() did not return the correct intersection when it's the last element");
     }
 }
