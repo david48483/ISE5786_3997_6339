@@ -9,6 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
  * Unit tests for class {@link Triangle}.
@@ -194,7 +195,7 @@ public class TriangleTests {
      * Includes all inherited plane cases and triangle-specific cases.
      */
     @Test
-    void findIntersections() {
+    void testFindIntersections() {
         // ============ Equivalence Partitions Tests ==============
 
         // EP01: Ray intersects the plane and the triangle (1 point)
@@ -271,4 +272,95 @@ public class TriangleTests {
         // BVA16: Additional parallel-to-plane miss case (0 points)
         assertNull(TRIANGLE.findIntersections(RAY_PARALLEL), ERR_FIND_INTERSECTIONS);
     }
+
+    /**
+     * Test method for {@link Triangle#calcIntersections(Ray)}.
+     * Includes all inherited plane cases and triangle-specific cases,
+     * ensuring that the returned GeoPoint contains the correct geometry and point.
+     */
+    @Test
+    void testCalcIntersections() {
+        // ============ Equivalence Partitions Tests ==============
+
+        // EP01: Ray intersects the plane and the triangle (1 point)
+        var resultEP01 = TRIANGLE.calcIntersections(RAY_HIT);
+        assertEquals(1, resultEP01.size(), ERR_FIND_INTERSECTIONS);
+        assertSame(TRIANGLE, resultEP01.getFirst().geometry, ERR_FIND_INTERSECTIONS);
+        assertEquals(P_HIT, resultEP01.getFirst().point, ERR_FIND_INTERSECTIONS);
+
+        // EP02: Ray line intersects the plane, but the ray points away (0 points)
+        assertNull(TRIANGLE.calcIntersections(new Ray(new Point(2, 1, 1), Vector.AXIS_Z)), ERR_FIND_INTERSECTIONS);
+
+        // EP03: Ray hits the triangle plane but misses - opposite edge PY-PX
+        assertNull(TRIANGLE.calcIntersections(RAY_OPP_EDGE_PY_PX), ERR_FIND_INTERSECTIONS);
+
+        // EP04: Ray hits the triangle plane but misses - opposite edge ZERO-PX
+        assertNull(TRIANGLE.calcIntersections(RAY_OPP_EDGE_ZERO_PX), ERR_FIND_INTERSECTIONS);
+
+        // EP05: Ray hits the triangle plane but misses - opposite edge ZERO-PY
+        assertNull(TRIANGLE.calcIntersections(RAY_OPP_EDGE_ZERO_PY), ERR_FIND_INTERSECTIONS);
+
+        // EP06: Ray hits the triangle plane but misses - opposite vertex PX
+        assertNull(TRIANGLE.calcIntersections(RAY_OPP_VERTEX_PX), ERR_FIND_INTERSECTIONS);
+
+        // EP07: Ray hits the triangle plane but misses - opposite vertex PY
+        assertNull(TRIANGLE.calcIntersections(RAY_OPP_VERTEX_PY), ERR_FIND_INTERSECTIONS);
+
+        // EP08: Ray hits the triangle plane but misses - opposite vertex ZERO
+        assertNull(TRIANGLE.calcIntersections(RAY_OPP_VERTEX_ZERO), ERR_FIND_INTERSECTIONS);
+
+        // ============ Boundary Values Tests ==============
+
+        // BVA01: Ray is parallel and included in the plane (0 points)
+        assertNull(TRIANGLE.calcIntersections(new Ray(P_IN_PLANE_INSIDE, Vector.AXIS_X)), ERR_FIND_INTERSECTIONS);
+
+        // BVA02: Ray is parallel and not included in the plane (0 points)
+        assertNull(TRIANGLE.calcIntersections(new Ray(new Point(2, 1, 1), Vector.AXIS_X)), ERR_FIND_INTERSECTIONS);
+
+        // BVA03: Ray is orthogonal to the plane and starts before the plane (1 point)
+        var resultBVA03 = TRIANGLE.calcIntersections(RAY_HIT);
+        assertEquals(1, resultBVA03.size(), ERR_FIND_INTERSECTIONS);
+        assertSame(TRIANGLE, resultBVA03.getFirst().geometry, ERR_FIND_INTERSECTIONS);
+        assertEquals(P_HIT, resultBVA03.getFirst().point, ERR_FIND_INTERSECTIONS);
+
+        // BVA04: Ray is orthogonal to the plane and starts in the plane (0 points)
+        assertNull(TRIANGLE.calcIntersections(new Ray(P_IN_PLANE_INSIDE, Vector.AXIS_Z)), ERR_FIND_INTERSECTIONS);
+
+        // BVA05: Ray is orthogonal to the plane and starts after the plane (0 points)
+        assertNull(TRIANGLE.calcIntersections(new Ray(new Point(2, 1, 1), Vector.AXIS_Z)), ERR_FIND_INTERSECTIONS);
+
+        // BVA06: Ray starts in the plane (not reference point), not parallel and not orthogonal (0 points)
+        assertNull(TRIANGLE.calcIntersections(new Ray(P_IN_PLANE_INSIDE, new Vector(1, 1, 1))), ERR_FIND_INTERSECTIONS);
+
+        // BVA07: Ray on edge PX-PY (0 points)
+        assertNull(TRIANGLE.calcIntersections(RAY_ON_EDGE_PX_PY), ERR_FIND_INTERSECTIONS);
+
+        // BVA08: Ray on edge ZERO-PY (0 points)
+        assertNull(TRIANGLE.calcIntersections(RAY_ON_EDGE_ZERO_PY), ERR_FIND_INTERSECTIONS);
+
+        // BVA09: Ray on edge ZERO-PX (0 points)
+        assertNull(TRIANGLE.calcIntersections(RAY_ON_EDGE_ZERO_PX), ERR_FIND_INTERSECTIONS);
+
+        // BVA10: Ray on vertex PX (0 points)
+        assertNull(TRIANGLE.calcIntersections(RAY_ON_VERTEX_PX), ERR_FIND_INTERSECTIONS);
+
+        // BVA11: Ray on vertex PY (0 points)
+        assertNull(TRIANGLE.calcIntersections(RAY_ON_VERTEX_PY), ERR_FIND_INTERSECTIONS);
+
+        // BVA12: Ray on vertex ZERO (0 points)
+        assertNull(TRIANGLE.calcIntersections(RAY_ON_VERTEX_ZERO), ERR_FIND_INTERSECTIONS);
+
+        // BVA13: Ray on continuation of edge PX-PY (0 points)
+        assertNull(TRIANGLE.calcIntersections(RAY_CONT_PX_PY), ERR_FIND_INTERSECTIONS);
+
+        // BVA14: Ray on continuation of edge ZERO-PY (0 points)
+        assertNull(TRIANGLE.calcIntersections(RAY_CONT_ZERO_PY), ERR_FIND_INTERSECTIONS);
+
+        // BVA15: Ray on continuation of edge ZERO-PX (0 points)
+        assertNull(TRIANGLE.calcIntersections(RAY_CONT_ZERO_PX), ERR_FIND_INTERSECTIONS);
+
+        // BVA16: Additional parallel-to-plane miss case (0 points)
+        assertNull(TRIANGLE.calcIntersections(RAY_PARALLEL), ERR_FIND_INTERSECTIONS);
+    }
+
 }

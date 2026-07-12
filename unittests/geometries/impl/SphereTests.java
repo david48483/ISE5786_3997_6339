@@ -9,6 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
  * Unit tests for {@link Sphere}.
@@ -103,6 +104,7 @@ public class SphereTests {
         assertNull(sphere.findIntersections(new Ray(new Point(0, 2, 8), Vector.AXIS_Z)),
                 ERR_FIND_INTERSECTIONS);
 
+
         // ============ Boundary Values Tests ==================
 
         // TC11: Ray starts on the sphere surface and goes inside (1 point)
@@ -153,5 +155,104 @@ public class SphereTests {
         assertEquals(List.of(new Point(0, 7, 0)), sphere.findIntersections(new Ray(new Point(0, 2, 0), Vector.AXIS_Y)),
                 ERR_FIND_INTERSECTIONS);
 
+    }
+
+    /**
+     * Tests {@link Sphere#calcIntersections(Ray)}.
+     * Covers rays that miss the sphere, cross it at two points, start inside it,
+     * start after it, start on its surface, are tangent to it, and start at its center.
+     */
+    @Test
+    void testCalcIntersections() {
+        Sphere sphere = new Sphere(Point.ZERO, 7);
+
+        // ============ Equivalence Partitions Tests ==============
+
+        // TC01: Ray's line is entirely outside the sphere (0 points)
+        assertNull(sphere.calcIntersections(new Ray(new Point(0, 8, -1), Vector.AXIS_Z)),
+                ERR_FIND_INTERSECTIONS);
+
+        // TC02: Ray starts before and crosses the sphere (2 points)
+        var resultTC02 = sphere.calcIntersections(new Ray(new Point(0, 2, -8), Vector.AXIS_Z));
+        assertEquals(2, resultTC02.size(), ERR_FIND_INTERSECTIONS);
+        assertSame(sphere, resultTC02.get(0).geometry, ERR_FIND_INTERSECTIONS);
+        assertEquals(P2, resultTC02.get(0).point, ERR_FIND_INTERSECTIONS);
+        assertSame(sphere, resultTC02.get(1).geometry, ERR_FIND_INTERSECTIONS);
+        assertEquals(P1, resultTC02.get(1).point, ERR_FIND_INTERSECTIONS);
+
+        // TC03: Ray starts inside the sphere (1 point)
+        var resultTC03 = sphere.calcIntersections(new Ray(new Point(0, 2, 2), Vector.AXIS_Z));
+        assertEquals(1, resultTC03.size(), ERR_FIND_INTERSECTIONS);
+        assertSame(sphere, resultTC03.getFirst().geometry, ERR_FIND_INTERSECTIONS);
+        assertEquals(P1, resultTC03.getFirst().point, ERR_FIND_INTERSECTIONS);
+
+        // TC04: Ray starts after the sphere (0 points)
+        assertNull(sphere.calcIntersections(new Ray(new Point(0, 2, 8), Vector.AXIS_Z)),
+                ERR_FIND_INTERSECTIONS);
+
+
+        // ============ Boundary Values Tests ==================
+
+        // TC11: Ray starts on the sphere surface and goes inside (1 point)
+        var resultTC11 = sphere.calcIntersections(new Ray(P2, Vector.AXIS_Z));
+        assertEquals(1, resultTC11.size(), ERR_FIND_INTERSECTIONS);
+        assertSame(sphere, resultTC11.getFirst().geometry, ERR_FIND_INTERSECTIONS);
+        assertEquals(P1, resultTC11.getFirst().point, ERR_FIND_INTERSECTIONS);
+
+        // TC12: Ray starts on the sphere surface and goes outside (0 points)
+        assertNull(sphere.calcIntersections(new Ray(P1, Vector.AXIS_Z)),
+                ERR_FIND_INTERSECTIONS);
+
+        // TC21: Ray is tangent to the sphere - starts before tangent point (0 points)
+        assertNull(sphere.calcIntersections(new Ray(new Point(0, 7, -8), Vector.AXIS_Z)),
+                ERR_FIND_INTERSECTIONS);
+
+        // TC22: Ray is tangent to the sphere - starts at tangent point (0 points)
+        assertNull(sphere.calcIntersections(new Ray(new Point(0, 7, 0), Vector.AXIS_Z)),
+                ERR_FIND_INTERSECTIONS);
+
+        // TC23: Ray is tangent to the sphere - starts after tangent point (0 points)
+        assertNull(sphere.calcIntersections(new Ray(new Point(0, 7, 8), Vector.AXIS_Z)),
+                ERR_FIND_INTERSECTIONS);
+
+        // TC31: Ray starts at the center of the sphere (1 point)
+        var resultTC31 = sphere.calcIntersections(new Ray(Point.ZERO, Vector.AXIS_Z));
+        assertEquals(1, resultTC31.size(), ERR_FIND_INTERSECTIONS);
+        assertSame(sphere, resultTC31.getFirst().geometry, ERR_FIND_INTERSECTIONS);
+        assertEquals(P3, resultTC31.getFirst().point, ERR_FIND_INTERSECTIONS);
+
+        // TC32: Ray starts on the north pole going outward (0 points)
+        assertNull(sphere.calcIntersections(new Ray(P3, Vector.AXIS_Z)),
+                ERR_FIND_INTERSECTIONS);
+
+        // TC33: Ray starts on the south pole going inward (1 point)
+        var resultTC33 = sphere.calcIntersections(new Ray(P4, Vector.AXIS_Z));
+        assertEquals(1, resultTC33.size(), ERR_FIND_INTERSECTIONS);
+        assertSame(sphere, resultTC33.getFirst().geometry, ERR_FIND_INTERSECTIONS);
+        assertEquals(P3, resultTC33.getFirst().point, ERR_FIND_INTERSECTIONS);
+
+        // TC34: Ray starts beyond the north pole going outward (0 points)
+        assertNull(sphere.calcIntersections(new Ray(new Point(0, 0, 8), Vector.AXIS_Z)),
+                ERR_FIND_INTERSECTIONS);
+
+        // TC35: Ray starts outside before south pole and crosses through (2 points)
+        var resultTC35 = sphere.calcIntersections(new Ray(new Point(0, 0, -8), Vector.AXIS_Z));
+        assertEquals(2, resultTC35.size(), ERR_FIND_INTERSECTIONS);
+        assertSame(sphere, resultTC35.get(0).geometry, ERR_FIND_INTERSECTIONS);
+        assertEquals(P4, resultTC35.get(0).point, ERR_FIND_INTERSECTIONS);
+        assertSame(sphere, resultTC35.get(1).geometry, ERR_FIND_INTERSECTIONS);
+        assertEquals(P3, resultTC35.get(1).point, ERR_FIND_INTERSECTIONS);
+
+        // TC36: Ray starts inside on Z axis going toward north pole (1 point)
+        var resultTC36 = sphere.calcIntersections(new Ray(new Point(0, 0, 2), Vector.AXIS_Z));
+        assertEquals(1, resultTC36.size(), ERR_FIND_INTERSECTIONS);
+        assertSame(sphere, resultTC36.getFirst().geometry, ERR_FIND_INTERSECTIONS);
+        assertEquals(P3, resultTC36.getFirst().point, ERR_FIND_INTERSECTIONS);
+
+        // TC37: Ray starts inside on the Y=2 plane going in +Y direction (1 point)
+        var resultTC37 = sphere.calcIntersections(new Ray(new Point(0, 2, 0), Vector.AXIS_Y));
+        assertEquals(1, resultTC37.size(), ERR_FIND_INTERSECTIONS);
+        assertSame(sphere, resultTC37.getFirst().geometry, ERR_FIND_INTERSECTIONS);
+        assertEquals(new Point(0, 7, 0), resultTC37.getFirst().point, ERR_FIND_INTERSECTIONS);
     }
 }
