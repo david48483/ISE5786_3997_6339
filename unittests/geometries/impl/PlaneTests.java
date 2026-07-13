@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Tests follow the methodology of
  * Equivalence Partitions (EP) and Boundary Values (BVA).
  *
- * @author David &amp; Yehuda
+ * @author David & Yehuda
  */
 
 public class PlaneTests {
@@ -56,7 +56,7 @@ public class PlaneTests {
 
     /**
      * Test method for {@link Plane#Plane(Point, Point, Point)}.
-     * validate that the constructor correctly creates a plane from three non-collinear points,
+     * Validate that the constructor correctly creates a plane from three non-collinear points,
      * and that it throws an exception when the points are collinear or when two or more points are the same.
      */
 
@@ -67,7 +67,7 @@ public class PlaneTests {
 
         //TC01 check constructor, different points
         assertDoesNotThrow(() -> new Plane(P001, P101, P011),
-                "ERROR,Plane constructor failed to create the expected plane  ");
+                "ERROR: Plane constructor failed to create the expected plane.");
 
         // =============== Boundary Values Tests ==================
 
@@ -83,19 +83,19 @@ public class PlaneTests {
         assertThrows(IllegalArgumentException.class, () -> new Plane(P001, P101, P101),
                 "ERROR: Plane constructor should throw exception when second and third points are the same");
 
-        //  All three points are different but collinear.
+        //  All three points are the same (invalid)
         assertThrows(IllegalArgumentException.class, () -> new Plane(P001, P001, P001),
-                "ERROR: Plane constructor should throw exception when all three points are different but collinear");
+                "ERROR: Plane constructor should throw exception when all three points are the same");
 
-        //   All three points are the same collinear.
+        //   Three collinear but distinct points (invalid)
         assertThrows(IllegalArgumentException.class, () -> new Plane(P101, new Point(4, 0, 1), new Point(2, 0, 1)),
-                "ERROR: Plane constructor should throw exception when all three points are the same collinear");
+                "ERROR: Plane constructor should throw exception when points are collinear");
 
     }
 
     /**
      * Test method for {@link Plane#Plane(Point, Vector)}.
-     * validate that the constructor correctly creates a plane from a point and a normal vector,
+     * Validate that the constructor correctly creates a plane from a point and a normal vector,
      * and that it throws an exception when the normal vector is the zero vector.
      */
     @Test
@@ -116,7 +116,7 @@ public class PlaneTests {
 
     /**
      * Test method for {@link Plane#getNormal(Point)}.
-     * validate that the method returns the correct normal vector for points on the plane.
+     * Validate that the method returns the correct normal vector for points on the plane.
      */
     @Test
     void testGetNormal() {
@@ -146,7 +146,7 @@ public class PlaneTests {
 
     /**
      * Test method for {@link Plane#findIntersections(Ray)}.
-     * validate that the method returns the correct intersection points for rays that intersect the plane in different ways, including rays that are parallel to the plane and rays that do not intersect the plane at all.
+     * Validate that the method returns the correct intersection points for rays that intersect the plane in different ways, including rays that are parallel to the plane and rays that do not intersect the plane at all.
      */
     @Test
     void testFindIntersections() {
@@ -208,7 +208,7 @@ public class PlaneTests {
 
     /**
      * Test method for {@link Plane#calcIntersections(Ray)}.
-     * validate that the method returns the correct intersection points and geometries
+     * Validate that the method returns the correct intersection points and geometries
      * for rays that intersect the plane in different ways, including rays that are parallel
      * to the plane and rays that do not intersect the plane at all.
      */
@@ -224,10 +224,12 @@ public class PlaneTests {
 
         Point p111 = new Point(1, 1, 1);
 
+        Ray testRay = new Ray(new Point(2, 3, -4), v1);
+
         // ============ Equivalence Partitions Tests ==============
 
         // EP01: Ray intersects the plane (1 point)
-        var resultEP01 = plane.calcIntersections(new Ray(new Point(2, 3, -4), v1));
+        var resultEP01 = plane.calcIntersections(testRay);
         assertEquals(1, resultEP01.size(),
                 "ERROR: Plane calcIntersections() wrong number of points for a ray that intersects the plane");
         assertSame(plane, resultEP01.getFirst().geometry, "ERROR: Plane calcIntersections() wrong geometry");
@@ -236,6 +238,18 @@ public class PlaneTests {
         // EP02: Ray's line intersects the plane, but the ray points away from it (0 points)
         assertNull(plane.calcIntersections(new Ray(p111, v1)),
                 "ERROR: Plane calcIntersections() wrong number of points for a ray that points away from the plane");
+
+        // EP03:
+        assertNull(plane.calcIntersections(testRay, 3.0),
+                "ERROR: Plane calcIntersections() should return null when maxDistance is smaller than the intersection distance");
+
+        // EP04:
+        assertEquals(p1, plane.calcIntersections(testRay, 5.0).getFirst().point,
+                "ERROR: Plane calcIntersections() returned wrong point when using maxDistance");
+
+        // EP05:
+        assertNull(plane.calcIntersections(new Ray(p111, v1), 3.0),
+                "ERROR: Plane calcIntersections() should return null for a ray pointing away even when maxDistance is provided");
 
         // =============== Boundary Values Tests ==================
 
