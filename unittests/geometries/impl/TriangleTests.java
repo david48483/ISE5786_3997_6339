@@ -7,9 +7,7 @@ import primitives.Vector;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for class {@link Triangle}.
@@ -308,6 +306,15 @@ public class TriangleTests {
 
         // EP08: Ray hits the triangle plane but misses - opposite vertex ZERO
         assertNull(TRIANGLE.calcIntersections(RAY_OPP_VERTEX_ZERO), ERR_FIND_INTERSECTIONS);
+
+        //EP09 distance of point longer than max distance
+        assertNull(TRIANGLE.calcIntersections(RAY_HIT, 0.5), ERR_FIND_INTERSECTIONS);
+
+        //EP10 distance of point shorter than max distance
+        assertEquals(TRIANGLE.calcIntersections(RAY_HIT, 2).size(), 1, ERR_FIND_INTERSECTIONS);
+
+        //EP11 ray start after the triangle
+        assertNull(TRIANGLE.calcIntersections(new Ray(new Point(2, 1, 1), Vector.AXIS_Z), 2), ERR_FIND_INTERSECTIONS);
 
         // ============ Boundary Values Tests ==============
 
