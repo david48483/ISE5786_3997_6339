@@ -64,16 +64,22 @@ public class Sphere extends RadialGeometry {
         if (t2 <= 0) return null;
 
         double t1 = alignZero(tm - th);
-        return t1 <= 0 ?
-                List.of(checckDistans(ray.getPoint(t2), this, maxDistance)) :
-                List.of(checckDistans(ray.getPoint(t1), this, maxDistance), checckDistans(ray.getPoint(t2), this, maxDistance));
+        boolean t1Valid = t1 > 0 && alignZero(t1 - maxDistance) <= 0;
+        boolean t2Valid = alignZero(t2 - maxDistance) <= 0;
+
+        if (t1Valid && t2Valid) {
+            return List.of(new Intersection(ray.getPoint(t1), this), new Intersection(ray.getPoint(t2), this));
+        }
+        if (t1Valid) {
+            return List.of(new Intersection(ray.getPoint(t1), this));
+        }
+        if (t2Valid) {
+            return List.of(new Intersection(ray.getPoint(t2), this));
+        }
+        return null;
+
     }
 
-    private Intersection checckDistans(Point point, Geometry geometry, double maxDistance) {
-        double distance = point.distance(ray.origin());
-        return alignZero(distance - maxDistance) <= 0 ? new Intersection(point, geometry) : null;
-
-    }
 
     @Override
     public String toString() {
