@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
  * Covers {@link Sphere#getNormal(Point)} and {@link Sphere#findIntersections(Ray)}.
  * Tests follow the Equivalence Partitions (EP) and Boundary Values Analysis (BVA) methodology.
  *
- * @author David &amp; Yehuda
+ * @author David & Yehuda
  */
 
 public class SphereTests {
@@ -165,6 +165,7 @@ public class SphereTests {
     @Test
     void testCalcIntersections() {
         Sphere sphere = new Sphere(Point.ZERO, 7);
+        Ray testRay = new Ray(new Point(0, 2, -8), Vector.AXIS_Z);
 
         // ============ Equivalence Partitions Tests ==============
 
@@ -173,7 +174,7 @@ public class SphereTests {
                 ERR_FIND_INTERSECTIONS);
 
         // TC02: Ray starts before and crosses the sphere (2 points)
-        var resultTC02 = sphere.calcIntersections(new Ray(new Point(0, 2, -8), Vector.AXIS_Z));
+        var resultTC02 = sphere.calcIntersections(testRay);
         assertEquals(2, resultTC02.size(), ERR_FIND_INTERSECTIONS);
         assertSame(sphere, resultTC02.get(0).geometry, ERR_FIND_INTERSECTIONS);
         assertEquals(P2, resultTC02.get(0).point, ERR_FIND_INTERSECTIONS);
@@ -188,6 +189,29 @@ public class SphereTests {
 
         // TC04: Ray starts after the sphere (0 points)
         assertNull(sphere.calcIntersections(new Ray(new Point(0, 2, 8), Vector.AXIS_Z)),
+                ERR_FIND_INTERSECTIONS);
+
+
+        // TC05: Ray starts before and crosses the sphere, but maxDistance is less than the distance to the first intersection (0 points)
+        assertNull(sphere.calcIntersections(testRay, 0.5),
+                ERR_FIND_INTERSECTIONS);
+
+        // TC06: Ray starts before and crosses the sphere, but maxDistance is less than the distance to the second intersection (1 point)
+        assertEquals(1, sphere.calcIntersections(testRay, 5).size(), ERR_FIND_INTERSECTIONS);
+
+        // TC07: Ray starts before and crosses the sphere, but maxDistance is greater than the distance to the second intersection (2 points)
+        assertEquals(2, sphere.calcIntersections(testRay, 16).size(), ERR_FIND_INTERSECTIONS);
+
+        // TC08: Ray starts inside the sphere but maxDistance shorter than distance to intersection (0 points)
+        assertNull(sphere.calcIntersections(new Ray(new Point(0, 2, 2), Vector.AXIS_Z), 2),
+                ERR_FIND_INTERSECTIONS);
+
+        // TC09: Ray starts inside the sphere and maxDistance includes the exit point (1 point)
+        assertEquals(1, sphere.calcIntersections(new Ray(new Point(0, 2, 2), Vector.AXIS_Z), 10).size(),
+                ERR_FIND_INTERSECTIONS);
+
+        // TC10: Ray starts after the sphere; even with maxDistance=10 there are 0 intersections (0 points)
+        assertNull(sphere.calcIntersections(new Ray(new Point(0, 2, 8), Vector.AXIS_Z), 10),
                 ERR_FIND_INTERSECTIONS);
 
 
