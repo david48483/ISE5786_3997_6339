@@ -48,6 +48,7 @@ public class Triangle extends Polygon {
         double n3 = alignZero(v.dotProduct(v3.crossProduct(v1)));
         if (n1 * n3 <= 0) return null;
 
-        return List.of(planeIntersections.getFirst());
+        Point p0 = planeIntersections.getFirst().point;
+        return List.of(new Intersection(p0, this));
     }
 }
