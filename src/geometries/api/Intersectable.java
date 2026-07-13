@@ -45,7 +45,7 @@ public abstract class Intersectable {
      * @return a list of Intersection objects, or null if no intersections exist
      */
 
-    protected abstract List<Intersection> calcIntersectionsHelper(Ray ray);
+    protected abstract List<Intersection> calcIntersectionsHelper(Ray ray, double maxDistance);
 
     /**
      * Finds all intersections between a ray and this geometric shape, returning detailed information about each intersection.
@@ -54,7 +54,11 @@ public abstract class Intersectable {
      * @return a list of Intersection objects, or null if no intersections exist
      */
     public final List<Intersection> calcIntersections(Ray ray) {
-        return calcIntersectionsHelper(ray);
+        return calcIntersections(ray, Double.POSITIVE_INFINITY);
+    }
+
+    public final List<Intersection> calcIntersections(Ray ray, double maxDistance) {
+        return calcIntersectionsHelper(ray, maxDistance);
     }
 
     /**

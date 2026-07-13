@@ -1,5 +1,6 @@
 package geometries.impl;
 
+import geometries.api.Geometry;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
@@ -38,7 +39,7 @@ public class Sphere extends RadialGeometry {
     }
 
     @Override
-    protected List<Intersection> calcIntersectionsHelper(Ray ray) {
+    protected List<Intersection> calcIntersectionsHelper(Ray ray, double maxDistance) {
         Vector l;
         try {
             l = _center.subtract(ray.origin());
@@ -64,8 +65,14 @@ public class Sphere extends RadialGeometry {
 
         double t1 = alignZero(tm - th);
         return t1 <= 0 ?
-                List.of(new Intersection(ray.getPoint(t2), this)):
-                List.of(new Intersection(ray.getPoint(t1), this), new Intersection(ray.getPoint(t2), this));
+                List.of(checckDistans(ray.getPoint(t2), this, maxDistance)) :
+                List.of(checckDistans(ray.getPoint(t1), this, maxDistance), checckDistans(ray.getPoint(t2), this, maxDistance));
+    }
+
+    private Intersection checckDistans(Point point, Geometry geometry, double maxDistance) {
+        double distance = point.distance(ray.origin());
+        return alignZero(distance - maxDistance) <= 0 ? new Intersection(point, geometry) : null;
+
     }
 
     @Override

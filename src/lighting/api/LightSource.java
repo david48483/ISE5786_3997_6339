@@ -29,4 +29,12 @@ public interface LightSource {
 
     Color getIntensity(Point p);
 
+    /**
+     * Returns the distance from the light source to the given point in the scene.
+     *
+     * @param point
+     * @return
+     */
+    double getDistance(Point point);
+
 }

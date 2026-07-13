@@ -63,7 +63,7 @@ public class Plane extends Geometry {
     }
 
     @Override
-    protected List<Intersection> calcIntersectionsHelper(Ray ray) {
+    protected List<Intersection> calcIntersectionsHelper(Ray ray, double maxDistance) {
 
         double nv = _normal.dotProduct(ray.direction());
         // no intersection – the ray is parallel to the plane
@@ -76,9 +76,16 @@ public class Plane extends Geometry {
             return null;
         }
 
-        double t = alignZero(u.dotProduct(_normal) / nv);//find t by the formula t = (Q-P)·N / v·N
-        // there is intersection only if it is in the direction of the ray
-        return t <= 0 ? null : List.of(new Intersection(ray.getPoint(t), this));
+        double t = alignZero(u.dotProduct(_normal) / nv); // find t by the formula t = (Q-P)·N / v·N
+
+        // The intersection point is behind the ray's origin (t <= 0)
+        // OR it is beyond the maximum distance (t > maxDistance)
+        if (alignZero(t) <= 0 || alignZero(t - maxDistance) > 0) {
+            return null;
+        }
+
+        // If we reached here, the intersection is valid and within the light's range
+        return List.of(new Intersection(ray.getPoint(t), this));
     }
 
     @Override

@@ -21,6 +21,11 @@ import static primitives.Util.alignZero;
 class SimpleRayTracer extends RayTracerBase {
 
     /**
+     * Small delta value used to offset rays to avoid self-intersection.
+     */
+    private static final double DELTA = 0.1;
+
+    /**
      * Creates a simple ray tracer for the given scene.
      *
      * @param scene the scene to trace
@@ -28,6 +33,19 @@ class SimpleRayTracer extends RayTracerBase {
     SimpleRayTracer(Scene scene) {
         super(scene);
 
+    }
+
+    /**
+     * Prepares light-dependent shading data for an intersection and a light source.
+     *
+     * @param intersection
+     * @return
+     */
+    private boolean unshaded(Intersection intersection) {
+        Vector pointToLight = intersection.l.scale(-1);
+        Vector delta = intersection.normal.scale(intersection.lNormal < 0 ? DELTA : -DELTA);
+        Ray shadowRay = new Ray(intersection.point.add(delta), pointToLight);
+        return _scene.geometries.findIntersections(shadowRay) == null;
     }
 
     @Override
@@ -64,7 +82,7 @@ class SimpleRayTracer extends RayTracerBase {
         Color color = intersection.geometry.getEmission();
 
         for (LightSource lightSource : _scene.lights) {
-            if (setLightSource(intersection, lightSource)) {
+            if (setLightSource(intersection, lightSource) && (unshaded(intersection))) {
                 color = color.add(
                         lightSource.getIntensity(intersection.point)
                                 .scale(calcDiffuse(intersection, lightSource)

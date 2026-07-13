@@ -1,11 +1,12 @@
 package geometries.impl;
 
-import java.util.List;
-
 import geometries.api.Geometry;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
+
 import static primitives.Util.isZero;
 
 /**
@@ -92,7 +93,7 @@ public class Polygon extends Geometry {
     }
 
     @Override
-    protected List<Intersection> calcIntersectionsHelper(Ray ray) {
+    protected List<Intersection> calcIntersectionsHelper(Ray ray, double maxDistance) {
         return null;
     }
 }
