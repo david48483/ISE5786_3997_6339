@@ -6,6 +6,7 @@ import primitives.Ray;
 import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Unit tests for the {@link Geometries} composite geometry class.
@@ -159,6 +160,18 @@ public class GeometriesTests {
         var resultEP01 = geometries.calcIntersections(_raySome);
         assertNotNull(resultEP01, ERR_CALC_INTERSECTIONS);
         assertEquals(3, resultEP01.size(), ERR_CALC_INTERSECTIONS);
+
+        // EP02: maxDistance large enough to include all intersections (expect 3 points)
+        assertEquals(3, geometries.calcIntersections(_raySome, 16.0).size(),
+                ERR_CALC_INTERSECTIONS);
+
+        // EP03: maxDistance excludes the farthest intersection (expect 2 points)
+        assertEquals(2, geometries.calcIntersections(_raySome, 10.0).size(),
+                ERR_CALC_INTERSECTIONS);
+
+        // EP04: maxDistance too small to reach any intersection (expect null)
+        assertNull(geometries.calcIntersections(_raySome, 5.0),
+                ERR_CALC_INTERSECTIONS);
 
         // ============ Boundary Values Tests ============
 
