@@ -28,6 +28,16 @@ public class Material {
      * Diffuse reflection coefficient.
      */
     public Double3 kD = Double3.ZERO;
+
+    /**
+     * Transmission coefficient
+     */
+    public Double3 kT = Double3.ZERO;
+
+    /**
+     * Reflection coefficient
+     */
+    public Double3 kR = Double3.ZERO;
     /**
      * Shininess exponent for specular highlights.
      */
@@ -75,6 +85,29 @@ public class Material {
     public Material setKD(Double3 obj) {
         kD = obj;
 
+        return this;
+    }
+
+    /**
+     * Sets the transmission coefficient.
+     *
+     * @param obj transmission coefficient
+     * @return this material instance
+     */
+    public Material setKT(Double3 obj) {
+        kT = obj;
+        return this;
+    }
+
+    /**
+     * Sets the reflection coefficient.
+     *
+     * @param obj reflection coefficient
+     * @return this material instance
+     */
+
+    public Material setKR(Double3 obj) {
+        kR = obj;
         return this;
     }
 
