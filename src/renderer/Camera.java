@@ -85,6 +85,8 @@ public class Camera implements Cloneable {
      */
     private RayTracerBase _rayTracer;
 
+    private int threadsCount = 0; // 0 אומר עבודה רגילה בלי מולטי-טרדינג
+
     /**
      * Default constructor for Camera. Initializes the camera with default values.
      * The camera's position, orientation, and view plane parameters must be set using the Builder before use.
@@ -99,12 +101,55 @@ public class Camera implements Cloneable {
      *
      * @return this camera instance
      */
-    public Camera renderImage() {
+  /*  public Camera renderImage() {
         for (int j = 0; j < _nY; j++) {
             for (int i = 0; i < _nX; i++) {
                 castRay(i, j);
             }
         }
+        return this;
+    }*/
+    public Camera renderImage() {
+        // אתחול המנהל של הפיקסלים (עם הדפסת אחוזים כל 0.1 שניות)
+        PixelManager pixelManager = new PixelManager(_nY, _nX, 0.1);
+
+        // המשימה שכל פועל (Thread) יבצע
+        Runnable task = () -> {
+            PixelManager.Pixel pixel;
+            // כל עוד יש פיקסלים פנויים בקצבייה
+            while ((pixel = pixelManager.nextPixel()) != null) {
+
+                // קריאה לפונקציית צביעת הפיקסל שלך:
+                // xIndex = pixel.col() (עמודה)
+                // yIndex = pixel.row() (שורה)
+                castRay(pixel.col(), pixel.row());
+
+                // מדווחים שסיימנו את הפיקסל כדי שהאחוזים יתקדמו
+                pixelManager.pixelDone();
+            }
+        };
+
+        if (threadsCount == 0) {
+            // רץ ללא מולטי-טרדינג (מתאים לטסטים הקטנים)
+            task.run();
+        } else {
+            // מולטי-טרדינג מופעל: נייצר פועלים (Threads) לפי כמות הליבות שביקשת
+            Thread[] threads = new Thread[threadsCount];
+            for (int i = 0; i < threadsCount; i++) {
+                threads[i] = new Thread(task);
+                threads[i].start(); // שולחים לעבודה במקביל
+            }
+
+            // המערכת הראשית מחכה שכל הפועלים יסיימו את העבודה
+            for (Thread thread : threads) {
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         return this;
     }
 
@@ -307,6 +352,17 @@ public class Camera implements Cloneable {
             } else {
                 throw new IllegalArgumentException(type + " ray tracer is not supported");
             }
+            return this;
+        }
+
+        public Builder setRayTracer(RayTracerBase rayTracer) {
+            this._camera._rayTracer = rayTracer;
+            return this;
+        }
+
+        public Builder setMultithreading(int threads) {
+            if (threads < 0) throw new IllegalArgumentException("Multithreading must be 0 or higher");
+            this._camera.threadsCount = threads;
             return this;
         }
 

@@ -35,6 +35,27 @@ class SimpleRayTracer extends RayTracerBase {
      */
     private static final Double3 INITIAL_K = Double3.ONE;
 
+    // דגל להדלקה וכיבוי של השיפורים
+    private boolean _useAdvancedEffects = false;
+    // כמות הקרניים שנייצר (למשל 9 אומר גריד של 9x9 = 81 קרניים)
+    private int _raysAmount = 1;
+
+    /**
+     * Set whether to use advanced rendering effects like Glossy Surfaces and Diffusive Glass.
+     */
+    public SimpleRayTracer setUseAdvancedEffects(boolean useAdvancedEffects) {
+        this._useAdvancedEffects = useAdvancedEffects;
+        return this;
+    }
+
+    /**
+     * Set the amount of rays for the beam (Grid of amount X amount).
+     */
+    public SimpleRayTracer setRaysAmount(int amount) {
+        this._raysAmount = amount;
+        return this;
+    }
+
     /**
      * Creates a simple ray tracer for the given scene.
      *
@@ -132,7 +153,7 @@ class SimpleRayTracer extends RayTracerBase {
      * @param kx    the material's reflection or transparency coefficient
      * @return the resulting color contribution from global effects
      */
-    private Color calcGlobalEffect(Ray ray, int level, Double3 k, Double3 kx) {
+  /*  private Color calcGlobalEffect(Ray ray, int level, Double3 k, Double3 kx) {
         Double3 kkx = k.product(kx);
         if (kkx.isLowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
         Intersection intersection = findClosestIntersection(ray);
@@ -140,7 +161,7 @@ class SimpleRayTracer extends RayTracerBase {
         return preprocessIntersection(intersection, ray.direction()) ?
                 calcColor(intersection, level - 1, kkx).scale(kx) : Color.BLACK;
 
-    }
+    }*/
 
     /**
      * Calculates the combined global effects (reflection and transparency) at an intersection point.
@@ -151,11 +172,93 @@ class SimpleRayTracer extends RayTracerBase {
      * @return
      */
 
-    private Color calcGlobalEffects(Intersection intersection, int level, Double3 k) {
+  /*  private Color calcGlobalEffects(Intersection intersection, int level, Double3 k) {
         return calcGlobalEffect(constructTransparencyRay(intersection),
                 level, k, intersection.material.kT)
                 .add(calcGlobalEffect(constructReflectionRay(intersection),
                         level, k, intersection.material.kR));
+    }*/
+
+    /**
+     * Calculates the combined global effects (reflection and transparency) at an intersection point.
+     *
+     * @param intersection
+     * @param level
+     * @param k
+     * @return
+     */
+    private Color calcGlobalEffects(Intersection intersection, int level, Double3 k) {
+        return calcGlobalEffect(
+                constructTransparencyRay(intersection),
+                level,
+                k,
+                intersection.material.kT,
+
+                // -------- הוספה: שולחים את רדיוס הטשטוש של הזכוכית --------
+                intersection.material.kB
+        )
+                .add(calcGlobalEffect(
+                        constructReflectionRay(intersection),
+                        level,
+                        k,
+                        intersection.material.kR,
+
+                        // -------- הוספה: שולחים את רדיוס הטשטוש של ההשתקפות --------
+                        intersection.material.kG
+                ));
+    }
+
+    /**
+     * Calculates the global lighting effect (reflection or transparency) for a given ray.
+     * (Updated to support Glossy Surfaces & Diffusive Glass with explosion prevention)
+     */
+    private Color calcGlobalEffect(Ray ray, int level, Double3 k, Double3 kx, double radius) {
+        Double3 kkx = k.product(kx);
+        if (kkx.isLowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
+
+        // --- התיקון הקריטי למניעת פיצוץ קרניים ---
+        // נבדוק האם אנחנו ברמה הראשונה של הרקורסיה.
+        // אם כן -> ניקח את כמות הקרניים המלאה שביקשו (למשל 9x9 = 81).
+        // אם לא (אנחנו כבר בתוך השתקפות של השתקפות) -> נשתמש בקרן אחת בלבד!
+        int actualRaysAmount = (level == MAX_CALC_COLOR_LEVEL) ? _raysAmount : 1;
+
+        // ====================================================================
+        // מצב רגיל (הדגל כבוי, או שהמשטח חלק לגמרי, או שזו השתקפות פנימית)
+        // ====================================================================
+        if (!_useAdvancedEffects || radius == 0 || actualRaysAmount <= 1) {
+            Intersection intersection = findClosestIntersection(ray);
+            if (intersection == null) return _scene.background.scale(kx);
+
+            return preprocessIntersection(intersection, ray.direction()) ?
+                    calcColor(intersection, level - 1, kkx).scale(kx) : Color.BLACK;
+        }
+
+        // ====================================================================
+        // מצב מתקדם - שימוש במחולל אלומות לטשטוש ההשתקפות/שבירה (רק ברמה הראשונה)
+        // ====================================================================
+
+        BeamGenerator beamGenerator = new BeamGenerator();
+        double targetDistance = 100d; // מרחק שרירותי לבניית רשת הפיזור
+
+        // שים לב שפה אנחנו שולחים את actualRaysAmount במקום _raysAmount המקורי
+        Beam beam = beamGenerator.generateBeam(ray, radius, targetDistance, actualRaysAmount);
+
+        Color colorSum = Color.BLACK;
+        List<Ray> rays = beam.getRays();
+
+        // מעבר על כל קרן באלומה, חישוב הצבע שלה, וסכימה לתוך colorSum
+        for (Ray beamRay : rays) {
+            Intersection intersection = findClosestIntersection(beamRay);
+
+            if (intersection == null) {
+                colorSum = colorSum.add(_scene.background.scale(kx));
+            } else if (preprocessIntersection(intersection, beamRay.direction())) {
+                colorSum = colorSum.add(calcColor(intersection, level - 1, kkx).scale(kx));
+            }
+        }
+
+        // מחזירים את ממוצע הצבעים של כל הקרניים באלומה (חילוק בכמות הקרניים)
+        return colorSum.reduce(rays.size());
     }
 
     @Override
