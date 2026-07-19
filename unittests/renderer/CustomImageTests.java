@@ -70,64 +70,73 @@ public class CustomImageTests {
     }
 
     /**
-     * Test for Bonus 1: 10+ objects, all geometries, demonstrating all features.
+     * Test for Bonus 1: 10+ objects, all geometries, demonstrating all features clearly.
      */
     @Test
     public void bonus1ComplexImageTest() {
         Scene scene = new Scene("Bonus 1 Scene")
-                .setAmbientLight(new AmbientLight(new Color(25, 25, 25)));
+                .setAmbientLight(new AmbientLight(new Color(30, 30, 30)));
 
         Material mirror = new Material().setKD(0.0).setKS(0.8).setShininess(60).setKR(0.7);
         Material weakMirror = new Material().setKD(0.0).setKS(0.8).setShininess(60).setKR(0.3);
-        Material ceilingMirror = new Material().setKD(0.0).setKS(0.8).setShininess(60).setKR(0.1);
-
-        Material semiTransparent = new Material().setKD(0.2).setKS(0.2).setShininess(30).setKT(0.6);
+        // יצרנו חומר זכוכית אמיתי - שקוף מאוד (0.85)
+        Material glass = new Material().setKD(0.1).setKS(0.2).setShininess(30).setKT(0.85);
         Material shinyMat = new Material().setKD(0.5).setKS(0.5).setShininess(100);
 
         scene.geometries.add(
-                // 1. רצפה רפלקטיבית
-                new Plane(new Point(0, 0, -50), new Vector(0, 0, 1))
-                        .setEmission(new Color(15, 15, 25))
+                // 1. רצפה רפלקטיבית - הבהרנו אותה כדי שצללים יבלטו עליה!
+                new Plane(new Point(0, 0, -20), new Vector(0, 0, 1))
+                        .setEmission(new Color(60, 60, 60))
                         .setMaterial(mirror),
 
-                // 2. קיר אחורי רפלקטיבי (מצולע)
-                new Polygon(new Point(-200, 150, -50), new Point(200, 150, -50),
-                        new Point(200, 150, 200), new Point(-200, 150, 200))
-                        .setEmission(new Color(10, 0, 10))
+                // 2. קיר אחורי - צבענו אותו בכחול כהה והקרבנו אותו כדי שנראה אותו מבעד לזכוכית
+                new Polygon(new Point(-200, 80, -50), new Point(200, 80, -50),
+                        new Point(200, 80, 200), new Point(-200, 80, 200))
+                        .setEmission(new Color(20, 20, 80))
                         .setMaterial(weakMirror),
 
-                // 3-6. 4 כדורים מסודרים בשורה (חלקם שקופים, חלקם אטומים)
-                new Sphere(new Point(-45, 0, 0), 15).setEmission(new Color(CYAN)).setMaterial(shinyMat),
-                new Sphere(new Point(-15, 0, 0), 15).setEmission(new Color(BLACK)).setMaterial(semiTransparent),
-                new Sphere(new Point(15, 0, 0), 15).setEmission(new Color(MAGENTA)).setMaterial(shinyMat),
-                new Sphere(new Point(45, 0, 0), 15).setEmission(new Color(BLACK)).setMaterial(semiTransparent),
+                // 3. כדור קדמי ממרכז - זכוכית שקופה (מטיל צל רך ורואים דרכו את הקיר והכדורים האחרים)
+                new Sphere(new Point(0, -20, 0), 15).setEmission(new Color(BLACK)).setMaterial(glass),
 
-                // 7-10. פירמידה (4 משולשים) שמרחפת מעל
-                new Triangle(new Point(0, 20, 60), new Point(20, 0, 40), new Point(-20, 0, 40))
+                // 4. כדור אחורי שמאלי - אטום אדום
+                new Sphere(new Point(-30, 15, 0), 15).setEmission(new Color(RED)).setMaterial(shinyMat),
+
+                // 5. כדור אחורי ימני - אטום ירוק
+                new Sphere(new Point(30, 15, 0), 15).setEmission(new Color(GREEN)).setMaterial(shinyMat),
+
+                // 6. כדור מרחף למעלה - מראת כדור יפהפייה
+                new Sphere(new Point(0, 30, 40), 12).setEmission(new Color(20, 20, 20)).setMaterial(mirror),
+
+                // 7-10. פירמידה (4 משולשים) בצד שמאל - מטילה צללים חדים
+                new Triangle(new Point(-50, 10, 50), new Point(-30, -10, 20), new Point(-70, -10, 20))
                         .setEmission(new Color(YELLOW)).setMaterial(shinyMat),
-                new Triangle(new Point(0, 20, 60), new Point(20, 0, 40), new Point(0, 40, 40))
+                new Triangle(new Point(-50, 10, 50), new Point(-30, -10, 20), new Point(-50, 30, 20))
                         .setEmission(new Color(ORANGE)).setMaterial(shinyMat),
-                new Triangle(new Point(0, 20, 60), new Point(-20, 0, 40), new Point(0, 40, 40))
-                        .setEmission(new Color(RED)).setMaterial(shinyMat),
-                new Triangle(new Point(20, 0, 40), new Point(-20, 0, 40), new Point(0, 40, 40))
+                new Triangle(new Point(-50, 10, 50), new Point(-70, -10, 20), new Point(-50, 30, 20))
+                        .setEmission(new Color(MAGENTA)).setMaterial(shinyMat),
+                new Triangle(new Point(-30, -10, 20), new Point(-70, -10, 20), new Point(-50, 30, 20))
                         .setEmission(new Color(DARK_GRAY)).setMaterial(shinyMat),
 
-                // 11. מישור נוסף כ"תקרה" כדי לייצר עוד השתקפויות
+                // 11. תקרה (בשביל ההשתקפויות)
                 new Plane(new Point(0, 0, 150), new Vector(0, 0, -1))
-                        .setEmission(new Color(5, 5, 5)).setMaterial(ceilingMirror)
+                        .setEmission(new Color(5, 5, 5)).setMaterial(weakMirror)
         );
 
-        scene.lights.add(new SpotLight(new Color(500, 500, 500), new Point(0, -100, 100), new Vector(0, 1, -0.5))
+        // השינוי הקריטי: הזזנו את האור הצידה ולמעלה!
+        // עכשיו האור יכה משמאל, וייצר צללים ארוכים וברורים ימינה
+        scene.lights.add(new SpotLight(new Color(800, 800, 800), new Point(-100, -100, 150), new Vector(1, 1, -1))
                 .setKl(0.0001).setKq(0.00001));
-        scene.lights.add(new PointLight(new Color(0, 255, 0), new Point(0, 10, 20))
+
+        // מקור אור נוסף חלש בצד ימין כדי למנוע חושך מוחלט באזורי הצל
+        scene.lights.add(new PointLight(new Color(0, 50, 100), new Point(100, -50, 50))
                 .setKl(0.001).setKq(0.0002));
 
         Camera camera = Camera.getBuilder()
-                .setLocation(new Point(0, -150, 30))
-                .setDirection(new Vector(0, 1, -0.1), new Vector(0, 0.1, 1))
+                // הגבהנו מעט את המצלמה כדי להסתכל "מלמעלה למטה" על הצללים
+                .setLocation(new Point(0, -150, 50))
+                .setDirection(new Vector(0, 1, -0.3), new Vector(0, 0.3, 1))
                 .setVpSize(200, 200)
                 .setVpDistance(100)
-                // תוקן: שימוש בפונקציות הנכונות של הבילדר שלך
                 .setResolution(800, 800)
                 .setRayTracer(scene, RayTracerType.SIMPLE)
                 .build();
