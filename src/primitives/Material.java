@@ -89,6 +89,16 @@ public class Material {
     }
 
     /**
+     * Sets the diffuse reflection coefficient uniformly for all channels.
+     *
+     * @param obj uniform diffuse reflection coefficient
+     * @return this material instance
+     */
+    public Material setKD(double obj) {
+        return setKD(new Double3(obj));
+    }
+
+    /**
      * Sets the transmission coefficient.
      *
      * @param obj transmission coefficient
@@ -97,6 +107,26 @@ public class Material {
     public Material setKT(Double3 obj) {
         kT = obj;
         return this;
+    }
+
+    /**
+     * Sets the transmission coefficient uniformly for all channels.
+     *
+     * @param obj
+     * @return this material instance
+     */
+    public Material setKT(double obj) {
+        return setKT(new Double3(obj));
+    }
+
+    /**
+     * Sets the reflection coefficient uniformly for all channels.
+     *
+     * @param obj
+     * @return this material instance
+     */
+    public Material setKR(double obj) {
+        return setKR(new Double3(obj));
     }
 
     /**
@@ -109,16 +139,6 @@ public class Material {
     public Material setKR(Double3 obj) {
         kR = obj;
         return this;
-    }
-
-    /**
-     * Sets the diffuse reflection coefficient uniformly for all channels.
-     *
-     * @param obj uniform diffuse reflection coefficient
-     * @return this material instance
-     */
-    public Material setKD(double obj) {
-        return setKD(new Double3(obj));
     }
 
     /**

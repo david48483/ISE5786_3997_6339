@@ -21,11 +21,6 @@ import static primitives.Util.alignZero;
 class SimpleRayTracer extends RayTracerBase {
 
     /**
-     * Small delta value used to offset rays to avoid self-intersection.
-     */
-    private static final double DELTA = 0.1;
-
-    /**
      * Maximum recursion depth for color calculation to prevent infinite recursion.
      */
     private static final int MAX_CALC_COLOR_LEVEL = 10;
@@ -58,8 +53,9 @@ class SimpleRayTracer extends RayTracerBase {
      */
     private boolean unshaded(Intersection intersection) {
         Vector pointToLight = intersection.l.scale(-1);
-        Vector delta = intersection.normal.scale(intersection.lNormal < 0 ? DELTA : -DELTA);
-        Ray shadowRay = new Ray(intersection.point.add(delta), pointToLight);
+
+        Ray shadowRay = new Ray(intersection.point, pointToLight, intersection.normal);
+
         double lightDistance = intersection.light.getDistance(intersection.point);
 
         var intersections = _scene.geometries.calcIntersections(shadowRay, lightDistance);
@@ -74,6 +70,35 @@ class SimpleRayTracer extends RayTracerBase {
     }
 
     /**
+     * Calculates the aggregated transparency attenuation factor along the shadow ray.
+     *
+     * @param intersection the intersection point data
+     * @return the cumulative transparency factor (Double3)
+     */
+    private Double3 transparency(Intersection intersection) {
+        Vector pointToLight = intersection.l.scale(-1);
+        Ray shadowRay = new Ray(intersection.point, pointToLight, intersection.normal);
+        double lightDistance = intersection.light.getDistance(intersection.point);
+
+        var intersections = _scene.geometries.calcIntersections(shadowRay, lightDistance);
+
+        Double3 ktr = Double3.ONE;
+
+        if (intersections == null) return ktr;
+
+        for (Intersection i : intersections) {
+
+            ktr = ktr.product(i.material.kT);
+
+            if (ktr.isLowerThan(MIN_CALC_COLOR_K)) {
+                return Double3.ZERO;
+            }
+        }
+
+        return ktr;
+    }
+
+    /**
      * Constructs a reflection ray based on the intersection point and incoming ray direction.
      *
      * @param intersection the intersection point data
@@ -84,10 +109,7 @@ class SimpleRayTracer extends RayTracerBase {
         // formula for calculate reflection ray : r = v - 2 * (v * n) * n
         Vector r = intersection.v.subtract(intersection.normal.scale(2 * intersection.vNormal));
 
-        // delta calc (based on the mathematical proof that r*n = -v*n)
-        Vector delta = intersection.normal.scale(intersection.vNormal < 0 ? DELTA : -DELTA);
-
-        return new Ray(intersection.point.add(delta), r);
+        return new Ray(intersection.point, r, intersection.normal);
     }
 
     /**
@@ -98,10 +120,7 @@ class SimpleRayTracer extends RayTracerBase {
      */
     private Ray constructTransparencyRay(Intersection intersection) {
 
-        // delta calc
-        Vector delta = intersection.normal.scale(intersection.vNormal < 0 ? -DELTA : DELTA);
-
-        return new Ray(intersection.point.add(delta), intersection.v);
+        return new Ray(intersection.point, intersection.v, intersection.normal);
     }
 
     /**
@@ -195,12 +214,16 @@ class SimpleRayTracer extends RayTracerBase {
         Color color = intersection.geometry.getEmission();
 
         for (LightSource lightSource : _scene.lights) {
-            if (setLightSource(intersection, lightSource) && (unshaded(intersection))) {
-                color = color.add(
-                        lightSource.getIntensity(intersection.point)
-                                .scale(calcDiffuse(intersection, lightSource)
-                                        .add(calcSpecular(intersection)))
-                );
+            if (setLightSource(intersection, lightSource)) {
+                Double3 ktr = transparency(intersection);
+                if (ktr.product(k).isGreaterThan(MIN_CALC_COLOR_K)) {
+                    color = color.add(
+                            lightSource.getIntensity(intersection.point)
+                                    .scale(ktr)
+                                    .scale(calcDiffuse(intersection, lightSource)
+                                            .add(calcSpecular(intersection)))
+                    );
+                }
             }
         }
 

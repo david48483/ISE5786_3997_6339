@@ -13,6 +13,10 @@ import java.util.List;
 public class Ray {
 
     /**
+     * Small delta value used to offset rays to avoid self-intersection.
+     */
+    private static final double DELTA = 0.1;
+    /**
      * Origin point of the ray.
      */
     private final Point _origin;
@@ -32,6 +36,23 @@ public class Ray {
     public Ray(Point origin, Vector direction) {
         _origin = origin;
         _direction = direction.normalize();
+    }
+
+    /**
+     * Creates a ray from a head point, a direction vector, and a normal vector.
+     *
+     * @param head
+     * @param direction
+     * @param normal
+     */
+    public Ray(Point head, Vector direction, Vector normal) {
+        _direction = direction.normalize();
+
+        double nv = normal.dotProduct(_direction);
+
+        Vector delta = normal.scale(nv > 0 ? DELTA : -DELTA);
+
+        _origin = head.add(delta);
     }
 
     /**
