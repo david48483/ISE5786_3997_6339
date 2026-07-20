@@ -32,7 +32,7 @@ public interface LightSource {
     /**
      * Returns the distance from the light source to the given point in the scene.
      *
-     * @param point the point in the scene for which to calculate the distance to the light source
+     * @param point the point in the scene for which to calculate the distance from the light source
      * @return double representing the distance from the light source to the given point
      */
     double getDistance(Point point);

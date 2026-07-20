@@ -36,55 +36,6 @@ class SimpleRayTracer extends RayTracerBase {
     private static final Double3 INITIAL_K = Double3.ONE;
 
     /**
-     * Flag indicating whether to use advanced rendering effects like Glossy Surfaces and Diffusive Glass.
-     */
-    private boolean _useAdvancedEffects = false;
-
-    /**
-     * The number of rays to generate for simulating glossy surfaces and diffusive glass.
-     */
-
-    private int _raysAmount = 1;
-
-    /**
-     * The target distance for the rays generated for simulating glossy surfaces and diffusive glass.
-     */
-    private double _targetDistance = 100d;
-
-    /**
-     * Set whether to use advanced rendering effects like Glossy Surfaces and Diffusive Glass.
-     *
-     * @param useAdvancedEffects true to enable advanced effects, false to disable
-     * @return this SimpleRayTracer instance for method chaining
-     */
-    public SimpleRayTracer setUseAdvancedEffects(boolean useAdvancedEffects) {
-        this._useAdvancedEffects = useAdvancedEffects;
-        return this;
-    }
-
-    /**
-     * Set the amount of rays for the beam (Grid of amount X amount).
-     *
-     * @param amount the amount of rays for the beam
-     * @return this SimpleRayTracer instance for method chaining
-     */
-    public SimpleRayTracer setRaysAmount(int amount) {
-        this._raysAmount = amount;
-        return this;
-    }
-
-    /**
-     * Set the target distance for the rays generated for simulating glossy surfaces and diffusive glass.
-     *
-     * @param targetDistance the target distance for the rays
-     * @return this SimpleRayTracer instance for method chaining
-     */
-    public SimpleRayTracer setTargetDistance(double targetDistance) {
-        this._targetDistance = targetDistance;
-        return this;
-    }
-
-    /**
      * Creates a simple ray tracer for the given scene.
      *
      * @param scene the scene to trace
@@ -98,7 +49,7 @@ class SimpleRayTracer extends RayTracerBase {
      * Prepares light-dependent shading data for an intersection and a light source.
      *
      * @param intersection the intersection point data
-     * @return true if the intersection is unshaded (not in shadow) for the light source, false otherwise
+     * @return true if the intersection is valid for shading, false otherwise
      */
     private boolean unshaded(Intersection intersection) {
         Vector pointToLight = intersection.l.scale(-1);
@@ -181,7 +132,7 @@ class SimpleRayTracer extends RayTracerBase {
      * @param kx    the material's reflection or transparency coefficient
      * @return the resulting color contribution from global effects
      */
-  /*  private Color calcGlobalEffect(Ray ray, int level, Double3 k, Double3 kx) {
+    private Color calcGlobalEffect(Ray ray, int level, Double3 k, Double3 kx) {
         Double3 kkx = k.product(kx);
         if (kkx.isLowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
         Intersection intersection = findClosestIntersection(ray);
@@ -189,106 +140,22 @@ class SimpleRayTracer extends RayTracerBase {
         return preprocessIntersection(intersection, ray.direction()) ?
                 calcColor(intersection, level - 1, kkx).scale(kx) : Color.BLACK;
 
-    }*/
+    }
 
     /**
      * Calculates the combined global effects (reflection and transparency) at an intersection point.
      *
-     * @param intersection
-     * @param level
-     * @param k
-     * @return
+     * @param intersection the intersection point data
+     * @param level        the current recursion level
+     * @param k            the accumulated color contribution factor
+     * @return the resulting color contribution from global effects
      */
 
-  /*  private Color calcGlobalEffects(Intersection intersection, int level, Double3 k) {
+    private Color calcGlobalEffects(Intersection intersection, int level, Double3 k) {
         return calcGlobalEffect(constructTransparencyRay(intersection),
                 level, k, intersection.material.kT)
                 .add(calcGlobalEffect(constructReflectionRay(intersection),
                         level, k, intersection.material.kR));
-    }*/
-
-    /**
-     * Calculates the combined global effects (reflection and transparency) at an intersection point.
-     *
-     * @param intersection a prepared intersection containing thepoint, normal, and material properties
-     * @param level        the current recursion level for color calculation
-     * @param k            the accumulated color contribution factor from previous calculations
-     * @return the resulting color contribution from both reflection and transparency effects
-     */
-    private Color calcGlobalEffects(Intersection intersection, int level, Double3 k) {
-        return calcGlobalEffect(
-                constructTransparencyRay(intersection),
-                level,
-                k,
-                intersection.material.kT,
-
-                intersection.material.kB,
-                intersection.normal
-        )
-                .add(calcGlobalEffect(
-                        constructReflectionRay(intersection),
-                        level,
-                        k,
-                        intersection.material.kR,
-                        intersection.material.kG,
-                        intersection.normal
-                ));
-    }
-
-    /**
-     * Calculates the global lighting effect (reflection or transparency) for a given ray.
-     * (Updated to support Glossy Surfaces and Diffusive Glass with explosion prevention)
-     *
-     * @param ray    the ray to trace for global
-     * @param level  the current recursion level
-     * @param k      the accumulated color contribution factor
-     * @param kx     the material's reflection or transparency coefficient
-     * @param radius the radius for generating rays for glossy or diffusive effects
-     * @param normal the surface normal at the intersection point
-     * @return the resulting color contribution from global effects
-     */
-    private Color calcGlobalEffect(Ray ray, int level, Double3 k, Double3 kx, double radius, Vector normal) {
-        Double3 kkx = k.product(kx);
-        if (kkx.isLowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
-
-        int actualRaysAmount = (level == MAX_CALC_COLOR_LEVEL) ? _raysAmount : 1;
-
-        if (!_useAdvancedEffects || radius == 0 || actualRaysAmount <= 1) {
-            Intersection intersection = findClosestIntersection(ray);
-            if (intersection == null) return _scene.background.scale(kx);
-
-            return preprocessIntersection(intersection, ray.direction()) ?
-                    calcColor(intersection, level - 1, kkx).scale(kx) : Color.BLACK;
-        }
-
-        BeamGenerator beamGenerator = new BeamGenerator();
-
-        Beam beam = beamGenerator.generateBeam(ray, radius, _targetDistance, actualRaysAmount);
-
-        Color colorSum = Color.BLACK;
-        List<Ray> rays = beam.getRays();
-        int validRaysCount = 0;
-
-        double idealDirectionSign = alignZero(ray.direction().dotProduct(normal));
-
-        for (Ray beamRay : rays) {
-            double rayDirectionSign = alignZero(beamRay.direction().dotProduct(normal));
-
-            if (idealDirectionSign * rayDirectionSign > 0) {
-                validRaysCount++;
-                Intersection intersection = findClosestIntersection(beamRay);
-
-                if (intersection == null) {
-                    colorSum = colorSum.add(_scene.background.scale(kx));
-                } else if (preprocessIntersection(intersection, beamRay.direction())) {
-                    colorSum = colorSum.add(calcColor(intersection, level - 1, kkx).scale(kx));
-                }
-            }
-        }
-
-        if (validRaysCount == 0) return Color.BLACK;
-
-        return colorSum.reduce(validRaysCount);
     }
 
     @Override
@@ -304,10 +171,10 @@ class SimpleRayTracer extends RayTracerBase {
     }
 
     /**
-     * Finds the closest intersection point along a given ray.
+     * Finds the closest intersection point along the given ray.
      *
      * @param ray the ray to trace for intersections
-     * @return the closest intersection point, or null if no intersections exist
+     * @return intersections the closest intersection point, or null if no intersections exist
      */
     private Intersection findClosestIntersection(Ray ray) {
         List<Intersection> intersections = _scene.geometries.calcIntersections(ray);

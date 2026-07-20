@@ -43,7 +43,7 @@ public class Ray {
      *
      * @param head      starting point of the ray
      * @param direction direction of the ray (does not have to be normalized)
-     * @param normal    normal vector used to offset the ray's origin to avoid self-intersection
+     * @param normal    normal vector used to offset the ray origin to avoid self-intersection
      */
     public Ray(Point head, Vector direction, Vector normal) {
         _direction = direction.normalize();

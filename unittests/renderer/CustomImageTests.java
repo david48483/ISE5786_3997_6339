@@ -25,6 +25,12 @@ import static java.awt.Color.*;
 public class CustomImageTests {
 
     /**
+     * Creates a new custom image test suite.
+     */
+    public CustomImageTests() {
+    }
+
+    /**
      * Test for Stage 8 requirement: 3-4 objects demonstrating reflection, refraction, and shadows.
      */
     @Test
@@ -50,6 +56,7 @@ public class CustomImageTests {
                         .setEmission(new Color(RED))
                         .setMaterial(matteMat),
 
+                // 4. משולש מרחף שמטיל צל
                 new Triangle(new Point(-30, 30, 40), new Point(-10, 30, 40), new Point(-20, 50, 60))
                         .setEmission(new Color(BLUE))
                         .setMaterial(matteMat)
@@ -63,7 +70,7 @@ public class CustomImageTests {
                 .setDirection(new Vector(0, 1, -0.2), new Vector(0, 0.2, 1))
                 .setVpSize(200, 200)
                 .setVpDistance(100)
-
+                // תוקן: שימוש בפונקציות הנכונות של הבילדר שלך
                 .setResolution(500, 500)
                 .setRayTracer(scene, RayTracerType.SIMPLE)
                 .build();
@@ -121,10 +128,12 @@ public class CustomImageTests {
         scene.lights.add(new SpotLight(new Color(800, 800, 800), new Point(-100, -100, 150), new Vector(1, 1, -1))
                 .setKl(0.0001).setKq(0.00001));
 
+        // מקור אור נוסף חלש בצד ימין כדי למנוע חושך מוחלט באזורי הצל
         scene.lights.add(new PointLight(new Color(0, 50, 100), new Point(100, -50, 50))
                 .setKl(0.001).setKq(0.0002));
 
         Camera camera = Camera.getBuilder()
+
                 .setLocation(new Point(0, -150, 50))
                 .setDirection(new Vector(0, 1, -0.3), new Vector(0, 0.3, 1))
                 .setVpSize(200, 200)
@@ -136,4 +145,5 @@ public class CustomImageTests {
         camera.renderImage();
         camera.writeToImage("bonus1_complex_image");
     }
+
 }
