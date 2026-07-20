@@ -16,6 +16,12 @@ import scene.Scene;
 
 import static java.awt.Color.*;
 
+/**
+ * Custom image tests for Stage 8 and Bonus 1 requirements.
+ *
+ * @author David  &amp; Yehuda
+ */
+
 public class CustomImageTests {
 
     /**

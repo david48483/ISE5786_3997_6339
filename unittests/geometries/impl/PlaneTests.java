@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Tests follow the methodology of
  * Equivalence Partitions (EP) and Boundary Values (BVA).
  *
- * @author David & Yehuda
+ * @author David  &amp; Yehuda
  */
 
 public class PlaneTests {
@@ -107,7 +107,7 @@ public class PlaneTests {
         Plane plane = new Plane(P101, V1);
 
         //  ============ Equivalence Partitions Tests ==============
- 
+
         //  TC01 check constructor.
         assertEquals(1, plane.getNormal(P101).length(), DELTA,
                 "ERROR: Plane constructor failed to create the expected plane with point and normal vector");

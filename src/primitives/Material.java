@@ -112,7 +112,7 @@ public class Material {
     /**
      * Sets the transmission coefficient uniformly for all channels.
      *
-     * @param obj
+     * @param obj transmission coefficient
      * @return this material instance
      */
     public Material setKT(double obj) {
@@ -122,7 +122,7 @@ public class Material {
     /**
      * Sets the reflection coefficient uniformly for all channels.
      *
-     * @param obj
+     * @param obj reflection coefficient
      * @return this material instance
      */
     public Material setKR(double obj) {

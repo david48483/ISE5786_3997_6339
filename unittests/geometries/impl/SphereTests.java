@@ -7,16 +7,14 @@ import primitives.Vector;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for {@link Sphere}.
  * Covers {@link Sphere#getNormal(Point)} and {@link Sphere#findIntersections(Ray)}.
  * Tests follow the Equivalence Partitions (EP) and Boundary Values Analysis (BVA) methodology.
  *
- * @author David & Yehuda
+ * @author David  &amp; Yehuda
  */
 
 public class SphereTests {
@@ -104,13 +102,12 @@ public class SphereTests {
         assertNull(sphere.findIntersections(new Ray(new Point(0, 2, 8), Vector.AXIS_Z)),
                 ERR_FIND_INTERSECTIONS);
 
-
         // ============ Boundary Values Tests ==================
 
         // TC11: Ray starts on the sphere surface and goes inside (1 point)
         assertEquals(List.of(P1), sphere.findIntersections(new Ray(P2, Vector.AXIS_Z)),
                 ERR_FIND_INTERSECTIONS);
-        
+
         // TC12: Ray starts on the sphere surface and goes outside (0 points)
         assertNull(sphere.findIntersections(new Ray(P1, Vector.AXIS_Z)),
                 ERR_FIND_INTERSECTIONS);
@@ -191,7 +188,6 @@ public class SphereTests {
         assertNull(sphere.calcIntersections(new Ray(new Point(0, 2, 8), Vector.AXIS_Z)),
                 ERR_FIND_INTERSECTIONS);
 
-
         // TC05: Ray starts before and crosses the sphere, but maxDistance is less than the distance to the first intersection (0 points)
         assertNull(sphere.calcIntersections(testRay, 0.5),
                 ERR_FIND_INTERSECTIONS);
@@ -213,7 +209,6 @@ public class SphereTests {
         // TC10: Ray starts after the sphere; even with maxDistance=10 there are 0 intersections (0 points)
         assertNull(sphere.calcIntersections(new Ray(new Point(0, 2, 8), Vector.AXIS_Z), 10),
                 ERR_FIND_INTERSECTIONS);
-
 
         // ============ Boundary Values Tests ==================
 

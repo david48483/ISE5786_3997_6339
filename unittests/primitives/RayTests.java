@@ -176,14 +176,27 @@ class RayTests {
     }
 
     /**
+     * Intersections used in the findClosestIntersection tests.
+     * These intersections are created with points at different distances along the Z-axis.
+     */
+    private final Intersectable.Intersection INT_2 = new Intersectable.Intersection(new Point(0, 0, 2), null);
+
+    /**
+     * Intersections used in the findClosestIntersection tests.
+     * These intersections are created with points at different distances along the Z-axis.
+     */
+    private final Intersectable.Intersection INT_4 = new Intersectable.Intersection(new Point(0, 0, 4), null);
+
+    /**
+     * Intersections used in the findClosestIntersection tests.
+     * These intersections are created with points at different distances along the Z-axis.
+     */
+    private final Intersectable.Intersection INT_7 = new Intersectable.Intersection(new Point(0, 0, 7), null);
+
+    /**
      * Test method for {@link Ray#findClosestIntersection(List)}.
      * Verifies that the method correctly identifies the closest Intersection from a list of Intersections.
      */
-
-    private final Intersectable.Intersection INT_2 = new Intersectable.Intersection(new Point(0, 0, 2), null);
-    private final Intersectable.Intersection INT_4 = new Intersectable.Intersection(new Point(0, 0, 4), null);
-    private final Intersectable.Intersection INT_7 = new Intersectable.Intersection(new Point(0, 0, 7), null);
-
     @Test
     void findClosestIntersection() {
         Ray ray = new Ray(Point.ZERO, Vector.AXIS_Z);
