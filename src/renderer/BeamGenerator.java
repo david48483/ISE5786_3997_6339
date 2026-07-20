@@ -19,6 +19,12 @@ import java.util.Random;
 public class BeamGenerator {
 
     /**
+     * Creates a new beam generator instance with jittering enabled.
+     */
+    public BeamGenerator() {
+    }
+
+    /**
      * Random number generator for jittering
      */
     private static final Random RANDOM = new Random();

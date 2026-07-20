@@ -17,6 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class BeamGeneratorTests {
 
     /**
+     * Creates a new beam generator test suite.
+     */
+    public BeamGeneratorTests() {
+    }
+
+    /**
      * Test method for the generateGrid function of the BeamGenerator class.
      */
     @Test

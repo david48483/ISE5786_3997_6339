@@ -22,6 +22,12 @@ import scene.Scene;
 public class GlossyDiffusiveTests {
 
     /**
+     * Creates a new glossy and diffusive test suite.
+     */
+    public GlossyDiffusiveTests() {
+    }
+
+    /**
      * Test method for rendering a scene with glossy and diffusive materials, comparing the effects of enabling and disabling advanced rendering features.
      */
     @Test

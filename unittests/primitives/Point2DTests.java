@@ -11,6 +11,12 @@ import org.junit.jupiter.api.Test;
 public class Point2DTests {
 
     /**
+     * Creates a new Point2D test suite.
+     */
+    public Point2DTests() {
+    }
+
+    /**
      * A Point2D instance used for testing the methods of the Point2D class.
      */
     Point2D point2D = new Point2D(1, 2);
