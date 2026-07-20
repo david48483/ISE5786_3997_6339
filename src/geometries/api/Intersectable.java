@@ -42,9 +42,9 @@ public abstract class Intersectable {
      * Finds all intersections between a ray and this geometric shape, returning detailed information about each intersection.
      *
      * @param ray the ray to find intersections with
+     * @param maxDistance the maximum distance from the ray origin to consider intersections
      * @return a list of Intersection objects, or null if no intersections exist
      */
-
     protected abstract List<Intersection> calcIntersectionsHelper(Ray ray, double maxDistance);
 
     /**
@@ -57,6 +57,13 @@ public abstract class Intersectable {
         return calcIntersections(ray, Double.POSITIVE_INFINITY);
     }
 
+    /**
+     * Finds all intersections between a ray and this geometric shape within the provided distance limit.
+     *
+     * @param ray the ray to find intersections with
+     * @param maxDistance the maximum distance from the ray origin to consider intersections
+     * @return a list of Intersection objects, or null if no intersections exist within the distance limit
+     */
     public final List<Intersection> calcIntersections(Ray ray, double maxDistance) {
         return calcIntersectionsHelper(ray, maxDistance);
     }

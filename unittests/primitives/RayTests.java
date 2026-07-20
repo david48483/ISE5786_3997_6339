@@ -180,10 +180,22 @@ class RayTests {
      * Verifies that the method correctly identifies the closest Intersection from a list of Intersections.
      */
 
+    /**
+     * Test intersection located at distance 2 along the ray.
+     */
     private final Intersectable.Intersection INT_2 = new Intersectable.Intersection(new Point(0, 0, 2), null);
+    /**
+     * Test intersection located at distance 4 along the ray.
+     */
     private final Intersectable.Intersection INT_4 = new Intersectable.Intersection(new Point(0, 0, 4), null);
+    /**
+     * Test intersection located at distance 7 along the ray.
+     */
     private final Intersectable.Intersection INT_7 = new Intersectable.Intersection(new Point(0, 0, 7), null);
 
+    /**
+     * Verifies that the closest intersection is selected correctly from a list of candidates.
+     */
     @Test
     void findClosestIntersection() {
         Ray ray = new Ray(Point.ZERO, Vector.AXIS_Z);

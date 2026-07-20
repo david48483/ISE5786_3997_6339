@@ -46,10 +46,10 @@ class SimpleRayTracer extends RayTracerBase {
     }
 
     /**
-     * Prepares light-dependent shading data for an intersection and a light source.
+     * Checks whether the given intersection is unshaded by the active light source.
      *
-     * @param intersection
-     * @return
+     * @param intersection the intersection data for the surface point being evaluated
+     * @return true if the point is visible from the light, false otherwise
      */
     private boolean unshaded(Intersection intersection) {
         Vector pointToLight = intersection.l.scale(-1);
@@ -147,12 +147,11 @@ class SimpleRayTracer extends RayTracerBase {
     /**
      * Calculates the combined global effects (reflection and transparency) at an intersection point.
      *
-     * @param intersection
-     * @param level
-     * @param k
-     * @return
+     * @param intersection the intersection whose global effects are being evaluated
+     * @param level the remaining recursion depth for global effects
+     * @param k the accumulated color contribution factor for this branch
+     * @return the combined color contribution from reflection and refraction
      */
-
     private Color calcGlobalEffects(Intersection intersection, int level, Double3 k) {
         return calcGlobalEffect(constructTransparencyRay(intersection),
                 level, k, intersection.material.kT)
@@ -172,6 +171,12 @@ class SimpleRayTracer extends RayTracerBase {
                 calcColor(closestIntersection, ray.direction());
     }
 
+    /**
+     * Finds the closest intersection for a ray in the current scene.
+     *
+     * @param ray the ray to evaluate against the scene geometry
+     * @return the closest intersection, or null if no geometry was hit
+     */
     private Intersection findClosestIntersection(Ray ray) {
         List<Intersection> intersections = _scene.geometries.calcIntersections(ray);
         return intersections == null ? null : ray.findClosestIntersection(intersections);
@@ -194,10 +199,10 @@ class SimpleRayTracer extends RayTracerBase {
     /**
      * Calculates the color at an intersection point with recursion for reflection and refraction.
      *
-     * @param intersection
-     * @param level
-     * @param k
-     * @return
+     * @param intersection the intersection whose color is being evaluated
+     * @param level the remaining recursion depth for recursive effects
+     * @param k the accumulated color contribution factor for this branch
+     * @return the computed color contribution for the intersection
      */
     private Color calcColor(Intersection intersection, int level, Double3 k) {
         Color color = calcLocalEffects(intersection, k);
@@ -210,6 +215,7 @@ class SimpleRayTracer extends RayTracerBase {
      * at the given intersection.
      *
      * @param intersection the prepared intersection data
+     * @param k the accumulated color contribution factor for this branch
      * @return resulting local color contribution
      */
     private Color calcLocalEffects(Intersection intersection, Double3 k) {

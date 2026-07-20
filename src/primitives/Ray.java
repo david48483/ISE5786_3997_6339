@@ -41,9 +41,9 @@ public class Ray {
     /**
      * Creates a ray from a head point, a direction vector, and a normal vector.
      *
-     * @param head
-     * @param direction
-     * @param normal
+     * @param head the point from which the ray starts
+     * @param direction the direction of the ray
+     * @param normal the surface normal used to offset the ray origin slightly
      */
     public Ray(Point head, Vector direction, Vector normal) {
         _direction = direction.normalize();

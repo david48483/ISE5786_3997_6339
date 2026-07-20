@@ -16,7 +16,16 @@ import scene.Scene;
 
 import static java.awt.Color.*;
 
+/**
+ * Collection of renderer-focused image tests that exercise reflection, refraction, and shadow behavior.
+ */
 public class CustomImageTests {
+
+    /**
+     * Creates a new custom image test suite.
+     */
+    public CustomImageTests() {
+    }
 
     /**
      * Test for Stage 8 requirement: 3-4 objects demonstrating reflection, refraction, and shadows.

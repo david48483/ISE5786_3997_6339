@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
  * Covers {@link Sphere#getNormal(Point)} and {@link Sphere#findIntersections(Ray)}.
  * Tests follow the Equivalence Partitions (EP) and Boundary Values Analysis (BVA) methodology.
  *
- * @author David & Yehuda
+ * @author David &amp; Yehuda
  */
 
 public class SphereTests {
