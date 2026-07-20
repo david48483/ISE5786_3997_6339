@@ -8,15 +8,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for {@link Ray} class.
- * The tests verify:
- * <ul>
- * <li>Ray constructor validity</li>
- * <li>{@link Ray#origin()}</li>
- * <li>{@link Ray#direction()}</li>
- * <li>{@link Ray#getPoint(double)}</li>
- * </ul>
- * Tests follow the methodology of Equivalence Partitions (EP) and Boundary Values (BVA).
+ * Unit tests for the {@link Ray} class.
+ * The tests cover ray construction, normalization, point evaluation,
+ * and selection of the closest point or intersection.
  *
  * @author David
  * @author Yehuda
@@ -24,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RayTests {
 
     /**
-     * Default constructor for RayTests.
+     * Creates a new {@code RayTests} instance.
      */
     public RayTests() {
     }
@@ -175,21 +169,18 @@ class RayTests {
 
     }
 
-    /**
-     * Test method for {@link Ray#findClosestIntersection(List)}.
-     * Verifies that the method correctly identifies the closest Intersection from a list of Intersections.
-     */
+
 
     /**
-     * Test intersection located at distance 2 along the ray.
+     * Test intersection located 2 units along the ray.
      */
     private final Intersectable.Intersection INT_2 = new Intersectable.Intersection(new Point(0, 0, 2), null);
     /**
-     * Test intersection located at distance 4 along the ray.
+     * Test intersection located 4 units along the ray.
      */
     private final Intersectable.Intersection INT_4 = new Intersectable.Intersection(new Point(0, 0, 4), null);
     /**
-     * Test intersection located at distance 7 along the ray.
+     * Test intersection located 7 units along the ray.
      */
     private final Intersectable.Intersection INT_7 = new Intersectable.Intersection(new Point(0, 0, 7), null);
 

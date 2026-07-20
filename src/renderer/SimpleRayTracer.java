@@ -225,7 +225,7 @@ class SimpleRayTracer extends RayTracerBase {
             if (setLightSource(intersection, lightSource)) {
                 Double3 ktr = transparency(intersection);
                 Double3 lightFactor = ktr.product(
-                        calcDiffuse(intersection, lightSource).add(calcSpecular(intersection))
+                        calcDiffuse(intersection).add(calcSpecular(intersection))
                 );
 
                 if (lightFactor.product(k).isGreaterThan(MIN_CALC_COLOR_K)) {
@@ -244,7 +244,7 @@ class SimpleRayTracer extends RayTracerBase {
      * @param light        active light source
      * @return diffuse coefficient per channel
      */
-    private Double3 calcDiffuse(Intersection intersection, LightSource light) {
+    private Double3 calcDiffuse(Intersection intersection) {
         return intersection.material.kD.scale(Math.abs(intersection.lNormal));
     }
 
