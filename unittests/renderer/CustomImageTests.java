@@ -25,6 +25,12 @@ import static java.awt.Color.*;
 public class CustomImageTests {
 
     /**
+     * Creates a new custom image test suite.
+     */
+    public CustomImageTests() {
+    }
+
+    /**
      * Test for Stage 8 requirement: 3-4 objects demonstrating reflection, refraction, and shadows.
      */
     @Test
