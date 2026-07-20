@@ -13,8 +13,17 @@ import primitives.Point;
 import primitives.Vector;
 import scene.Scene;
 
+/**
+ * Unit tests for rendering scenes with glossy and diffusive materials, comparing the effects of enabling and disabling advanced rendering features.
+ *
+ * @author David &amp; Yehuda
+ */
+
 public class GlossyDiffusiveTests {
 
+    /**
+     * Test method for rendering a scene with glossy and diffusive materials, comparing the effects of enabling and disabling advanced rendering features.
+     */
     @Test
     public void testGlossyAndDiffusiveSimulation() {
         Scene scene = new Scene("Glossy and Diffusive Simulation Scene");
@@ -113,8 +122,11 @@ public class GlossyDiffusiveTests {
         System.out.println("Render time WITH advanced effects: " + (endTime - startTime) / 1000.0 + " seconds.");
     }
 
+    /**
+     * Test method for rendering a scene with self-reflections and glossy/diffusive materials, comparing the effects of enabling and disabling advanced rendering features.
+     */
     @Test
-    public void testSef() {
+    public void testSelf() {
         Scene scene = new Scene("testYehuda").setBackground(new Color(10, 10, 10));
 
         scene.lights.add(new DirectionalLight(new Color(100, 100, 100), new Vector(0, -1, -1)));
@@ -125,22 +137,17 @@ public class GlossyDiffusiveTests {
         scene.lights.add(new SpotLight(new Color(255, 200, 100), new Point(0, 50, 80), new Vector(0, -1, -2))
                 .setKl(0.0005).setKq(0.00005));
 
-        // רצפה אטומה
         scene.geometries.add(new Plane(new Point(0, -50, 0), Vector.AXIS_Y)
                 .setEmission(new Color(50, 50, 50))
                 .setMaterial(new Material().setKD(0.7).setKS(0.1).setShininess(10)));
 
-        // קיר אחורי אטום
         scene.geometries.add(new Plane(new Point(0, 0, -200), Vector.AXIS_Z)
                 .setEmission(new Color(20, 50, 100))
                 .setMaterial(new Material().setKD(0.8).setKS(0.2).setShininess(20)));
 
-        // כדור אדום מבריק במרכז
         scene.geometries.add(new Sphere(new Point(0, -20, -120), 30)
                 .setEmission(new Color(200, 0, 0))
                 .setMaterial(new Material().setKD(0.3).setKS(1.0).setShininess(300)));
-
-        // --- מראה מושלמת (צד ימין) ---
 
         Point mP1 = new Point(30, -10, -198);
         Point mP2 = new Point(80, -10, -198);
@@ -151,8 +158,6 @@ public class GlossyDiffusiveTests {
         scene.geometries.add(new Triangle(mP1, mP2, mP3).setMaterial(mirrorMat));
         scene.geometries.add(new Triangle(mP1, mP3, mP4).setMaterial(mirrorMat));
 
-        // --- מתכת מוברשת / מראה מטושטשת (צד שמאל) ---
-
         Point bmP1 = new Point(-130, -20, -198);
         Point bmP2 = new Point(-40, -20, -198);
         Point bmP3 = new Point(-85, 80, -198);
@@ -161,8 +166,6 @@ public class GlossyDiffusiveTests {
         scene.geometries.add(new Triangle(bmP1, bmP2, bmP3)
                 .setEmission(new Color(20, 20, 20))
                 .setMaterial(brushedMetalMat));
-
-        // --- חלון זכוכית חלבית (קדמי, מסתיר חצי מהכדור) ---
 
         Point gP1 = new Point(-40, -20, -70);
         Point gP2 = new Point(0, -20, -70);
