@@ -39,6 +39,8 @@ class SimpleRayTracer extends RayTracerBase {
     private boolean _useAdvancedEffects = false;
     // כמות הקרניים שנייצר (למשל 9 אומר גריד של 9x9 = 81 קרניים)
     private int _raysAmount = 1;
+    // שדה חדש עם ערך ברירת מחדל של 100
+    private double _targetDistance = 100d;
 
     /**
      * Set whether to use advanced rendering effects like Glossy Surfaces and Diffusive Glass.
@@ -53,6 +55,12 @@ class SimpleRayTracer extends RayTracerBase {
      */
     public SimpleRayTracer setRaysAmount(int amount) {
         this._raysAmount = amount;
+        return this;
+    }
+
+    // הסטר שלו (מאפשר שרשור - Builder Pattern)
+    public SimpleRayTracer setTargetDistance(double targetDistance) {
+        this._targetDistance = targetDistance;
         return this;
     }
 
@@ -195,7 +203,8 @@ class SimpleRayTracer extends RayTracerBase {
                 intersection.material.kT,
 
                 // -------- הוספה: שולחים את רדיוס הטשטוש של הזכוכית --------
-                intersection.material.kB
+                intersection.material.kB,
+                intersection.normal
         )
                 .add(calcGlobalEffect(
                         constructReflectionRay(intersection),
@@ -204,7 +213,8 @@ class SimpleRayTracer extends RayTracerBase {
                         intersection.material.kR,
 
                         // -------- הוספה: שולחים את רדיוס הטשטוש של ההשתקפות --------
-                        intersection.material.kG
+                        intersection.material.kG,
+                        intersection.normal
                 ));
     }
 
@@ -212,7 +222,7 @@ class SimpleRayTracer extends RayTracerBase {
      * Calculates the global lighting effect (reflection or transparency) for a given ray.
      * (Updated to support Glossy Surfaces & Diffusive Glass with explosion prevention)
      */
-    private Color calcGlobalEffect(Ray ray, int level, Double3 k, Double3 kx, double radius) {
+    private Color calcGlobalEffect(Ray ray, int level, Double3 k, Double3 kx, double radius, Vector normal) {
         Double3 kkx = k.product(kx);
         if (kkx.isLowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
 
@@ -238,27 +248,38 @@ class SimpleRayTracer extends RayTracerBase {
         // ====================================================================
 
         BeamGenerator beamGenerator = new BeamGenerator();
-        double targetDistance = 100d; // מרחק שרירותי לבניית רשת הפיזור
 
         // שים לב שפה אנחנו שולחים את actualRaysAmount במקום _raysAmount המקורי
-        Beam beam = beamGenerator.generateBeam(ray, radius, targetDistance, actualRaysAmount);
+        Beam beam = beamGenerator.generateBeam(ray, radius, _targetDistance, actualRaysAmount);
 
         Color colorSum = Color.BLACK;
         List<Ray> rays = beam.getRays();
+        int validRaysCount = 0; // צובר שיספור רק את הקרניים החוקיות
+
+        // חשוב: נבדוק מהו הכיוון "הנכון" ביחס לנורמל על פי הקרן האידיאלית
+        double idealDirectionSign = alignZero(ray.direction().dotProduct(normal));
 
         // מעבר על כל קרן באלומה, חישוב הצבע שלה, וסכימה לתוך colorSum
         for (Ray beamRay : rays) {
-            Intersection intersection = findClosestIntersection(beamRay);
+            double rayDirectionSign = alignZero(beamRay.direction().dotProduct(normal));
 
-            if (intersection == null) {
-                colorSum = colorSum.add(_scene.background.scale(kx));
-            } else if (preprocessIntersection(intersection, beamRay.direction())) {
-                colorSum = colorSum.add(calcColor(intersection, level - 1, kkx).scale(kx));
+            if (idealDirectionSign * rayDirectionSign > 0) { // שניהם חיוביים או שניהם שליליים
+                validRaysCount++; // מצאנו קרן חוקית!
+                Intersection intersection = findClosestIntersection(beamRay);
+
+                if (intersection == null) {
+                    colorSum = colorSum.add(_scene.background.scale(kx));
+                } else if (preprocessIntersection(intersection, beamRay.direction())) {
+                    colorSum = colorSum.add(calcColor(intersection, level - 1, kkx).scale(kx));
+                }
             }
         }
 
-        // מחזירים את ממוצע הצבעים של כל הקרניים באלומה (חילוק בכמות הקרניים)
-        return colorSum.reduce(rays.size());
+        // אם במקרה כל הקרניים נפסלו (נדיר מאוד), נחזיר שחור כדי לא לחלק באפס
+        if (validRaysCount == 0) return Color.BLACK;
+
+        // מחלקים רק במספר הקרניים שהיו חוקיות
+        return colorSum.reduce(validRaysCount);
     }
 
     @Override

@@ -23,11 +23,11 @@ public class BeamGenerator {
     }
 
     /**
-     * Generates a grid of 2D points within a square of size [size x size] with Jittering.
+     * Generates a circular grid of 2D points with Jittering.
      *
-     * @param amount The number of points along one side of the grid (e.g., 3 for a 3x3 grid)
-     * @param size   The size of the square target area
-     * @return A list of Point2D objects
+     * @param amount The base number of points along one side (before circular compensation)
+     * @param size   The diameter of the circular target area
+     * @return A list of Point2D objects inside the circle
      */
     public List<Point2D> generateGrid(int amount, double size) {
         List<Point2D> points = new ArrayList<>();
@@ -37,23 +37,35 @@ public class BeamGenerator {
             return points;
         }
 
-        double step = size / (amount - 1);
-        double start = -size / 2;
+        // --- התיקון לעיגול ---
+        // כדי שבסוף יישארו לנו בערך amount * amount נקודות בתוך העיגול,
+        // אנחנו מגדילים את גודל הרשת ההתחלתי. השורש של 4 חלקי פאי הוא בערך 1.128.
+        int effectiveAmount = (int) Math.ceil(amount * Math.sqrt(4 / Math.PI));
 
-        for (int i = 0; i < amount; i++) {
-            for (int j = 0; j < amount; j++) {
+        double step = size / (effectiveAmount - 1);
+        double start = -size / 2;
+        double radius = size / 2;
+        double radiusSq = radius * radius; // שומרים את הרדיוס בריבוע כדי לחסוך פעולת שורש בבדיקה
+
+        for (int i = 0; i < effectiveAmount; i++) {
+            for (int j = 0; j < effectiveAmount; j++) {
                 double x = start + i * step;
                 double y = start + j * step;
 
-                // מפעילים אקראיות רק אם הדגל דלוק
+                // מפעילים אקראיות (Jittering) אם הדגל דלוק
                 if (useJitter) {
                     x += (RANDOM.nextDouble() - 0.5) * step;
                     y += (RANDOM.nextDouble() - 0.5) * step;
                 }
 
-                points.add(new Point2D(x, y));
+                // --- סינון הנקודות שמעבר לרדיוס (משוואת המעגל) ---
+                // בודקים האם x^2 + y^2 קטן או שווה ל-R^2
+                if (x * x + y * y <= radiusSq) {
+                    points.add(new Point2D(x, y));
+                }
             }
         }
+
         return points;
     }
 
@@ -66,16 +78,16 @@ public class BeamGenerator {
         Vector vTo = centerRay.direction();
 
 // נבדוק כמה הקרן שלנו מקבילה לציר Z בעזרת מכפלה סקלרית
-        Vector zAxis = new Vector(0, 0, 1);
-        double dotProd = vTo.dotProduct(zAxis);
+
+        double dotProd = vTo.dotProduct(Vector.AXIS_Z);
 
 // אם הערך המוחלט קרוב ל-1, זה אומר שהוקטור מקביל כמעט לחלוטין לציר Z.
 // במצב כזה, שימוש בציר Z למכפלה וקטורית יקריס את התוכנית, לכן נבחר בציר Y.
         Vector tempVector;
         if (Math.abs(dotProd) > 0.9) {
-            tempVector = new Vector(0, 1, 0);
+            tempVector = Vector.AXIS_Y;
         } else {
-            tempVector = zAxis;
+            tempVector = Vector.AXIS_Z;
         }
 
 // עכשיו בטוח לעשות את המכפלות הוקטוריות
