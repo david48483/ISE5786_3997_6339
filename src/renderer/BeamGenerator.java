@@ -93,7 +93,7 @@ public class BeamGenerator {
         for (Point2D p2d : samples) {
             Point p = pTarget;
 
-            // אופטימיזציה קטנה: נזיז את הנקודה רק אם הערך שונה מאפס
+            // אופטימיזציה נזיז את הנקודה רק אם הערך שונה מאפס
             if (p2d.getX() != 0) {
                 p = p.add(vRight.scale(p2d.getX()));
             }
