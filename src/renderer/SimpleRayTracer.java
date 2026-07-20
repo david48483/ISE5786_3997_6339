@@ -241,7 +241,6 @@ class SimpleRayTracer extends RayTracerBase {
      * Calculates the diffuse reflection coefficient for the current light.
      *
      * @param intersection the prepared intersection data
-     * @param light        active light source
      * @return diffuse coefficient per channel
      */
     private Double3 calcDiffuse(Intersection intersection) {
