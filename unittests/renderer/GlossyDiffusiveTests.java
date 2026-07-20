@@ -36,38 +36,31 @@ public class GlossyDiffusiveTests {
 
         scene.lights.add(new DirectionalLight(new Color(200, 200, 200), new Vector(1, -1, -1)));
 
-        // גוף 1: רצפת מראה מטושטשת (Glossy Surface עם kG)
         scene.geometries.add(new Plane(new Point(0, -70, 0), Vector.AXIS_Y)
                 .setMaterial(new Material().setKD(0.2).setKS(0.2).setShininess(30)
                         .setKR(1).setKG(7.0))); // kG = רדיוס טשטוש השתקפות
 
-        // גוף 2: קיר רקע מט
         scene.geometries.add(new Plane(new Point(0, 0, -200), Vector.AXIS_Z)
                 .setMaterial(new Material().setKD(0.5).setKS(0.1).setShininess(10)));
 
-        // גוף 3: כדור מרכזי עשוי זכוכית חלבית (Diffusive Glass עם kB)
         scene.geometries.add(new Sphere(new Point(0, 0, -50), 30)
                 .setEmission(new Color(20, 40, 80))
                 .setMaterial(new Material().setKD(0.2).setKS(0.5).setShininess(70)
                         .setKT(0.8).setKB(100.0))); // kB = רדיוס טשטוש שבירה
 
-        // גוף 4: כדור ימני - מראה מבריקה חלקה (לצורך השוואה קונטרסטית)
         scene.geometries.add(new Sphere(new Point(70, 20, -70), 20)
                 .setEmission(new Color(30, 0, 0))
                 .setMaterial(new Material().setKD(0.2).setKS(0.8).setShininess(200)
                         .setKR(1)));
 
-        // גוף 5: כדור שמאלי - פלסטיק ירוק מט
         scene.geometries.add(new Sphere(new Point(-70, 20, -70), 20)
                 .setEmission(new Color(0, 40, 0))
                 .setMaterial(new Material().setKD(0.7).setKS(0.2).setShininess(50)));
 
-        // גוף 6: כדור קטן אחורי
         scene.geometries.add(new Sphere(new Point(0, 60, -120), 10)
                 .setEmission(new Color(80, 80, 0))
                 .setMaterial(new Material().setKD(0.5).setKS(0.5).setShininess(30)));
 
-        // גופים 7, 8, 9, 10: ארבעה משולשים היוצרים פירמידה קטנה בצד הסצנה
         Point p1 = new Point(-40, -69, -30);
         Point p2 = new Point(-20, -69, -30);
         Point p3 = new Point(-30, -69, -50);
