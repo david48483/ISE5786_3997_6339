@@ -89,7 +89,9 @@ public class Camera implements Cloneable {
      * The number of threads to use for rendering. If set to 0, rendering will be single-threaded.
      */
 
-    private int threadsCount = 0;
+    private int _threadsCount = 0;
+
+   // private double _interval = 0.1;
 
     /**
      * Default constructor for Camera. Initializes the camera with default values.
@@ -105,23 +107,19 @@ public class Camera implements Cloneable {
      *
      * @return this camera instance
      */
-  /*  public Camera renderImage() {
+    public Camera renderImage() {
         for (int j = 0; j < _nY; j++) {
             for (int i = 0; i < _nX; i++) {
                 castRay(i, j);
             }
         }
         return this;
-    }*/
+    }
 
-    /**
-     * Renders the current scene by casting rays through each pixel, using multithreading if specified.
-     *
-     * @return this camera instance
-     */
-    public Camera renderImage() {
 
-        PixelManager pixelManager = new PixelManager(_nY, _nX, 0.1);
+   /* public Camera renderImage() {
+
+        PixelManager pixelManager = new PixelManager(_nY, _nX, _interval);
 
         Runnable task = () -> {
             PixelManager.Pixel pixel;
@@ -134,13 +132,13 @@ public class Camera implements Cloneable {
             }
         };
 
-        if (threadsCount == 0) {
+        if (_threadsCount == 0) {
 
             task.run();
         } else {
 
-            Thread[] threads = new Thread[threadsCount];
-            for (int i = 0; i < threadsCount; i++) {
+            Thread[] threads = new Thread[_threadsCount];
+            for (int i = 0; i < _threadsCount; i++) {
                 threads[i] = new Thread(task);
                 threads[i].start();
             }
@@ -155,13 +153,12 @@ public class Camera implements Cloneable {
         }
 
         return this;
-    }
+    }*/
 
     /**
      * Draws a grid on top of the rendered image.
      *
-     * @param interval line spacing in pixels
-     * @param color    grid color
+     * @param interval line spacing in pixels* @param color    grid color
      * @return this camera instance
      */
     public Camera printGrid(int interval, Color color) {
@@ -378,7 +375,7 @@ public class Camera implements Cloneable {
          */
         public Builder setMultithreading(int threads) {
             if (threads < 0) throw new IllegalArgumentException("Multithreading must be 0 or higher");
-            this._camera.threadsCount = threads;
+            this._camera._threadsCount = threads;
             return this;
         }
 
