@@ -86,6 +86,14 @@ public class Camera implements Cloneable {
     private RayTracerBase _rayTracer;
 
     /**
+     * The number of threads to use for rendering. If set to 0, rendering will be single-threaded.
+     */
+
+    private int _threadsCount = 0;
+
+   // private double _interval = 0.1;
+
+    /**
      * Default constructor for Camera. Initializes the camera with default values.
      * The camera's position, orientation, and view plane parameters must be set using the Builder before use.
      */
@@ -107,6 +115,45 @@ public class Camera implements Cloneable {
         }
         return this;
     }
+
+
+   /* public Camera renderImage() {
+
+        PixelManager pixelManager = new PixelManager(_nY, _nX, _interval);
+
+        Runnable task = () -> {
+            PixelManager.Pixel pixel;
+
+            while ((pixel = pixelManager.nextPixel()) != null) {
+
+                castRay(pixel.col(), pixel.row());
+
+                pixelManager.pixelDone();
+            }
+        };
+
+        if (_threadsCount == 0) {
+
+            task.run();
+        } else {
+
+            Thread[] threads = new Thread[_threadsCount];
+            for (int i = 0; i < _threadsCount; i++) {
+                threads[i] = new Thread(task);
+                threads[i].start();
+            }
+
+            for (Thread thread : threads) {
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return this;
+    }*/
 
     /**
      * Draws a grid on top of the rendered image.
@@ -307,6 +354,29 @@ public class Camera implements Cloneable {
             } else {
                 throw new IllegalArgumentException(type + " ray tracer is not supported");
             }
+            return this;
+        }
+
+        /**
+         * Sets the ray tracer implementation for the camera.
+         *
+         * @param rayTracer the ray tracer to be used for rendering
+         * @return the Builder instance for method chaining
+         */
+        public Builder setRayTracer(RayTracerBase rayTracer) {
+            this._camera._rayTracer = rayTracer;
+            return this;
+        }
+
+        /**
+         * Sets the number of threads to use for rendering. If set to 0, rendering will be single-threaded.
+         *
+         * @param threads the number of threads to use for rendering
+         * @return the Builder instance for method chaining
+         */
+        public Builder setMultithreading(int threads) {
+            if (threads < 0) throw new IllegalArgumentException("Multithreading must be 0 or higher");
+            this._camera._threadsCount = threads;
             return this;
         }
 

@@ -44,6 +44,38 @@ public class Material {
     public int nShininess;
 
     /**
+     * Glossy radius for reflection blur (0 means perfect mirror).
+     */
+    public double kG = 0.0;
+
+    /**
+     * Blurry radius for refraction blur (0 means perfect glass).
+     */
+    public double kB = 0.0;
+
+    /**
+     * Sets the glossy reflection radius.
+     *
+     * @param kG the radius of the beam for glossy reflection
+     * @return this material instance
+     */
+    public Material setKG(double kG) {
+        this.kG = kG;
+        return this;
+    }
+
+    /**
+     * Sets the diffusive glass (refraction) radius.
+     *
+     * @param kB the radius of the beam for diffusive refraction
+     * @return this material instance
+     */
+    public Material setKB(double kB) {
+        this.kB = kB;
+        return this;
+    }
+
+    /**
      * Returns the ambient reflection coefficient (kA) of the material, which represents how much ambient light the material reflects.
      *
      * @param obj the new ambient reflection coefficient to set for the material
