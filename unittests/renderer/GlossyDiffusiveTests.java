@@ -1,6 +1,7 @@
 package renderer;
 
 import geometries.impl.Plane;
+import geometries.impl.Polygon;
 import geometries.impl.Sphere;
 import geometries.impl.Triangle;
 import lighting.impl.DirectionalLight;
@@ -172,10 +173,7 @@ public class GlossyDiffusiveTests {
         Point gP4 = new Point(-40, 30, -70);
         Material frostedGlassMat = new Material().setKT(0.95).setKB(5.0);
 
-        scene.geometries.add(new Triangle(gP1, gP2, gP3)
-                .setEmission(new Color(10, 20, 30))
-                .setMaterial(frostedGlassMat));
-        scene.geometries.add(new Triangle(gP1, gP3, gP4)
+        scene.geometries.add(new Polygon(gP4, gP3, gP2, gP1)
                 .setEmission(new Color(10, 20, 30))
                 .setMaterial(frostedGlassMat));
 

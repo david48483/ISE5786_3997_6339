@@ -7,6 +7,7 @@ import primitives.Vector;
 
 import java.util.List;
 
+import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
@@ -92,8 +93,38 @@ public class Polygon extends Geometry {
         return _plane.getNormal(point);
     }
 
+
     @Override
     protected List<Intersection> calcIntersectionsHelper(Ray ray, double maxDistance) {
-        return null;
+        // 1. Check if the ray intersects the supporting plane of the polygon
+        List<Intersection> planeIntersections = _plane.calcIntersections(ray, maxDistance);
+        if (planeIntersections == null) return null;
+
+        Vector v = ray.direction();
+        Point head = ray.origin();
+
+        // 2. Check the first edge pair to determine the required sign
+        Vector v1 = _vertices.get(0).subtract(head);
+        Vector v2 = _vertices.get(1).subtract(head);
+        double sign1 = alignZero(v.dotProduct(v1.crossProduct(v2)));
+        if (sign1 == 0) return null; // Ray lies on the edge
+
+        boolean isPositive = sign1 > 0;
+
+        // 3. Loop through all remaining edges and verify they have the same sign
+        for (int i = 1; i < _size; i++) {
+            v1 = v2;
+            v2 = _vertices.get((i + 1) % _size).subtract(head); // Use modulo to wrap back to the first vertex
+
+            double sign = alignZero(v.dotProduct(v1.crossProduct(v2)));
+            if (sign == 0) return null; // Ray lies on an edge
+
+            // If the sign changes, the intersection point is outside the polygon
+            if ((sign > 0) != isPositive) return null;
+        }
+
+        // 4. The point is inside the polygon! Return the intersection point
+        Point p0 = planeIntersections.getFirst().point;
+        return List.of(new Intersection(p0, this));
     }
 }
