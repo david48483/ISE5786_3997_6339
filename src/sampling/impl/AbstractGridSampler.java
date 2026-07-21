@@ -14,6 +14,15 @@ import java.util.Random;
  */
 public abstract class AbstractGridSampler implements Sampler {
 
+    /**
+     * Creates a new AbstractGridSampler instance.
+     */
+    protected AbstractGridSampler() {
+    }
+
+    /**
+     * Random number generator for jittering.
+     */
     protected static final Random RANDOM = new Random();
 
     @Override
@@ -47,10 +56,11 @@ public abstract class AbstractGridSampler implements Sampler {
 
     /**
      * Calculates the final position of the sample point.
-     * * @param x    The base x coordinate on the grid
-     * @param y    The base y coordinate on the grid
-     * @param step The size of a grid cell
-     * @return The finalized Point2D
+     *
+     * @param x the base x coordinate on the grid
+     * @param y the base y coordinate on the grid
+     * @param step the size of a grid cell
+     * @return the finalized Point2D
      */
     protected abstract Point2D getPoint(double x, double y, double step);
 }

@@ -7,6 +7,12 @@ import sampling.api.Point2D;
  */
 public class JitteredSampler extends AbstractGridSampler {
 
+    /**
+     * Creates a new jittered sampler instance.
+     */
+    public JitteredSampler() {
+    }
+
     @Override
     protected Point2D getPoint(double x, double y, double step) {
 

@@ -12,6 +12,15 @@ import java.util.Random;
  */
 public class RandomSampler implements Sampler {
 
+    /**
+     * Creates a new random sampler instance.
+     */
+    public RandomSampler() {
+    }
+
+    /**
+     * Random number generator for point generation.
+     */
     private static final Random RANDOM = new Random();
 
     @Override

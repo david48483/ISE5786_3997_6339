@@ -26,14 +26,15 @@ public class BeamGenerator {
     }
 
     /**
-     *
+     * The sampler used to generate points for the beam.
      */
     private Sampler sampler = new JitteredSampler();
 
     /**
+     * Sets the sampler to use for beam generation.
      *
-     * @param sampler
-     * @return
+     * @param sampler the sampler strategy to use
+     * @return this BeamGenerator instance for method chaining
      */
     public BeamGenerator setSampler(Sampler sampler) {
         this.sampler = sampler;

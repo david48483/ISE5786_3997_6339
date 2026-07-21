@@ -1,9 +1,8 @@
-package renderer;
+package sampling;
 
 import org.junit.jupiter.api.Test;
-import sampling.BeamGenerator;
 import sampling.api.Point2D;
-import sampling.impl.GridSampler;
+import sampling.impl.GridSampler; // ייבוא של המחלקה החדשה שיצרנו
 
 import java.util.List;
 
@@ -11,11 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for the BeamGenerator class, specifically testing the generateGrid method to ensure that it generates points within a circular area and handles edge cases correctly.
+ * Unit tests for the GridSampler class, specifically testing the generatePoints method
+ * to ensure that it generates points within a circular area and handles edge cases correctly.
  *
- * @author David  &amp; Yehuda
+ * @author David &amp; Yehuda
  */
-
 public class BeamGeneratorTests {
 
     /**
@@ -25,24 +24,28 @@ public class BeamGeneratorTests {
     }
 
     /**
-     * Test method for the generateGrid function of the BeamGenerator class.
+     * Test method for the generatePoints function of the GridSampler class.
      */
     @Test
     public void testGenerateGrid() {
-        BeamGenerator generator = new BeamGenerator().setSampler(new GridSampler());
+        // במקום BeamGenerator עם Jitter מכובה, אנחנו פשוט משתמשים ב-GridSampler הנקי!
+        GridSampler sampler = new GridSampler();
 
         double size = 1.0;
         int baseAmount = 2;
 
-        List<Point2D> points = generator.generateGrid(baseAmount, size);
+        // הפונקציה נקראת כעת generatePoints (כפי שהוגדר בממשק Sampler)
+        List<Point2D> points = sampler.generatePoints(baseAmount, size);
 
         double radius = size / 2.0;
         double radiusSq = radius * radius;
         double delta = 1e-10;
 
         for (Point2D p : points) {
+            // שימוש ב- x() ו- y() בגלל שזה record
             double distSq = p.x() * p.x() + p.y() * p.y();
-            assertTrue(distSq <= radiusSq + delta, "Point (" + p.getX() + ", " + p.getY() + ") is outside the circular target area");
+            assertTrue(distSq <= radiusSq + delta,
+                    "Point (" + p.x() + ", " + p.y() + ") is outside the circular target area");
         }
 
         assertFalse(points.isEmpty(), "Generated grid should not be empty");
@@ -55,14 +58,15 @@ public class BeamGeneratorTests {
      * Helper method to check if a point (x, y) is present in the list of points within a specified delta tolerance.
      *
      * @param points List of Point2D objects to search
-     * @param x      pozition of the point to check
-     * @param y      pozition of the point to check
+     * @param x      position of the point to check
+     * @param y      position of the point to check
      * @param delta  tolerance for floating-point comparison
      * @return true if the point is found in the list, false otherwise
      */
     private boolean isPointInList(List<Point2D> points, double x, double y, double delta) {
         for (Point2D p : points) {
-            if (Math.abs(p.getX() - x) < delta && Math.abs(p.getY() - y) < delta) {
+            // גם כאן עודכן השימוש ל- x() ו- y()
+            if (Math.abs(p.x() - x) <= delta && Math.abs(p.y() - y) <= delta) {
                 return true;
             }
         }

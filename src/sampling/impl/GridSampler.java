@@ -7,6 +7,12 @@ import sampling.api.Point2D;
  */
 public class GridSampler extends AbstractGridSampler {
 
+    /**
+     * Creates a new grid sampler instance.
+     */
+    public GridSampler() {
+    }
+
     @Override
     protected Point2D getPoint(double x, double y, double step) {
         return new Point2D(x, y);
