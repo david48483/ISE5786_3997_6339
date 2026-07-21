@@ -158,7 +158,8 @@ public class Camera implements Cloneable {
     /**
      * Draws a grid on top of the rendered image.
      *
-     * @param interval line spacing in pixels* @param color    grid color
+     * @param interval line spacing in pixels
+     * @param color    grid color
      * @return this camera instance
      */
     public Camera printGrid(int interval, Color color) {
