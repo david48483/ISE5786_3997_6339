@@ -37,55 +37,6 @@ class SimpleRayTracer extends RayTracerBase {
     private static final Double3 INITIAL_K = Double3.ONE;
 
     /**
-     * Flag indicating whether to use advanced rendering effects like Glossy Surfaces and Diffusive Glass.
-     */
-    private boolean _useAdvancedEffects = false;
-
-    /**
-     * The number of rays to generate for simulating glossy surfaces and diffusive glass.
-     */
-
-    private int _raysAmount = 1;
-
-    /**
-     * The target distance for the rays generated for simulating glossy surfaces and diffusive glass.
-     */
-    private double _targetDistance = 100d;
-
-    /**
-     * Set whether to use advanced rendering effects like Glossy Surfaces and Diffusive Glass.
-     *
-     * @param useAdvancedEffects true to enable advanced effects, false to disable
-     * @return this SimpleRayTracer instance for method chaining
-     */
-    public SimpleRayTracer setUseAdvancedEffects(boolean useAdvancedEffects) {
-        this._useAdvancedEffects = useAdvancedEffects;
-        return this;
-    }
-
-    /**
-     * Set the amount of rays for the beam (Grid of amount X amount).
-     *
-     * @param amount the amount of rays for the beam
-     * @return this SimpleRayTracer instance for method chaining
-     */
-    public SimpleRayTracer setRaysAmount(int amount) {
-        this._raysAmount = amount;
-        return this;
-    }
-
-    /**
-     * Set the target distance for the rays generated for simulating glossy surfaces and diffusive glass.
-     *
-     * @param targetDistance the target distance for the rays
-     * @return this SimpleRayTracer instance for method chaining
-     */
-    public SimpleRayTracer setTargetDistance(double targetDistance) {
-        this._targetDistance = targetDistance;
-        return this;
-    }
-
-    /**
      * Creates a simple ray tracer for the given scene.
      *
      * @param scene the scene to trace
@@ -176,21 +127,24 @@ class SimpleRayTracer extends RayTracerBase {
     /**
      * Calculates the global lighting effect (reflection or transparency) for a given ray.
      *
-    * @param ray the ray to trace for global effects
+     * @param ray   the ray to trace for global effects
      * @param level the current recursion level
-    * @param k the accumulated color contribution factor
-    * @param kx the material's reflection or transparency coefficient
+     * @param k     the accumulated color contribution factor
+     * @param kx    the material's reflection or transparency coefficient
      * @return the resulting color contribution from global effects
      */
-  /*  private Color calcGlobalEffect(Ray ray, int level, Double3 k, Double3 kx) {
+    private Color calcGlobalEffect(Ray ray, int level, Double3 k, Double3 kx) {
         Double3 kkx = k.product(kx);
         if (kkx.isLowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
-        Intersection intersection = findClosestIntersection(ray);
-        if (intersection == null) return _scene.background.scale(kx);
-        return preprocessIntersection(intersection, ray.direction()) ?
-                calcColor(intersection, level - 1, kkx).scale(kx) : Color.BLACK;
 
-    }*/
+        Intersection intersection = findClosestIntersection(ray);
+
+        if (intersection == null) return _scene.background.scale(kx);
+
+        if (!preprocessIntersection(intersection, ray.direction())) return Color.BLACK;
+
+        return calcColor(intersection, level - 1, kkx).scale(kx);
+    }
 
     /**
     * Calculates the combined global effects (reflection and transparency) at an intersection point.
@@ -341,13 +295,13 @@ class SimpleRayTracer extends RayTracerBase {
         for (LightSource lightSource : _scene.lights) {
             if (setLightSource(intersection, lightSource)) {
                 Double3 ktr = transparency(intersection);
-                if (ktr.product(k).isGreaterThan(MIN_CALC_COLOR_K)) {
-                    color = color.add(
-                            lightSource.getIntensity(intersection.point)
-                                    .scale(ktr)
-                                    .scale(calcDiffuse(intersection)
-                                            .add(calcSpecular(intersection)))
-                    );
+
+                Double3 lightFactor = ktr.product(
+                        calcDiffuse(intersection, lightSource).add(calcSpecular(intersection))
+                );
+
+                if (lightFactor.product(k).isGreaterThan(MIN_CALC_COLOR_K)) {
+                    color = color.add(lightSource.getIntensity(intersection.point).scale(lightFactor));
                 }
             }
         }
