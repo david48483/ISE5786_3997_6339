@@ -48,7 +48,7 @@ public class GlossyDiffusiveTests {
 
         scene.geometries.add(new Plane(new Point(0, -70, 0), Vector.AXIS_Y)
                 .setMaterial(new Material().setKD(0.2).setKS(0.2).setShininess(30)
-                        .setKR(1).setKG(7.0))); // kG = רדיוס טשטוש השתקפות
+                        .setKR(1).setKG(7.0)));
 
         scene.geometries.add(new Plane(new Point(0, 0, -200), Vector.AXIS_Z)
                 .setMaterial(new Material().setKD(0.5).setKS(0.1).setShininess(10)));
@@ -56,7 +56,7 @@ public class GlossyDiffusiveTests {
         scene.geometries.add(new Sphere(new Point(0, 0, -50), 30)
                 .setEmission(new Color(20, 40, 80))
                 .setMaterial(new Material().setKD(0.2).setKS(0.5).setShininess(70)
-                        .setKT(0.8).setKB(100.0))); // kB = רדיוס טשטוש שבירה
+                        .setKT(0.8).setKB(100.0))); //
 
         scene.geometries.add(new Sphere(new Point(70, 20, -70), 20)
                 .setEmission(new Color(30, 0, 0))
@@ -87,10 +87,10 @@ public class GlossyDiffusiveTests {
                 .setDirection(new Vector(0, 0, -1), Vector.AXIS_Y)
                 .setVpSize(200, 200)
                 .setVpDistance(500)
+                .setUseAdvancedEffects(false)
                 .setResolution(600, 600);
 
         createImage(new SimpleRayTracer(scene)
-                .setUseAdvancedEffects(false)
                 .setRaysAmount(9), cameraBuilder, "GlossyDiffusive_DISABLED");
 
         createImage(new SimpleRayTracer(scene)

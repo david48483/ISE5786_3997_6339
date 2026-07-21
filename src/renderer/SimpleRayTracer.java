@@ -38,15 +38,10 @@ class SimpleRayTracer extends RayTracerBase {
      */
     private static final Double3 INITIAL_K = Double3.ONE;
 
-    /**
-     * Flag indicating whether to use advanced rendering effects like Glossy Surfaces and Diffusive Glass.
-     */
-    private boolean _useAdvancedEffects = false;
 
     /**
      * The number of rays to generate for simulating glossy surfaces and diffusive glass.
      */
-
     private int _raysAmount = 1;
 
     /**
@@ -60,15 +55,9 @@ class SimpleRayTracer extends RayTracerBase {
     private final BeamGenerator _beamGenerator = new BeamGenerator();
 
     /**
-     * Sets the sampling strategy (Sampler) to be used by the beam generator.
-     *
-     * @param sampler the sampling strategy to set (e.g., GridSampler, JitteredSampler, RandomSampler)
-     * @return this SimpleRayTracer instance for method chaining
+     * Flag indicating whether to use advanced rendering effects like Glossy Surfaces and Diffusive Glass.
      */
-    public SimpleRayTracer setSampler(Sampler sampler) {
-        this._beamGenerator.setSampler(sampler);
-        return this;
-    }
+    private boolean _useAdvancedEffects = false;
 
     /**
      * Set whether to use advanced rendering effects like Glossy Surfaces and Diffusive Glass.
@@ -76,10 +65,23 @@ class SimpleRayTracer extends RayTracerBase {
      * @param useAdvancedEffects true to enable advanced effects, false to disable
      * @return this SimpleRayTracer instance for method chaining
      */
-    public SimpleRayTracer setUseAdvancedEffects(boolean useAdvancedEffects) {
+    SimpleRayTracer setUseAdvancedEffects(boolean useAdvancedEffects) {
         this._useAdvancedEffects = useAdvancedEffects;
         return this;
     }
+
+    /**
+     * Sets the sampling strategy (Sampler) to be used by the beam generator.
+     *
+     * @param sampler the sampling strategy to set (e.g., GridSampler, JitteredSampler, RandomSampler)
+     * @return this SimpleRayTracer instance for method chaining
+     */
+    SimpleRayTracer setSampler(Sampler sampler) {
+        this._beamGenerator.setSampler(sampler);
+        return this;
+    }
+
+
 
     /**
      * Set the amount of rays for the beam (Grid of amount X amount).
@@ -87,7 +89,7 @@ class SimpleRayTracer extends RayTracerBase {
      * @param amount the amount of rays for the beam
      * @return this SimpleRayTracer instance for method chaining
      */
-    public SimpleRayTracer setRaysAmount(int amount) {
+    SimpleRayTracer setRaysAmount(int amount) {
         this._raysAmount = amount;
         return this;
     }
@@ -98,7 +100,7 @@ class SimpleRayTracer extends RayTracerBase {
      * @param targetDistance the target distance for the rays
      * @return this SimpleRayTracer instance for method chaining
      */
-    public SimpleRayTracer setTargetDistance(double targetDistance) {
+    SimpleRayTracer setTargetDistance(double targetDistance) {
         this._targetDistance = targetDistance;
         return this;
     }
