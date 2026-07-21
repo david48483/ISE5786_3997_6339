@@ -4,6 +4,8 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import sampling.api.Sampler;
+import sampling.impl.BeamGenerator;
 import scene.Scene;
 
 import java.util.MissingResourceException;
@@ -86,12 +88,33 @@ public class Camera implements Cloneable {
     private RayTracerBase _rayTracer;
 
     /**
+     * The beam generator used for creating sampling ray beams for glossy and diffusive effects.
+     */
+    private Sampler _sampler;
+
+    /**
      * The number of threads to use for rendering. If set to 0, rendering will be single-threaded.
      */
 
     private int _threadsCount = 0;
 
-   // private double _interval = 0.1;
+    /**
+     * Flag indicating whether to use advanced rendering effects like Glossy Surfaces and Diffusive Glass.
+     */
+    private boolean _useAdvancedEffects = false;
+
+    /**
+     * The number of rays to generate for simulating glossy surfaces and diffusive glass.
+     */
+    private int _raysAmount = 1;
+
+    /**
+     * The target distance for the rays generated for simulating glossy surfaces and diffusive glass.
+     */
+    private double _targetDistance = 100d;
+
+
+    // private double _interval = 0.1;
 
     /**
      * Default constructor for Camera. Initializes the camera with default values.
@@ -369,6 +392,28 @@ public class Camera implements Cloneable {
         }
 
         /**
+         * Set whether to use advanced rendering effects like Glossy Surfaces and Diffusive Glass.
+         *
+         * @param useAdvancedEffects true to enable advanced effects, false to disable
+         * @return this Builder instance for method chaining
+         */
+        public Builder setUseAdvancedEffects(boolean useAdvancedEffects) {
+            this._camera._useAdvancedEffects = useAdvancedEffects;
+            return this;
+        }
+
+        /**
+         * Set the amount of rays for the beam (Grid of amount X amount).
+         *
+         * @param amount the amount of rays for the beam
+         * @return this Builder instance for method chaining
+         */
+        public Builder setRaysAmount(int amount) {
+            this._camera._raysAmount = amount;
+            return this;
+        }
+
+        /**
          * Sets the number of threads to use for rendering. If set to 0, rendering will be single-threaded.
          *
          * @param threads the number of threads to use for rendering
@@ -377,6 +422,28 @@ public class Camera implements Cloneable {
         public Builder setMultithreading(int threads) {
             if (threads < 0) throw new IllegalArgumentException("Multithreading must be 0 or higher");
             this._camera._threadsCount = threads;
+            return this;
+        }
+
+        /**
+         * Sets the sampling strategy (Sampler) to be used by the beam generator.
+         *
+         * @param sampler the sampling strategy to set (e.g., GridSampler, JitteredSampler, RandomSampler)
+         * @return this Builder instance for method chaining
+         */
+        public Builder setSampler(Sampler sampler) {
+            this._camera._sampler = sampler;
+            return this;
+        }
+
+        /**
+         * Set the target distance for the rays generated for simulating glossy surfaces and diffusive glass.
+         *
+         * @param targetDistance the target distance for the rays
+         * @return this Builder instance for method chaining
+         */
+        public Builder setTargetDistance(double targetDistance) {
+            this._camera._targetDistance = targetDistance;
             return this;
         }
 
@@ -466,6 +533,17 @@ public class Camera implements Cloneable {
             if (_camera._rayTracer == null) {
                 setRayTracer(new Scene("test"), RayTracerType.SIMPLE);
             }
+            if (_camera._rayTracer instanceof SimpleRayTracer simpleRayTracer) {
+                simpleRayTracer.setUseAdvancedEffects(_camera._useAdvancedEffects);
+                if (_camera._sampler != null) {
+                    simpleRayTracer.setSampler(_camera._sampler);
+                }
+
+                simpleRayTracer.setRaysAmount(_camera._raysAmount);
+                simpleRayTracer.setTargetDistance(_camera._targetDistance);
+            }
+
+
         }
 
         /**
