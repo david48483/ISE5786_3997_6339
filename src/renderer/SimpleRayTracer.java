@@ -135,11 +135,14 @@ class SimpleRayTracer extends RayTracerBase {
     private Color calcGlobalEffect(Ray ray, int level, Double3 k, Double3 kx) {
         Double3 kkx = k.product(kx);
         if (kkx.isLowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
-        Intersection intersection = findClosestIntersection(ray);
-        if (intersection == null) return _scene.background.scale(kx);
-        return preprocessIntersection(intersection, ray.direction()) ?
-                calcColor(intersection, level - 1, kkx).scale(kx) : Color.BLACK;
 
+        Intersection intersection = findClosestIntersection(ray);
+
+        if (intersection == null) return _scene.background.scale(kx);
+
+        if (!preprocessIntersection(intersection, ray.direction())) return Color.BLACK;
+
+        return calcColor(intersection, level - 1, kkx).scale(kx);
     }
 
     /**
@@ -223,13 +226,13 @@ class SimpleRayTracer extends RayTracerBase {
         for (LightSource lightSource : _scene.lights) {
             if (setLightSource(intersection, lightSource)) {
                 Double3 ktr = transparency(intersection);
-                if (ktr.product(k).isGreaterThan(MIN_CALC_COLOR_K)) {
-                    color = color.add(
-                            lightSource.getIntensity(intersection.point)
-                                    .scale(ktr)
-                                    .scale(calcDiffuse(intersection, lightSource)
-                                            .add(calcSpecular(intersection)))
-                    );
+
+                Double3 lightFactor = ktr.product(
+                        calcDiffuse(intersection, lightSource).add(calcSpecular(intersection))
+                );
+
+                if (lightFactor.product(k).isGreaterThan(MIN_CALC_COLOR_K)) {
+                    color = color.add(lightSource.getIntensity(intersection.point).scale(lightFactor));
                 }
             }
         }
