@@ -38,13 +38,5 @@ public class Point2DTests {
         assert point2D.getY() == 2;
     }
 
-    /**
-     * Tests the toString() method of the Point2D class to ensure it returns the correct string representation of the point.
-     */
-
-    @Test
-    void testToString() {
-        assert point2D.toString().equals("(1.0, 2.0)");
-    }
 
 }

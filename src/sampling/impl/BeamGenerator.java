@@ -1,12 +1,11 @@
-package sampling;
+package sampling.impl;
 
 import primitives.Point;
-import renderer.Beam;
+import sampling.api.Beam;
 import primitives.Ray;
 import primitives.Vector;
 import sampling.api.Point2D;
 import sampling.api.Sampler;
-import sampling.impl.JitteredSampler;
 
 import java.util.ArrayList;
 import java.util.List;

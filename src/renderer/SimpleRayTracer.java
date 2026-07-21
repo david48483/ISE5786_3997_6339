@@ -6,7 +6,8 @@ import primitives.Color;
 import primitives.Double3;
 import primitives.Ray;
 import primitives.Vector;
-import sampling.BeamGenerator;
+import sampling.impl.BeamGenerator;
+import sampling.api.Beam;
 import scene.Scene;
 
 import java.util.List;
