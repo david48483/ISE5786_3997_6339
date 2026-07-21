@@ -6,6 +6,7 @@ import primitives.Color;
 import primitives.Double3;
 import primitives.Ray;
 import primitives.Vector;
+import sampling.api.Sampler;
 import sampling.impl.BeamGenerator;
 import sampling.api.Beam;
 import scene.Scene;
@@ -52,6 +53,22 @@ class SimpleRayTracer extends RayTracerBase {
      * The target distance for the rays generated for simulating glossy surfaces and diffusive glass.
      */
     private double _targetDistance = 100d;
+
+    /**
+     * The beam generator used for creating sampling ray beams for glossy and diffusive effects.
+     */
+    private final BeamGenerator _beamGenerator = new BeamGenerator();
+
+    /**
+     * Sets the sampling strategy (Sampler) to be used by the beam generator.
+     *
+     * @param sampler the sampling strategy to set (e.g., GridSampler, JitteredSampler, RandomSampler)
+     * @return this SimpleRayTracer instance for method chaining
+     */
+    public SimpleRayTracer setSampler(Sampler sampler) {
+        this._beamGenerator.setSampler(sampler);
+        return this;
+    }
 
     /**
      * Set whether to use advanced rendering effects like Glossy Surfaces and Diffusive Glass.
@@ -247,9 +264,7 @@ class SimpleRayTracer extends RayTracerBase {
                     calcColor(intersection, level - 1, kkx).scale(kx) : Color.BLACK;
         }
 
-        BeamGenerator beamGenerator = new BeamGenerator();
-
-        Beam beam = beamGenerator.generateBeam(ray, radius, _targetDistance, actualRaysAmount);
+        Beam beam = _beamGenerator.generateBeam(ray, radius, _targetDistance, actualRaysAmount);
 
         Color colorSum = Color.BLACK;
         List<Ray> rays = beam.getRays();

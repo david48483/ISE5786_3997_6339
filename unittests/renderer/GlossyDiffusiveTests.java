@@ -12,6 +12,9 @@ import primitives.Color;
 import primitives.Material;
 import primitives.Point;
 import primitives.Vector;
+import sampling.impl.GridSampler;
+import sampling.impl.JitteredSampler;
+import sampling.impl.RandomSampler;
 import scene.Scene;
 
 /**
@@ -93,7 +96,6 @@ public class GlossyDiffusiveTests {
 
         Camera cameraOff = cameraBuilder
                 .setRayTracer(tracerOff)
-                .setMultithreading(4)
                 .build();
 
         cameraOff.renderImage();
@@ -104,22 +106,39 @@ public class GlossyDiffusiveTests {
 
         startTime = System.currentTimeMillis();
 
-        SimpleRayTracer tracerOn = new SimpleRayTracer(scene)
+        createImage(new SimpleRayTracer(scene)
                 .setUseAdvancedEffects(true)
-                .setRaysAmount(9);
+                .setSampler(new JitteredSampler())
+                .setRaysAmount(9), cameraBuilder, "GlossyDiffusive_Jitter_ENABLED");
 
-        Camera cameraOn = cameraBuilder
-                .setRayTracer(tracerOn)
+        createImage(new SimpleRayTracer(scene)
+                .setUseAdvancedEffects(true)
+                .setSampler(new GridSampler())
+                .setRaysAmount(9), cameraBuilder, "GlossyDiffusive_Grid_ENABLED");
 
-                .setMultithreading(4)
-
-                .build();
-
-        cameraOn.renderImage();
-        cameraOn.writeToImage("GlossyDiffusive_ENABLED");
+        createImage(new SimpleRayTracer(scene)
+                .setUseAdvancedEffects(true)
+                .setSampler(new RandomSampler())
+                .setRaysAmount(9), cameraBuilder, "GlossyDiffusive_Random_ENABLED");
 
         endTime = System.currentTimeMillis();
         System.out.println("Render time WITH advanced effects: " + (endTime - startTime) / 1000.0 + " seconds.");
+    }
+
+    /**
+     * Helper method to render an image using the provided ray tracer and camera builder.
+     *
+     * @param tracer                   the ray tracer instance to use
+     * @param cameraBuilder            the camera builder instance
+     * @param glossyDiffusiveFileName the output image file name
+     */
+    private void createImage(SimpleRayTracer tracer, Camera.Builder cameraBuilder, String glossyDiffusiveFileName) {
+        Camera cameraOn = cameraBuilder
+                .setRayTracer(tracer)
+                .build();
+
+        cameraOn.renderImage();
+        cameraOn.writeToImage(glossyDiffusiveFileName);
     }
 
     /**
@@ -186,34 +205,18 @@ public class GlossyDiffusiveTests {
 
         long startTime = System.currentTimeMillis();
 
-        SimpleRayTracer tracerOff = new SimpleRayTracer(scene)
-                .setUseAdvancedEffects(false);
-
-        Camera cameraOff = cameraBuilder
-                .setRayTracer(tracerOff)
-                .setMultithreading(4)
-                .build();
-
-        cameraOff.renderImage();
-        cameraOff.writeToImage("SelfGlossyDiffusive_DISABLED");
+        createImage(new SimpleRayTracer(scene)
+                .setUseAdvancedEffects(false), cameraBuilder, "SelfGlossyDiffusive_DISABLED");
 
         long endTime = System.currentTimeMillis();
         System.out.println("Render time WITHOUT advanced effects: " + (endTime - startTime) / 1000.0 + " seconds.");
 
         startTime = System.currentTimeMillis();
 
-        SimpleRayTracer tracerOn = new SimpleRayTracer(scene)
+        createImage(new SimpleRayTracer(scene)
                 .setUseAdvancedEffects(true)
                 .setRaysAmount(9)
-                .setTargetDistance(100d);
-
-        Camera cameraOn = cameraBuilder
-                .setRayTracer(tracerOn)
-                .setMultithreading(4)
-                .build();
-
-        cameraOn.renderImage();
-        cameraOn.writeToImage("SelfGlossyDiffusive_ENABLED");
+                .setTargetDistance(100d), cameraBuilder, "SelfGlossyDiffusive_ENABLED");
 
         endTime = System.currentTimeMillis();
         System.out.println("Render time WITH advanced effects: " + (endTime - startTime) / 1000.0 + " seconds.");
