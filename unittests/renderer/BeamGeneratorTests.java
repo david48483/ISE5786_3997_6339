@@ -1,7 +1,9 @@
 package renderer;
 
 import org.junit.jupiter.api.Test;
-import primitives.Point2D;
+import sampling.BeamGenerator;
+import sampling.api.Point2D;
+import sampling.impl.GridSampler;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class BeamGeneratorTests {
      */
     @Test
     public void testGenerateGrid() {
-        BeamGenerator generator = new BeamGenerator().setUseJitter(false);
+        BeamGenerator generator = new BeamGenerator().setSampler(new GridSampler());
 
         double size = 1.0;
         int baseAmount = 2;
@@ -39,7 +41,7 @@ public class BeamGeneratorTests {
         double delta = 1e-10;
 
         for (Point2D p : points) {
-            double distSq = p.getX() * p.getX() + p.getY() * p.getY();
+            double distSq = p.x() * p.x() + p.y() * p.y();
             assertTrue(distSq <= radiusSq + delta, "Point (" + p.getX() + ", " + p.getY() + ") is outside the circular target area");
         }
 

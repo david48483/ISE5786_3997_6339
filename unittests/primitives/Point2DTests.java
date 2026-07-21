@@ -1,6 +1,7 @@
 package primitives;
 
 import org.junit.jupiter.api.Test;
+import sampling.api.Point2D;
 
 /**
  * Unit tests for the Point2D class, which represents a point in 2D space.
