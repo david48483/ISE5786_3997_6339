@@ -25,7 +25,7 @@ public class BeamGeneratorTests {
     /**
      * Main reference ray used for beam generation tests.
      */
-    private static final Ray CENTER_RAY = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
+    private static final Ray CENTER_RAY = new Ray(Point.ZERO, Vector.AXIS_Z);
 
     /**
      * Test method for {@link BeamGenerator#generateBeam(Ray, double, double, int)}.
@@ -50,7 +50,7 @@ public class BeamGeneratorTests {
         }
 
         // TC02: Custom Sampler injection test (using GridSampler)
-        generator.setSampler(new GridSampler());
+        generator.setSampler(new RandomSampler());
         Beam gridBeam = generator.generateBeam(CENTER_RAY, 2.0, 10.0, 9);
         assertNotNull(gridBeam, "ERROR: generateBeam() with custom sampler failed");
 
