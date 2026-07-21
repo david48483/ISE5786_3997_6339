@@ -22,7 +22,6 @@ import scene.Scene;
  *
  * @author David &amp; Yehuda
  */
-
 public class GlossyDiffusiveTests {
 
     /**
@@ -56,7 +55,7 @@ public class GlossyDiffusiveTests {
         scene.geometries.add(new Sphere(new Point(0, 0, -50), 30)
                 .setEmission(new Color(20, 40, 80))
                 .setMaterial(new Material().setKD(0.2).setKS(0.5).setShininess(70)
-                        .setKT(0.8).setKB(100.0))); //
+                        .setKT(0.8).setKB(100.0)));
 
         scene.geometries.add(new Sphere(new Point(70, 20, -70), 20)
                 .setEmission(new Color(30, 0, 0))
@@ -82,54 +81,40 @@ public class GlossyDiffusiveTests {
         scene.geometries.add(new Triangle(p3, p1, pTop).setMaterial(pyramidMat));
         scene.geometries.add(new Triangle(p1, p2, p3).setMaterial(pyramidMat));
 
+        // בסיס המצלמה המשותף לכל ההרצות
         Camera.Builder cameraBuilder = Camera.getBuilder()
                 .setLocation(new Point(0, 0, 500))
                 .setDirection(new Vector(0, 0, -1), Vector.AXIS_Y)
                 .setVpSize(200, 200)
                 .setVpDistance(500)
-                .setUseAdvancedEffects(false)
                 .setResolution(600, 600);
 
-        createImage(new SimpleRayTracer(scene)
-                .setRaysAmount(9), cameraBuilder, "GlossyDiffusive_DISABLED");
+        // 1. ללא אפקטים מתקדמים
+        createImage(scene, cameraBuilder
+                .setUseAdvancedEffects(false)
+                .setRaysAmount(9), "GlossyDiffusive_DISABLED");
 
-        createImage(new SimpleRayTracer(scene)
+        // 2. עם Jittered Sampler
+        createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
-                .setRaysAmount(9), cameraBuilder, "GlossyDiffusive_Jitter_ENABLED");
+                .setRaysAmount(9), "GlossyDiffusive_Jitter_ENABLED");
 
-        createImage(new SimpleRayTracer(scene)
+        // 3. עם Grid Sampler
+        createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new GridSampler())
-                .setRaysAmount(9), cameraBuilder, "GlossyDiffusive_Grid_ENABLED");
+                .setRaysAmount(9), "GlossyDiffusive_Grid_ENABLED");
 
-        createImage(new SimpleRayTracer(scene)
+        // 4. עם Random Sampler
+        createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new RandomSampler())
-                .setRaysAmount(9), cameraBuilder, "GlossyDiffusive_Random_ENABLED");
+                .setRaysAmount(9), "GlossyDiffusive_Random_ENABLED");
     }
 
     /**
-     * Helper method to render an image using the provided ray tracer and camera builder.
-     *
-     * @param tracer                   the ray tracer instance to use
-     * @param cameraBuilder            the camera builder instance
-     * @param glossyDiffusiveFileName the output image file name
-     */
-    private void createImage(SimpleRayTracer tracer, Camera.Builder cameraBuilder, String glossyDiffusiveFileName) {
-        long startTime = System.currentTimeMillis();
-        Camera cameraOn = cameraBuilder
-                .setRayTracer(tracer)
-                .build();
-
-        cameraOn.renderImage();
-        cameraOn.writeToImage(glossyDiffusiveFileName);
-        long endTime = System.currentTimeMillis();
-        System.out.println("Render time " + glossyDiffusiveFileName + ": " + (endTime - startTime) / 1000.0 + " seconds.");
-    }
-
-    /**
-     * Test method for rendering a scene with self-reflections and glossy/diffusive materials, comparing the effects of enabling and disabling advanced rendering features.
+     * Test method for rendering a scene with self-reflections and glossy/diffusive materials.
      */
     @Test
     public void testSelf() {
@@ -190,22 +175,35 @@ public class GlossyDiffusiveTests {
                 .setVpDistance(150)
                 .setResolution(600, 600);
 
-        long startTime = System.currentTimeMillis();
+        // 1. ללא אפקטים
+        createImage(scene, cameraBuilder
+                .setUseAdvancedEffects(false), "SelfGlossyDiffusive_DISABLED");
 
-        createImage(new SimpleRayTracer(scene)
-                .setUseAdvancedEffects(false), cameraBuilder, "SelfGlossyDiffusive_DISABLED");
-
-        long endTime = System.currentTimeMillis();
-        System.out.println("Render time WITHOUT advanced effects: " + (endTime - startTime) / 1000.0 + " seconds.");
-
-        startTime = System.currentTimeMillis();
-
-        createImage(new SimpleRayTracer(scene)
+        // 2. עם אפקטים מתקדמים
+        createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setRaysAmount(9)
-                .setTargetDistance(100d), cameraBuilder, "SelfGlossyDiffusive_ENABLED");
+                .setTargetDistance(100d), "SelfGlossyDiffusive_ENABLED");
+    }
 
-        endTime = System.currentTimeMillis();
-        System.out.println("Render time WITH advanced effects: " + (endTime - startTime) / 1000.0 + " seconds.");
+    /**
+     * Helper method to render an image using the configured camera builder and scene.
+     *
+     * @param scene                   the scene to render
+     * @param cameraBuilder            the fully configured camera builder
+     * @param glossyDiffusiveFileName the output image file name
+     */
+    private void createImage(Scene scene, Camera.Builder cameraBuilder, String glossyDiffusiveFileName) {
+        long startTime = System.currentTimeMillis();
+
+        Camera cameraOn = cameraBuilder
+                .setRayTracer(scene, RayTracerType.SIMPLE) // ה-Builder יוצר את SimpleRayTracer פנימית ומעביר לו את ההגדרות
+                .build();
+
+        cameraOn.renderImage();
+        cameraOn.writeToImage(glossyDiffusiveFileName);
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Render time " + glossyDiffusiveFileName + ": " + (endTime - startTime) / 1000.0 + " seconds.");
     }
 }
