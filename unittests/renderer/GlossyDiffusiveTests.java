@@ -125,7 +125,7 @@ public class GlossyDiffusiveTests {
         cameraOn.renderImage();
         cameraOn.writeToImage(glossyDiffusiveFileName);
         long endTime = System.currentTimeMillis();
-        System.out.println("Render time " + "String: " + (endTime - startTime) / 1000.0 + " seconds.");
+        System.out.println("Render time " + glossyDiffusiveFileName + ": " + (endTime - startTime) / 1000.0 + " seconds.");
     }
 
     /**
