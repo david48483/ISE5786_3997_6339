@@ -4,9 +4,6 @@ import geometries.api.Intersectable.Intersection;
 
 import java.util.List;
 
-import static primitives.Util.alignZero;
-import static primitives.Util.isZero;
-
 /**
  * Represents a ray (half-line) in 3D space by an origin point and a direction vector.
  * The direction vector is stored in normalized form.
@@ -45,23 +42,16 @@ public class Ray {
      * Creates a ray from a head point, a direction vector, and a normal vector.
      *
      * @param head      starting point of the ray
-     * @param direction direction of the ray (does not have to be normalized)
+     * @param direction direction of the ray (have to be normalized)
      * @param normal    normal vector used to offset the ray origin to avoid self-intersection
      */
     public Ray(Point head, Vector direction, Vector normal) {
-        _direction = direction.normalize();
+        _direction = direction;
 
         // alignment/cleaning of floating point errors
-        double nv = alignZero(normal.dotProduct(_direction));
-
-        // if nv is not zero, shift along the normal
-        if (!isZero(nv)) {
-            Vector delta = normal.scale(nv > 0 ? DELTA : -DELTA);
-            _origin = head.add(delta);
-        } else {
-            // if the ray is tangent to the surface (orthogonal to normal), do not shift
-            _origin = head;
-        }
+        double nv = normal.dotProduct(_direction);
+        Vector delta = normal.scale(nv > 0 ? DELTA : -DELTA);
+        _origin = head.add(delta);
     }
 
     /**

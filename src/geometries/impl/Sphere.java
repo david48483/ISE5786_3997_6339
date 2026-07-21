@@ -1,6 +1,5 @@
 package geometries.impl;
 
-import geometries.api.Geometry;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
@@ -64,22 +63,14 @@ public class Sphere extends RadialGeometry {
         if (t2 <= 0) return null;
 
         double t1 = alignZero(tm - th);
-        boolean t1Valid = t1 > 0 && alignZero(t1 - maxDistance) <= 0;
-        boolean t2Valid = alignZero(t2 - maxDistance) <= 0;
+        if (alignZero(t1 - maxDistance) > 0) return null;
 
-        if (t1Valid && t2Valid) {
-            return List.of(new Intersection(ray.getPoint(t1), this), new Intersection(ray.getPoint(t2), this));
-        }
-        if (t1Valid) {
-            return List.of(new Intersection(ray.getPoint(t1), this));
-        }
-        if (t2Valid) {
-            return List.of(new Intersection(ray.getPoint(t2), this));
-        }
-        return null;
-
+        if (alignZero(t2 - maxDistance) > 0)
+            return t1 <= 0 ? null : List.of(new Intersection(ray.getPoint(t1), this));
+        else
+            return t1 <= 0 ? List.of(new Intersection(ray.getPoint(t2), this))
+                    : List.of(new Intersection(ray.getPoint(t1), this), new Intersection(ray.getPoint(t2), this));
     }
-
 
     @Override
     public String toString() {

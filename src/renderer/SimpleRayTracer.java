@@ -51,6 +51,7 @@ class SimpleRayTracer extends RayTracerBase {
      * @param intersection the intersection point data
      * @return true if the intersection is valid for shading, false otherwise
      */
+    @SuppressWarnings("unused")
     private boolean unshaded(Intersection intersection) {
         Vector pointToLight = intersection.l.scale(-1);
 
@@ -227,9 +228,7 @@ class SimpleRayTracer extends RayTracerBase {
             if (setLightSource(intersection, lightSource)) {
                 Double3 ktr = transparency(intersection);
 
-                Double3 lightFactor = ktr.product(
-                        calcDiffuse(intersection, lightSource).add(calcSpecular(intersection))
-                );
+                Double3 lightFactor = ktr.product(calcDiffuse(intersection).add(calcSpecular(intersection)));
 
                 if (lightFactor.product(k).isGreaterThan(MIN_CALC_COLOR_K)) {
                     color = color.add(lightSource.getIntensity(intersection.point).scale(lightFactor));
@@ -244,10 +243,9 @@ class SimpleRayTracer extends RayTracerBase {
      * Calculates the diffuse reflection coefficient for the current light.
      *
      * @param intersection the prepared intersection data
-     * @param light        active light source
      * @return diffuse coefficient per channel
      */
-    private Double3 calcDiffuse(Intersection intersection, LightSource light) {
+    private Double3 calcDiffuse(Intersection intersection) {
         return intersection.material.kD.scale(Math.abs(intersection.lNormal));
     }
 
