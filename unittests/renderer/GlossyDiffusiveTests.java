@@ -89,22 +89,9 @@ public class GlossyDiffusiveTests {
                 .setVpDistance(500)
                 .setResolution(600, 600);
 
-        long startTime = System.currentTimeMillis();
-
-        SimpleRayTracer tracerOff = new SimpleRayTracer(scene)
-                .setUseAdvancedEffects(false);
-
-        Camera cameraOff = cameraBuilder
-                .setRayTracer(tracerOff)
-                .build();
-
-        cameraOff.renderImage();
-        cameraOff.writeToImage("GlossyDiffusive_DISABLED");
-
-        long endTime = System.currentTimeMillis();
-        System.out.println("Render time WITHOUT advanced effects: " + (endTime - startTime) / 1000.0 + " seconds.");
-
-        startTime = System.currentTimeMillis();
+        createImage(new SimpleRayTracer(scene)
+                .setUseAdvancedEffects(false)
+                .setRaysAmount(9), cameraBuilder, "GlossyDiffusive_DISABLED");
 
         createImage(new SimpleRayTracer(scene)
                 .setUseAdvancedEffects(true)
@@ -120,9 +107,6 @@ public class GlossyDiffusiveTests {
                 .setUseAdvancedEffects(true)
                 .setSampler(new RandomSampler())
                 .setRaysAmount(9), cameraBuilder, "GlossyDiffusive_Random_ENABLED");
-
-        endTime = System.currentTimeMillis();
-        System.out.println("Render time WITH advanced effects: " + (endTime - startTime) / 1000.0 + " seconds.");
     }
 
     /**
@@ -133,12 +117,15 @@ public class GlossyDiffusiveTests {
      * @param glossyDiffusiveFileName the output image file name
      */
     private void createImage(SimpleRayTracer tracer, Camera.Builder cameraBuilder, String glossyDiffusiveFileName) {
+        long startTime = System.currentTimeMillis();
         Camera cameraOn = cameraBuilder
                 .setRayTracer(tracer)
                 .build();
 
         cameraOn.renderImage();
         cameraOn.writeToImage(glossyDiffusiveFileName);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Render time " + "String: " + (endTime - startTime) / 1000.0 + " seconds.");
     }
 
     /**
