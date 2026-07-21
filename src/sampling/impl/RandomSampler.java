@@ -32,9 +32,6 @@ public class RandomSampler implements Sampler {
             return points;
         }
 
-        // Adjust amount to generate a square number of points for better distribution
-        amount = (int) Math.pow(amount, 2);
-
         double radius = size / 2.0;
         double radiusSq = radius * radius;
 

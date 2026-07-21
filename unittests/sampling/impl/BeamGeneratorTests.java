@@ -51,7 +51,7 @@ public class BeamGeneratorTests {
 
         // TC02: Custom Sampler injection test (using GridSampler)
         generator.setSampler(new RandomSampler());
-        Beam gridBeam = generator.generateBeam(CENTER_RAY, 2.0, 10.0, 9);
+        Beam gridBeam = generator.generateBeam(CENTER_RAY, 2.0, 10.0, 81);
         assertNotNull(gridBeam, "ERROR: generateBeam() with custom sampler failed");
 
         // =============== Boundary Values Tests ==================
