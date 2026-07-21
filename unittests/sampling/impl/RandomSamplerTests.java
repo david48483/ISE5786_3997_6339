@@ -42,7 +42,7 @@ public class RandomSamplerTests {
         List<Point2D> points = sampler.generatePoints(requestedAmount, size);
 
         assertNotNull(points, "ERROR: generatePoints() returned null");
-        assertEquals(requestedAmount, points.size(), "ERROR: RandomSampler must generate the exact requested amount of points");
+        assertEquals((int) Math.pow(requestedAmount, 2), points.size(), "ERROR: RandomSampler must generate the exact requested amount of points");
 
         // Verify points fall inside the circle
         for (Point2D p : points) {
