@@ -134,6 +134,7 @@ public class Camera implements Cloneable {
      * @return this camera instance
      */
     public Camera renderImageNoThreads() {
+        System.out.println("Rendering image sequentially (single-threaded)...");
         for (int j = 0; j < _nY; j++) {
             for (int i = 0; i < _nX; i++) {
                 castRay(i, j);
@@ -149,17 +150,19 @@ public class Camera implements Cloneable {
      * @return this camera instance
      */
     private Camera renderImageRawThreads() {
+        System.out.println("Rendering image using " + _threadsCount + " raw threads...");
         var threads = new LinkedList<Thread>();
         var count = _threadsCount;
         while (count-- > 0)
             threads.add(new Thread(() -> {
                 PixelManager.Pixel pixel;
-                while ((pixel = _pixelManager.nextPixel()) != null)castRay(pixel.col(), pixel.row());
+                while ((pixel = _pixelManager.nextPixel()) != null) castRay(pixel.col(), pixel.row());
             }));
         for (var thread : threads) thread.start();
         try {
             for (var thread : threads) thread.join();
-        } catch (InterruptedException _) {}
+        } catch (InterruptedException _) {
+        }
         return this;
     }
 
@@ -169,13 +172,11 @@ public class Camera implements Cloneable {
      * @return this camera instance
      */
     public Camera renderImageStream() {
+        System.out.println("Rendering image using parallel streams...");
         IntStream.range(0, _nY).parallel()
                 .forEach(yIndex -> IntStream.range(0, _nX).parallel().forEach(xIndex -> castRay(xIndex, yIndex)));
         return this;
     }
-
-
-
 
     /**
      * Draws a grid on top of the rendered image.
@@ -427,7 +428,6 @@ public class Camera implements Cloneable {
             return this;
         }
 
-
         /**
          * Sets the multithreading mode.
          * <ul>
@@ -454,7 +454,7 @@ public class Camera implements Cloneable {
          * @param printInterval interval in the range [0.0, 1.0]; 0 disables printing
          * @return the Builder instance for method chaining
          */
-        public Builder setDebugPrint(double printInterval){
+        public Builder setDebugPrint(double printInterval) {
             this._camera._printInterval = printInterval;
             return this;
         }
@@ -480,9 +480,6 @@ public class Camera implements Cloneable {
             this._samplerShapeType = shape;
             return this;
         }
-
-
-
 
         /**
          * Set the target distance for the rays generated for simulating glossy surfaces and diffusive glass.

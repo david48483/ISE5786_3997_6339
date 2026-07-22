@@ -89,7 +89,6 @@ public class GlossyDiffusiveMultiTests {
                 .setSamplerShape(TargetShapeType.CIRCLE)
                 .setResolution(600, 600);
 
-
         // 2. עם Jittered Sampler
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
@@ -135,7 +134,7 @@ public class GlossyDiffusiveMultiTests {
      * Helper method to render an image using the configured camera builder and scene.
      *
      * @param scene                   the scene to render
-     * @param cameraBuilder            the fully configured camera builder
+     * @param cameraBuilder           the fully configured camera builder
      * @param glossyDiffusiveFileName the output image file name
      */
     private void createImage(Scene scene, Camera.Builder cameraBuilder, String glossyDiffusiveFileName) {
@@ -149,6 +148,6 @@ public class GlossyDiffusiveMultiTests {
         cameraOn.writeToImage(glossyDiffusiveFileName);
 
         long endTime = System.currentTimeMillis();
-        System.out.println("Render time " + glossyDiffusiveFileName + ": " + (endTime - startTime) / 1000.0 + " seconds.");
+        System.out.println("Render time " + glossyDiffusiveFileName + ": " + (endTime - startTime) / 1000.0 + " seconds.\n");
     }
 }
