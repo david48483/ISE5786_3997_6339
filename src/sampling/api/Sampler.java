@@ -14,5 +14,8 @@ public interface Sampler {
      * @param size   The size (diameter/length) of the target area
      * @return List of generated 2D points
      */
+
+    boolean circle = false;
+
     List<Point2D> generatePoints(int amount, double size);
 }

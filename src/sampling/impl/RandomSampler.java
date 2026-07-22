@@ -39,7 +39,9 @@ public class RandomSampler implements Sampler {
             double x = (RANDOM.nextDouble() * size) - radius;
             double y = (RANDOM.nextDouble() * size) - radius;
 
-            if (x * x + y * y <= radiusSq) {
+            if (circle && x * x + y * y <= radiusSq) {
+                points.add(new Point2D(x, y));
+            } else if (!circle) {
                 points.add(new Point2D(x, y));
             }
         }

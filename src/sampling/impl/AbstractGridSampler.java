@@ -46,8 +46,10 @@ public abstract class AbstractGridSampler implements Sampler {
 
                 Point2D p = getPoint(x, y, step);
 
-                if (p.getX() * p.getX() + p.getY() * p.getY() <= radiusSq) {
-                    points.add(p);
+                if (circle && p.getX() * p.getX() + p.getY() * p.getY() <= radiusSq) {
+                    points.add(new Point2D(x, y));
+                } else if (!circle) {
+                    points.add(new Point2D(x, y));
                 }
             }
         }
