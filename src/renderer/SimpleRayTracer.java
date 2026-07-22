@@ -81,8 +81,6 @@ class SimpleRayTracer extends RayTracerBase {
         return this;
     }
 
-
-
     /**
      * Set the amount of rays for the beam (Grid of amount X amount).
      *

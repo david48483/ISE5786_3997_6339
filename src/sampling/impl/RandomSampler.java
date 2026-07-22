@@ -23,6 +23,13 @@ public class RandomSampler implements Sampler {
      */
     private static final Random RANDOM = new Random();
 
+    private TargetShapeType _shape = TargetShapeType.SQUARE;
+
+    @Override
+    public void setTargetShape(TargetShapeType shape){
+        this._shape = shape;
+    }
+
     @Override
     public List<Point2D> generatePoints(int amount, double size) {
         List<Point2D> points = new ArrayList<>();
@@ -39,9 +46,7 @@ public class RandomSampler implements Sampler {
             double x = (RANDOM.nextDouble() * size) - radius;
             double y = (RANDOM.nextDouble() * size) - radius;
 
-            if (circle && x * x + y * y <= radiusSq) {
-                points.add(new Point2D(x, y));
-            } else if (!circle) {
+            if (_shape == TargetShapeType.SQUARE || (_shape == TargetShapeType.CIRCLE && x * x + y * y <= radiusSq)) {
                 points.add(new Point2D(x, y));
             }
         }

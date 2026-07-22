@@ -2,6 +2,8 @@ package sampling.api;
 
 import java.util.List;
 
+import sampling.impl.TargetShapeType;
+
 /**
  * Interface for sampling strategies that generate a collection of 2D points.
  * Implementations define how points are distributed within a given area.
@@ -14,8 +16,7 @@ public interface Sampler {
      * @param size   The size (diameter/length) of the target area
      * @return List of generated 2D points
      */
-
-    boolean circle = false;
-
     List<Point2D> generatePoints(int amount, double size);
+
+    void setTargetShape (TargetShapeType shape);
 }

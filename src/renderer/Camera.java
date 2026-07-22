@@ -5,6 +5,7 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 import sampling.api.Sampler;
+import sampling.impl.TargetShapeType;
 import scene.Scene;
 
 import java.util.MissingResourceException;
@@ -252,6 +253,8 @@ public class Camera implements Cloneable {
          */
         private Sampler _sampler;
 
+        private TargetShapeType _samplerShapeType = TargetShapeType.SQUARE;
+
         /**
          * Flag indicating whether to use advanced rendering effects like Glossy Surfaces and Diffusive Glass.
          */
@@ -423,6 +426,12 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        public Builder setSamplerCircle(TargetShapeType shape) {
+            this._samplerShapeType = shape;
+            return this;
+        }
+
+
         /**
          * Set the target distance for the rays generated for simulating glossy surfaces and diffusive glass.
          *
@@ -523,6 +532,7 @@ public class Camera implements Cloneable {
             if (_camera._rayTracer instanceof SimpleRayTracer simpleRayTracer) {
                 simpleRayTracer.setUseAdvancedEffects(_useAdvancedEffects);
                 if (_sampler != null) {
+                    _sampler.setTargetShape(_samplerShapeType);
                     simpleRayTracer.setSampler(_sampler);
                 }
 

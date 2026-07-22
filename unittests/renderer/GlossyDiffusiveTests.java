@@ -15,6 +15,7 @@ import primitives.Vector;
 import sampling.impl.GridSampler;
 import sampling.impl.JitteredSampler;
 import sampling.impl.RandomSampler;
+import sampling.impl.TargetShapeType;
 import scene.Scene;
 
 /**
@@ -99,6 +100,13 @@ public class GlossyDiffusiveTests {
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
                 .setRaysAmount(9), "GlossyDiffusive_Jitter_ENABLED");
+
+        // 2. עם Jittered Sampler
+        createImage(scene, cameraBuilder
+                .setUseAdvancedEffects(true)
+                .setSamplerCircle(TargetShapeType.CIRCLE)
+                .setSampler(new JitteredSampler())
+                .setRaysAmount(9), "GlossyDiffusive_Jitter_Circle_ENABLED");
 
         // 3. עם Grid Sampler
         createImage(scene, cameraBuilder

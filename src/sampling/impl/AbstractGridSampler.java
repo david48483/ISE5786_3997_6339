@@ -25,6 +25,13 @@ public abstract class AbstractGridSampler implements Sampler {
      */
     protected static final Random RANDOM = new Random();
 
+    private TargetShapeType _shape = TargetShapeType.SQUARE;
+
+    @Override
+    public void setTargetShape(TargetShapeType shape){
+        this._shape = shape;
+    }
+
     @Override
     public List<Point2D> generatePoints(int amount, double size) {
         List<Point2D> points = new ArrayList<>();
@@ -46,9 +53,7 @@ public abstract class AbstractGridSampler implements Sampler {
 
                 Point2D p = getPoint(x, y, step);
 
-                if (circle && p.getX() * p.getX() + p.getY() * p.getY() <= radiusSq) {
-                    points.add(new Point2D(x, y));
-                } else if (!circle) {
+                if (_shape == TargetShapeType.SQUARE || (_shape == TargetShapeType.CIRCLE && p.getX() * p.getX() + p.getY() * p.getY() <= radiusSq)){
                     points.add(new Point2D(x, y));
                 }
             }
