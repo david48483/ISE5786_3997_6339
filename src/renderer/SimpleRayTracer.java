@@ -265,16 +265,16 @@ class SimpleRayTracer extends RayTracerBase {
                 Intersection intersection = findClosestIntersection(beamRay);
 
                 if (intersection == null) {
-                    colorSum = colorSum.add(_scene.background.scale(kx));
+                    colorSum = colorSum.add(_scene.background);
                 } else if (preprocessIntersection(intersection, beamRay.direction())) {
-                    colorSum = colorSum.add(calcColor(intersection, level - 1, kkx).scale(kx));
+                    colorSum = colorSum.add(calcColor(intersection, level - 1, kkx));
                 }
             }
         }
 
         if (validRaysCount == 0) return Color.BLACK;
 
-        return colorSum.reduce(validRaysCount);
+        return colorSum.reduce(validRaysCount).scale(kx);
     }
 
     @Override
