@@ -5,7 +5,6 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 import sampling.api.Sampler;
-import sampling.impl.BeamGenerator;
 import scene.Scene;
 
 import java.util.MissingResourceException;
@@ -88,31 +87,10 @@ public class Camera implements Cloneable {
     private RayTracerBase _rayTracer;
 
     /**
-     * The beam generator used for creating sampling ray beams for glossy and diffusive effects.
-     */
-    private Sampler _sampler;
-
-    /**
      * The number of threads to use for rendering. If set to 0, rendering will be single-threaded.
      */
 
     private int _threadsCount = 0;
-
-    /**
-     * Flag indicating whether to use advanced rendering effects like Glossy Surfaces and Diffusive Glass.
-     */
-    private boolean _useAdvancedEffects = false;
-
-    /**
-     * The number of rays to generate for simulating glossy surfaces and diffusive glass.
-     */
-    private int _raysAmount = 1;
-
-    /**
-     * The target distance for the rays generated for simulating glossy surfaces and diffusive glass.
-     */
-    private double _targetDistance = 100d;
-
 
     // private double _interval = 0.1;
 
@@ -270,6 +248,26 @@ public class Camera implements Cloneable {
         private Vector _up;
 
         /**
+         * The beam generator used for creating sampling ray beams for glossy and diffusive effects.
+         */
+        private Sampler _sampler;
+
+        /**
+         * Flag indicating whether to use advanced rendering effects like Glossy Surfaces and Diffusive Glass.
+         */
+        private boolean _useAdvancedEffects = false;
+
+        /**
+         * The number of rays to generate for simulating glossy surfaces and diffusive glass.
+         */
+        private int _raysAmount = 1;
+
+        /**
+         * The target distance for the rays generated for simulating glossy surfaces and diffusive glass.
+         */
+        private double _targetDistance = 100d;
+
+        /**
          * Default constructor for the Builder. Initializes a new Camera instance to be configured.
          */
         public Builder() {
@@ -381,24 +379,13 @@ public class Camera implements Cloneable {
         }
 
         /**
-         * Sets the ray tracer implementation for the camera.
-         *
-         * @param rayTracer the ray tracer to be used for rendering
-         * @return the Builder instance for method chaining
-         */
-        public Builder setRayTracer(RayTracerBase rayTracer) {
-            this._camera._rayTracer = rayTracer;
-            return this;
-        }
-
-        /**
          * Set whether to use advanced rendering effects like Glossy Surfaces and Diffusive Glass.
          *
          * @param useAdvancedEffects true to enable advanced effects, false to disable
          * @return this Builder instance for method chaining
          */
         public Builder setUseAdvancedEffects(boolean useAdvancedEffects) {
-            this._camera._useAdvancedEffects = useAdvancedEffects;
+            this._useAdvancedEffects = useAdvancedEffects;
             return this;
         }
 
@@ -409,7 +396,7 @@ public class Camera implements Cloneable {
          * @return this Builder instance for method chaining
          */
         public Builder setRaysAmount(int amount) {
-            this._camera._raysAmount = amount;
+            this._raysAmount = amount;
             return this;
         }
 
@@ -432,7 +419,7 @@ public class Camera implements Cloneable {
          * @return this Builder instance for method chaining
          */
         public Builder setSampler(Sampler sampler) {
-            this._camera._sampler = sampler;
+            this._sampler = sampler;
             return this;
         }
 
@@ -443,7 +430,7 @@ public class Camera implements Cloneable {
          * @return this Builder instance for method chaining
          */
         public Builder setTargetDistance(double targetDistance) {
-            this._camera._targetDistance = targetDistance;
+            this._targetDistance = targetDistance;
             return this;
         }
 
@@ -534,15 +521,14 @@ public class Camera implements Cloneable {
                 setRayTracer(new Scene("test"), RayTracerType.SIMPLE);
             }
             if (_camera._rayTracer instanceof SimpleRayTracer simpleRayTracer) {
-                simpleRayTracer.setUseAdvancedEffects(_camera._useAdvancedEffects);
-                if (_camera._sampler != null) {
-                    simpleRayTracer.setSampler(_camera._sampler);
+                simpleRayTracer.setUseAdvancedEffects(_useAdvancedEffects);
+                if (_sampler != null) {
+                    simpleRayTracer.setSampler(_sampler);
                 }
 
-                simpleRayTracer.setRaysAmount(_camera._raysAmount);
-                simpleRayTracer.setTargetDistance(_camera._targetDistance);
+                simpleRayTracer.setRaysAmount(_raysAmount);
+                simpleRayTracer.setTargetDistance(_targetDistance);
             }
-
 
         }
 
