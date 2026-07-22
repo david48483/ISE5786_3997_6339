@@ -25,6 +25,9 @@ public class RandomSampler implements Sampler {
      */
     private static final Random RANDOM = new Random();
 
+    /**
+     * The shape used to limit random points (inside a circle or within a square box).
+     */
     private TargetShapeType _shape = TargetShapeType.SQUARE;
 
     @Override

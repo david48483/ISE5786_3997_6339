@@ -7,12 +7,15 @@ import sampling.api.Point2D;
  */
 public class GridSampler extends AbstractGridSampler {
 
+    /**
+     * Creates a grid sampler that samples the center of each cell.
+     */
     public GridSampler() {
     }
 
     @Override
     protected Point2D getPoint(double x, double y, double step) {
-        // נקודה במרכז התא
+        // Point at the center of the cell
         return new Point2D(x + 0.5 * step, y + 0.5 * step);
     }
 }

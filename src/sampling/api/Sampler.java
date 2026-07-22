@@ -18,5 +18,11 @@ public interface Sampler {
      */
     List<Point2D> generatePoints(int amount, double size);
 
-    void setTargetShape (TargetShapeType shape);
+    /**
+     * Sets the geometric shape of the target area in which points are generated.
+     * Supported shapes are defined by {@link TargetShapeType}.
+     *
+     * @param shape the target shape type (e.g., CIRCLE or SQUARE)
+     */
+    void setTargetShape(TargetShapeType shape);
 }

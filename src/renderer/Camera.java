@@ -253,6 +253,9 @@ public class Camera implements Cloneable {
          */
         private Sampler _sampler;
 
+        /**
+         * The shape of the target area used by the sampler (e.g., circle or square).
+         */
         private TargetShapeType _samplerShapeType = TargetShapeType.SQUARE;
 
         /**
@@ -426,6 +429,12 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        /**
+         * Sets the shape of the target area for the sampler.
+         *
+         * @param shape the desired target shape type
+         * @return this Builder instance for method chaining
+         */
         public Builder setSamplerCircle(TargetShapeType shape) {
             this._samplerShapeType = shape;
             return this;

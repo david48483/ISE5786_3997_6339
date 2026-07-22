@@ -16,11 +16,20 @@ import static primitives.Util.alignZero;
  */
 public abstract class AbstractGridSampler implements Sampler {
 
+    /**
+     * Default constructor for grid-based samplers.
+     */
     protected AbstractGridSampler() {
     }
 
+    /**
+     * Shared random generator used by grid sampler implementations.
+     */
     protected static final Random RANDOM = new Random();
 
+    /**
+     * Target shape used to filter generated points (square or circle).
+     */
     private TargetShapeType _shape = TargetShapeType.SQUARE;
 
     @Override
@@ -37,7 +46,7 @@ public abstract class AbstractGridSampler implements Sampler {
             return points;
         }
 
-        // חישוב מספר התאים בכל ציר
+        // Compute the number of cells on each axis
         int effectiveAmount = (int) Math.ceil(amount * Math.sqrt(4 / Math.PI));
         double step = size / effectiveAmount;
         double start = -size / 2.0;
@@ -45,11 +54,11 @@ public abstract class AbstractGridSampler implements Sampler {
 
         for (int i = 0; i < effectiveAmount; i++) {
             for (int j = 0; j < effectiveAmount; j++) {
-                // פינת התא ה- (i,j)
+                // Origin (lower-left corner) of the (i,j) cell
                 double xCell = start + i * step;
                 double yCell = start + j * step;
 
-                // קבלת הנקודה מתוך התא
+                // Get the sample point from the cell
                 Point2D p = getPoint(xCell, yCell, step);
                 double distSq = p.getX() * p.getX() + p.getY() * p.getY();
 

@@ -7,6 +7,9 @@ import sampling.api.Point2D;
  */
 public class JitteredSampler extends AbstractGridSampler {
 
+    /**
+     * Creates a jittered sampler that places a random point inside each cell.
+     */
     public JitteredSampler() {
     }
 

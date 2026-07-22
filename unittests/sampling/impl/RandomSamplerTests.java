@@ -15,11 +15,21 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class RandomSamplerTests {
 
+    /**
+     * Default constructor for the test class.
+     */
     public RandomSamplerTests() {
     }
 
+    /**
+     * Numerical tolerance used in floating-point assertions.
+     */
     private static final double DELTA = 1e-10;
 
+    /**
+     * Verifies that RandomSampler generates points inside the selected shape,
+     * returns the exact requested amount (except boundary cases), and differs between runs.
+     */
     @Test
     void testGeneratePoints() {
         RandomSampler sampler = new RandomSampler();
