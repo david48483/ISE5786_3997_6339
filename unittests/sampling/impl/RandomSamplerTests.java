@@ -32,6 +32,8 @@ public class RandomSamplerTests {
     @Test
     void testGeneratePoints() {
         RandomSampler sampler = new RandomSampler();
+        sampler.setTargetShape(TargetShapeType.CIRCLE);
+        ;
         double size = 4.0;
         int requestedAmount = 25;
         double radiusSq = (size / 2.0) * (size / 2.0);
@@ -39,6 +41,7 @@ public class RandomSamplerTests {
         // ============ Equivalence Partitions Tests ==============
 
         // TC01: Verify exact requested amount is generated
+
         List<Point2D> points = sampler.generatePoints(requestedAmount, size);
 
         assertNotNull(points, "ERROR: generatePoints() returned null");
@@ -49,6 +52,14 @@ public class RandomSamplerTests {
             double distSq = p.x() * p.x() + p.y() * p.y();
             assertTrue(distSq <= radiusSq + DELTA,
                     "ERROR: Random point (" + p.x() + ", " + p.y() + ") lies outside the circular target area");
+        }
+
+        //  TC02 : for square shape, verify points fall inside the square
+        sampler.setTargetShape(TargetShapeType.SQUARE);
+        points = sampler.generatePoints(requestedAmount, size);
+        for (Point2D p : points) {
+            assertTrue(Math.abs(p.x()) <= size / 2.0 + DELTA && Math.abs(p.y()) <= size / 2.0 + DELTA,
+                    "ERROR: Random point (" + p.x() + ", " + p.y() + ") lies outside the square target area");
         }
 
         // =============== Boundary Values Tests ==================
