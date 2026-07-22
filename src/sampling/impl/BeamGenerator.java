@@ -42,8 +42,6 @@ public class BeamGenerator {
         return this;
     }
 
-
-
     /**
      * Generates a beam of rays based on a center ray, size, distance, and sampler.
      *
@@ -61,40 +59,31 @@ public class BeamGenerator {
 
         Vector vTo = centerRay.direction();
 
-        // Choose a helper vector to build the local 3D coordinate system.
-        // If vTo is almost parallel to Z axis, use Y axis instead.
+        // Choose a helper vector to build the local 3D coordinate system
         Vector tempVector = Math.abs(vTo.dotProduct(Vector.AXIS_Z)) > 0.9
                 ? Vector.AXIS_Y
                 : Vector.AXIS_Z;
 
-        // Create local X and Y axis vectors (Orthonormal Basis)
+        // Create local orthonormal basis (X and Y axes)
         Vector vRight = vTo.crossProduct(tempVector).normalize();
         Vector vUp = vRight.crossProduct(vTo); // Already normalized
 
-        // Find the center point on the target plane
-        Point pTarget = centerRay.origin().add(vTo.scale(distance));
+        Point origin = centerRay.origin();
+        Vector baseVector = vTo.scale(distance);
 
-        // Get 2D sample points from the current sampler
-        List<Point2D> samples = sampler.generatePoints(amount, size);
-        List<Ray> rays = new ArrayList<>(samples.size());
-
-        // Convert each 2D sample point to a 3D ray
-        for (Point2D p2d : samples) {
-            Point p = pTarget;
-
-            // Move point along local X axis
-            if (!isZero(p2d.x())) {
-                p = p.add(vRight.scale(p2d.x()));
-            }
-
-            // Move point along local Y axis
-            if (!isZero(p2d.y())) {
-                p = p.add(vUp.scale(p2d.y()));
-            }
-
-            // Create new ray from origin to the target point
-            rays.add(new Ray(centerRay.origin(), p.subtract(centerRay.origin())));
-        }
+        // Map 2D sample points directly to 3D rays
+        List<Ray> rays = sampler.generatePoints(amount, size).stream()
+                .map(p2d -> {
+                    Vector dir = baseVector;
+                    if (!isZero(p2d.x())) {
+                        dir = dir.add(vRight.scale(p2d.x()));
+                    }
+                    if (!isZero(p2d.y())) {
+                        dir = dir.add(vUp.scale(p2d.y()));
+                    }
+                    return new Ray(origin, dir);
+                })
+                .toList();
 
         return new Beam(rays);
     }
