@@ -3,22 +3,19 @@ package sampling.impl;
 import sampling.api.Point2D;
 
 /**
- * Generates points in a grid with random displacements (jittering).
+ * Generates points with random jitter within each grid cell.
  */
 public class JitteredSampler extends AbstractGridSampler {
 
-    /**
-     * Creates a new jittered sampler instance.
-     */
     public JitteredSampler() {
     }
 
     @Override
-    protected Point2D getPoint(double x, double y, double step) {
+    protected Point2D getPoint(double xCell, double yCell, double step) {
 
         return new Point2D(
-                x + (RANDOM.nextDouble() - 0.5) * step,
-                y + (RANDOM.nextDouble() - 0.5) * step
+                xCell + RANDOM.nextDouble() * step,
+                yCell + RANDOM.nextDouble() * step
         );
     }
 }

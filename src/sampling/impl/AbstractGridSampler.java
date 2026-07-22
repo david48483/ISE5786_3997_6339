@@ -7,28 +7,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static primitives.Util.alignZero;
+
 /**
  * An abstract base class for grid-based samplers.
- * It handles the grid generation and circular filtering,
- * delegating the exact point positioning to its subclasses.
+ * It handles grid generation and shape filtering,
+ * delegating the exact point positioning within each cell to its subclasses.
  */
 public abstract class AbstractGridSampler implements Sampler {
 
-    /**
-     * Creates a new AbstractGridSampler instance.
-     */
     protected AbstractGridSampler() {
     }
 
-    /**
-     * Random number generator for jittering.
-     */
     protected static final Random RANDOM = new Random();
 
     private TargetShapeType _shape = TargetShapeType.SQUARE;
 
     @Override
-    public void setTargetShape(TargetShapeType shape){
+    public void setTargetShape(TargetShapeType shape) {
         this._shape = shape;
     }
 
@@ -41,20 +37,24 @@ public abstract class AbstractGridSampler implements Sampler {
             return points;
         }
 
+        // חישוב מספר התאים בכל ציר
         int effectiveAmount = (int) Math.ceil(amount * Math.sqrt(4 / Math.PI));
-        double step = size / (effectiveAmount - 1);
-        double start = -size / 2;
-        double radiusSq = (size / 2) * (size / 2);
+        double step = size / effectiveAmount;
+        double start = -size / 2.0;
+        double radiusSq = (size / 2.0) * (size / 2.0);
 
         for (int i = 0; i < effectiveAmount; i++) {
             for (int j = 0; j < effectiveAmount; j++) {
-                double x = start + i * step;
-                double y = start + j * step;
+                // פינת התא ה- (i,j)
+                double xCell = start + i * step;
+                double yCell = start + j * step;
 
-                Point2D p = getPoint(x, y, step);
+                // קבלת הנקודה מתוך התא
+                Point2D p = getPoint(xCell, yCell, step);
+                double distSq = p.getX() * p.getX() + p.getY() * p.getY();
 
-                if (_shape == TargetShapeType.SQUARE || (_shape == TargetShapeType.CIRCLE && p.getX() * p.getX() + p.getY() * p.getY() <= radiusSq)){
-                    points.add(new Point2D(x, y));
+                if (_shape == TargetShapeType.SQUARE || (_shape == TargetShapeType.CIRCLE && alignZero(distSq - radiusSq) <= 0)) {
+                    points.add(p);
                 }
             }
         }
@@ -62,12 +62,12 @@ public abstract class AbstractGridSampler implements Sampler {
     }
 
     /**
-     * Calculates the final position of the sample point.
+     * Calculates the sample point position within the specified cell.
      *
-     * @param x the base x coordinate on the grid
-     * @param y the base y coordinate on the grid
-     * @param step the size of a grid cell
-     * @return the finalized Point2D
+     * @param xCell origin x coordinate of the cell
+     * @param yCell origin y coordinate of the cell
+     * @param step size of the cell
+     * @return Point2D inside the cell
      */
-    protected abstract Point2D getPoint(double x, double y, double step);
+    protected abstract Point2D getPoint(double xCell, double yCell, double step);
 }

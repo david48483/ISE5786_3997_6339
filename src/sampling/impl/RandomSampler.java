@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static primitives.Util.alignZero;
+
 /**
  * A sampler that generates points randomly (stochastically) within a circular target area.
  */
@@ -46,7 +48,8 @@ public class RandomSampler implements Sampler {
             double x = (RANDOM.nextDouble() * size) - radius;
             double y = (RANDOM.nextDouble() * size) - radius;
 
-            if (_shape == TargetShapeType.SQUARE || (_shape == TargetShapeType.CIRCLE && x * x + y * y <= radiusSq)) {
+            double distSq = x * x + y * y;
+            if (_shape == TargetShapeType.SQUARE || (_shape == TargetShapeType.CIRCLE && alignZero(distSq - radiusSq) <= 0)) {
                 points.add(new Point2D(x, y));
             }
         }

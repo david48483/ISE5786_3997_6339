@@ -3,18 +3,16 @@ package sampling.impl;
 import sampling.api.Point2D;
 
 /**
- * Generates points in a perfect, uniform grid.
+ * Generates points at the center of each grid cell.
  */
 public class GridSampler extends AbstractGridSampler {
 
-    /**
-     * Creates a new grid sampler instance.
-     */
     public GridSampler() {
     }
 
     @Override
     protected Point2D getPoint(double x, double y, double step) {
-        return new Point2D(x, y);
+        // נקודה במרכז התא
+        return new Point2D(x + 0.5 * step, y + 0.5 * step);
     }
 }

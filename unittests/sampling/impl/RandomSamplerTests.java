@@ -45,6 +45,8 @@ public class RandomSamplerTests {
         assertEquals(requestedAmount, points.size(), "ERROR: RandomSampler must generate the exact requested amount of points");
 
         // Verify points fall inside the circle
+        sampler.setTargetShape(TargetShapeType.CIRCLE);
+        points = sampler.generatePoints(requestedAmount, size);
         for (Point2D p : points) {
             double distSq = p.x() * p.x() + p.y() * p.y();
             assertTrue(distSq <= radiusSq + DELTA,
