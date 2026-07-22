@@ -1,7 +1,6 @@
 package renderer;
 
 import geometries.impl.Plane;
-import geometries.impl.Polygon;
 import geometries.impl.Sphere;
 import geometries.impl.Triangle;
 import lighting.impl.DirectionalLight;
@@ -12,9 +11,7 @@ import primitives.Color;
 import primitives.Material;
 import primitives.Point;
 import primitives.Vector;
-import sampling.impl.GridSampler;
 import sampling.impl.JitteredSampler;
-import sampling.impl.RandomSampler;
 import sampling.impl.TargetShapeType;
 import scene.Scene;
 
@@ -23,12 +20,13 @@ import scene.Scene;
  *
  * @author David &amp; Yehuda
  */
-public class GlossyDiffusiveTests {
+public class GlossyDiffusiveMultiTests {
 
     /**
+     *
      * Creates a new glossy and diffusive test suite.
      */
-    public GlossyDiffusiveTests() {
+    public GlossyDiffusiveMultiTests() {
     }
 
     /**
@@ -88,110 +86,49 @@ public class GlossyDiffusiveTests {
                 .setDirection(new Vector(0, 0, -1), Vector.AXIS_Y)
                 .setVpSize(200, 200)
                 .setVpDistance(500)
-                .setResolution(600, 600);
-
-        // 1. ללא אפקטים מתקדמים
-        createImage(scene, cameraBuilder
-                .setUseAdvancedEffects(false)
-                .setRaysAmount(9), "GlossyDiffusive_DISABLED");
-
-        // 2. עם Jittered Sampler
-        createImage(scene, cameraBuilder
-                .setUseAdvancedEffects(true)
-                .setSampler(new JitteredSampler())
-                .setRaysAmount(9), "GlossyDiffusive_Jitter_ENABLED");
-
-        // 2. עם Jittered Sampler
-        createImage(scene, cameraBuilder
-                .setUseAdvancedEffects(true)
                 .setSamplerShape(TargetShapeType.CIRCLE)
-                .setSampler(new JitteredSampler())
-                .setRaysAmount(9), "GlossyDiffusive_Jitter_Circle_ENABLED");
-
-        // 3. עם Grid Sampler
-        createImage(scene, cameraBuilder
-                .setUseAdvancedEffects(true)
-                .setSampler(new GridSampler())
-                .setRaysAmount(9), "GlossyDiffusive_Grid_ENABLED");
-
-        // 4. עם Random Sampler
-        createImage(scene, cameraBuilder
-                .setUseAdvancedEffects(true)
-                .setSampler(new RandomSampler())
-                .setRaysAmount(9), "GlossyDiffusive_Random_ENABLED");
-    }
-
-    /**
-     * Test method for rendering a scene with self-reflections and glossy/diffusive materials.
-     */
-    @Test
-    public void testSelf() {
-        Scene scene = new Scene("testYehuda").setBackground(new Color(10, 10, 10));
-
-        scene.lights.add(new DirectionalLight(new Color(100, 100, 100), new Vector(0, -1, -1)));
-
-        scene.lights.add(new PointLight(new Color(250, 250, 250), new Point(0, 80, 50))
-                .setKl(0.001).setKq(0.0001));
-
-        scene.lights.add(new SpotLight(new Color(255, 200, 100), new Point(0, 50, 80), new Vector(0, -1, -2))
-                .setKl(0.0005).setKq(0.00005));
-
-        scene.geometries.add(new Plane(new Point(0, -50, 0), Vector.AXIS_Y)
-                .setEmission(new Color(50, 50, 50))
-                .setMaterial(new Material().setKD(0.7).setKS(0.1).setShininess(10)));
-
-        scene.geometries.add(new Plane(new Point(0, 0, -200), Vector.AXIS_Z)
-                .setEmission(new Color(20, 50, 100))
-                .setMaterial(new Material().setKD(0.8).setKS(0.2).setShininess(20)));
-
-        scene.geometries.add(new Sphere(new Point(0, -20, -120), 30)
-                .setEmission(new Color(200, 0, 0))
-                .setMaterial(new Material().setKD(0.3).setKS(1.0).setShininess(300)));
-
-        Point mP1 = new Point(30, -10, -198);
-        Point mP2 = new Point(80, -10, -198);
-        Point mP3 = new Point(80, 40, -198);
-        Point mP4 = new Point(30, 40, -198);
-        Material mirrorMat = new Material().setKR(1.0);
-
-        scene.geometries.add(new Triangle(mP1, mP2, mP3).setMaterial(mirrorMat));
-        scene.geometries.add(new Triangle(mP1, mP3, mP4).setMaterial(mirrorMat));
-
-        Point bmP1 = new Point(-130, -20, -198);
-        Point bmP2 = new Point(-40, -20, -198);
-        Point bmP3 = new Point(-85, 80, -198);
-        Material brushedMetalMat = new Material().setKR(0.8).setKG(15.0);
-
-        scene.geometries.add(new Triangle(bmP1, bmP2, bmP3)
-                .setEmission(new Color(20, 20, 20))
-                .setMaterial(brushedMetalMat));
-
-        Point gP1 = new Point(-40, -20, -70);
-        Point gP2 = new Point(0, -20, -70);
-        Point gP3 = new Point(0, 30, -70);
-        Point gP4 = new Point(-40, 30, -70);
-        Material frostedGlassMat = new Material().setKT(0.95).setKB(5.0);
-
-        scene.geometries.add(new Polygon(gP4, gP3, gP2, gP1)
-                .setEmission(new Color(10, 20, 30))
-                .setMaterial(frostedGlassMat));
-
-        Camera.Builder cameraBuilder = Camera.getBuilder()
-                .setLocation(new Point(0, 10, 150))
-                .setDirection(new Vector(0, 0, -1), Vector.AXIS_Y)
-                .setVpSize(200, 200)
-                .setVpDistance(150)
                 .setResolution(600, 600);
 
-        // 1. ללא אפקטים
-        createImage(scene, cameraBuilder
-                .setUseAdvancedEffects(false), "SelfGlossyDiffusive_DISABLED");
 
-        // 2. עם אפקטים מתקדמים
+        // 2. עם Jittered Sampler
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
-                .setRaysAmount(9)
-                .setTargetDistance(100d), "SelfGlossyDiffusive_ENABLED");
+                .setSampler(new JitteredSampler())
+                .setDebugPrint(0.1)
+                .setMultithreading(-2)
+                .setRaysAmount(9), "multi-2");
+
+        // 2. עם Jittered Sampler
+        createImage(scene, cameraBuilder
+                .setUseAdvancedEffects(true)
+                .setSampler(new JitteredSampler())
+                .setDebugPrint(0.1)
+                .setMultithreading(-1)
+                .setRaysAmount(9), "multi-1");
+
+        // 2. עם Jittered Sampler
+        createImage(scene, cameraBuilder
+                .setUseAdvancedEffects(true)
+                .setSampler(new JitteredSampler())
+                .setDebugPrint(0.1)
+                .setMultithreading(-0)
+                .setRaysAmount(9), "multi-0");
+
+        // 2. עם Jittered Sampler
+        createImage(scene, cameraBuilder
+                .setUseAdvancedEffects(true)
+                .setSampler(new JitteredSampler())
+                .setDebugPrint(0.1)
+                .setMultithreading(1)
+                .setRaysAmount(9), "multi_1");
+
+        // 2. עם Jittered Sampler
+        createImage(scene, cameraBuilder
+                .setUseAdvancedEffects(true)
+                .setSampler(new JitteredSampler())
+                .setDebugPrint(0.1)
+                .setMultithreading(4)
+                .setRaysAmount(9), "multi_4");
     }
 
     /**

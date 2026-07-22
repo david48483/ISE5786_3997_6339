@@ -476,7 +476,7 @@ public class Camera implements Cloneable {
          * @param shape the desired target shape type
          * @return this Builder instance for method chaining
          */
-        public Builder setSamplerCircle(TargetShapeType shape) {
+        public Builder setSamplerShape(TargetShapeType shape) {
             this._samplerShapeType = shape;
             return this;
         }

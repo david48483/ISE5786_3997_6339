@@ -61,7 +61,7 @@ class PixelManager {
     /**
      * Printing format
      */
-    private static final String PRINT_FORMAT = "%5.1f%%\n";
+    private static final String PRINT_FORMAT = "%5.1f%%\r";
     /**
      * Mutual exclusion object for synchronizing next pixel allocation between
      * threads
