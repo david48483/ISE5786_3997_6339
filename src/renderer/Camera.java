@@ -1,5 +1,6 @@
 package renderer;
 
+import geometries.api.Intersectable;
 import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
@@ -490,6 +491,11 @@ public class Camera implements Cloneable {
         public Builder setTargetDistance(double targetDistance) {
             this._targetDistance = targetDistance;
             return this;
+        }
+
+        public Builder setBvhEnabled(boolean isEnabled) {
+            Intersectable.setBvhEnabled(isEnabled);
+            return this; // החזרת הבילדר כדי לאפשר שרשור (Chaining)
         }
 
         /**

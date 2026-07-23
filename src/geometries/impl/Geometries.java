@@ -77,13 +77,14 @@ public class Geometries extends Intersectable {
         for (Intersectable geo : _geometries) {
             AABB geoBox = geo.getBoundingBox();
 
-            // Ignore infinite geometries that don't have a bounding box (like Plane)
-            if (geoBox != null) {
-                if (combinedBox == null) {
-                    combinedBox = geoBox;
-                } else {
-                    combinedBox = combinedBox.union(geoBox);
-                }
+            if (geoBox == null) {
+                return null;
+            }
+
+            if (combinedBox == null) {
+                combinedBox = geoBox;
+            } else {
+                combinedBox = combinedBox.union(geoBox);
             }
         }
 

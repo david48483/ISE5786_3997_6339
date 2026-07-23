@@ -24,6 +24,12 @@ public abstract class Intersectable {
     protected Intersectable() {
     }
 
+    private static boolean _bvhEnabled = false;
+
+    public static void setBvhEnabled(boolean bvhEnabled) {
+        Intersectable._bvhEnabled = bvhEnabled;
+    }
+
     /**
      * Finds all intersection points between a ray and this geometric shape.
      * Returns a list of intersection points in the order they are encountered along the ray direction.
@@ -67,6 +73,13 @@ public abstract class Intersectable {
      * @return a list of Intersection objects, or null if no intersections exist
      */
     public final List<Intersection> calcIntersections(Ray ray, double maxDistance) {
+        if (_bvhEnabled) {
+            AABB box = getBoundingBox();
+
+            if (box != null && !box.intersects(ray, maxDistance)) {
+                return null;
+            }
+        }
         return calcIntersectionsHelper(ray, maxDistance);
     }
 
