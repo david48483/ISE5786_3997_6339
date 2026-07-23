@@ -1,0 +1,136 @@
+package parserTests;
+
+import geometries.impl.Plane;
+import geometries.impl.Sphere;
+import lighting.impl.PointLight;
+import org.junit.jupiter.api.Test;
+import parser.ObjParser;
+import primitives.Color;
+import primitives.Material;
+import primitives.Point;
+import primitives.Vector;
+import renderer.Camera;
+import renderer.RayTracerType;
+import scene.Scene;
+
+public class CamaroRenderTest {
+    /**
+     * פונקציה לייצור שלט לדים מבוסס מטריצה
+     */
+    private void createNeonSign(Scene scene) {
+        // מטריצה המציירת 'בהוקרה לד"ר דן היקר!' (משמאל לימין)
+        int[][] textMatrix = {
+                {1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1},
+                {1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1},
+                {1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1},
+                {0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1},
+                {1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1}
+        };
+
+        Material ledMat = new Material().setKD(0).setKS(0); // לא מקבל אור, רק פולט
+        Color ledColor = new Color(255, 180, 20); // כתום ניאון חם
+
+        // מידות מותאמות למשפט ארוך
+        double radius = 0.08;
+        double spacing = 0.18;
+
+        // מיקום התחלתי לשלט: שמאלה (כדי שיתמרכז), למעלה, וקצת לפני הקיר האחורי
+        double startX = -10;
+        double startY = 3.5;
+        double startZ = -5.8;
+
+        // יצירת הכדורים
+        for (int row = 0; row < textMatrix.length; row++) {
+            for (int col = 0; col < textMatrix[row].length; col++) {
+                if (textMatrix[row][col] == 1) {
+                    double x = startX + col * spacing;
+                    double y = startY - row * spacing;
+
+                    Sphere led = new Sphere(new Point(x, y, startZ), radius);
+                    led.setEmission(ledColor);
+                    led.setMaterial(ledMat);
+                    scene.geometries.add(led);
+                }
+            }
+        }
+
+        // 3 מנורות רפאים באוויר כדי לפזר את התאורה באופן שווה על פני כל השלט הרחב
+        scene.lights.add(new PointLight(new Color(255, 180, 20), new Point(-4, 2.5, -4.5))
+                .setKl(0.05).setKq(0.005));
+        scene.lights.add(new PointLight(new Color(255, 180, 20), new Point(0, 2.5, -4.5))
+                .setKl(0.05).setKq(0.005));
+        scene.lights.add(new PointLight(new Color(255, 180, 20), new Point(4, 2.5, -4.5))
+                .setKl(0.05).setKq(0.005));
+    }
+
+    @Test
+    void testCamaroRender() {
+        // 1. הגדרת הסצנה וצבע רקע כהה כדי שהרכב יבלוט
+        Scene scene = new Scene("Camaro Test Scene")
+                .setBackground(new Color(15, 15, 20));
+
+        // 2. הגדרת הפח של הרכב (מבריק כדי שיראו השתקפויות של התאורה)
+        Material carMaterial = new Material().setKD(0.5).setKS(0.5).setShininess(300).setKR(1);
+        Color carColor = new Color(200, 20, 20); // רכב אדום ספורטיבי
+
+        String desktop = "C:\\Users\\admin\\Desktop\\Camaro.obj";
+        // 3. קריאה לפארסר! (ודא שהקובץ camaro.obj נמצא בתיקיית הבסיס של הפרויקט)
+        System.out.println("Loading OBJ file... This might take a few seconds.");
+        ObjParser.parseAndAdd(desktop, scene, carMaterial, carColor);
+        System.out.println("Loaded " + " triangles successfully.");
+        System.out.println("Finished loading geometry!");
+
+        // 4. הוספת תאורה (מחליף את מנורות הסטודיו שמחקנו בבלנדר)
+        // מנורה חזקה מלמעלה ומימין
+        scene.lights.add(new PointLight(new Color(800, 800, 800), new Point(200, 300, 100))
+                .setKl(0.0001).setKq(0.00005));
+
+        // מנורת "מילוי" חלשה יותר משמאל כדי לרכך צללים
+        scene.lights.add(new PointLight(new Color(300, 300, 400), new Point(-200, 100, 150))
+                .setKl(0.0001).setKq(0.00005));
+
+        scene.geometries.add(
+                new Plane(new Point(0, -1, 0), new Vector(0, 1, 0))
+                        .setEmission(new Color(50, 50, 50))
+                        .setMaterial(new Material().setKD(0.8).setKS(0.2).setShininess(10).setKR(0.2).setKG(7.0).setKB(100.0))
+        );
+        // קיר אחורי שפונה לעבר המצלמה
+        scene.geometries.add(new Plane(new Point(-10, 0, -10), new Vector(1, 0, 1))
+                .setEmission(new Color(20, 20, 20)) // צבע אפור כהה
+                .setMaterial(new Material().setKD(0.5).setKS(0.1)));
+
+       /* Material ledMat = new Material().setKD(0).setKS(0); // לד לא מגיב לאור חיצוני, הוא רק פולט
+        Color ledColor = new Color(255, 200, 50); // אור צהוב-כתום חם
+        double ledRadius = 0.15; // גודל כל נורה*/
+// 1. הוספת קיר אחורי אפור וקצת מבריק שיושב מאחורי הרכב
+        scene.geometries.add(new Plane(new Point(0, 0, -6), new Vector(0, 0, 1))
+                .setEmission(new Color(20, 20, 20))
+                .setMaterial(new Material().setKD(0.5).setKS(0.1)));
+
+// 2. הפעלת הפונקציה ששמה את השלט והתאורה על הקיר
+        createNeonSign(scene);
+        // 5. הגדרת המצלמה
+        Camera camera = Camera.getBuilder()
+                // מיקום המצלמה: מתרחקים קצת לאחור ומעלמים מעט למעלה
+                .setLocation(new Point(3, 2, 3))
+                // מסתכלים לכיוון המרכז (0,0,0) איפה שהרכב נמצא
+                .setDirection(new Vector(-3, -2, -3), new Vector(-1, 3, -1)) // וקטורים מאונכים המכוונים פנימה ולמטה
+                .setVpSize(200, 200)
+                .setVpDistance(100)
+                .setResolution(50, 50) // רזולוציה גבוהה
+                // אם מימשת את שיטת ה-Jittering למניעת אליאסינג (Anti-Aliasing), זה הזמן להשתמש בה!
+                .setRayTracer(scene, RayTracerType.SIMPLE)
+                .setMultithreading(8)
+                .setDebugPrint(0.1)
+                .build();
+
+        // 6. צילום ויצירת הקובץ
+        System.out.println("Starting render engine...");
+        long startTime = System.currentTimeMillis();
+
+        camera.renderImage();
+        camera.writeToImage("camaro_final_render");
+
+        System.out.println("Render complete in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds!");
+    }
+}
