@@ -1,4 +1,4 @@
-package sampling.api;
+package primitives;
 
 /**
  * A record representing a 2D point in space, used to define offsets for super-sampling.

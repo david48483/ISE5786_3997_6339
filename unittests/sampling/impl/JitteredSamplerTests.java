@@ -1,7 +1,7 @@
 package sampling.impl;
 
 import org.junit.jupiter.api.Test;
-import sampling.api.Point2D;
+import primitives.Point2D;
 
 import java.util.List;
 

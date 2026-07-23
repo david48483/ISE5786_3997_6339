@@ -2,6 +2,7 @@ package sampling.api;
 
 import java.util.List;
 
+import primitives.Point2D;
 import sampling.impl.TargetShapeType;
 
 /**

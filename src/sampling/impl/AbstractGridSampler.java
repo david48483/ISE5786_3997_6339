@@ -1,6 +1,6 @@
 package sampling.impl;
 
-import sampling.api.Point2D;
+import primitives.Point2D;
 import sampling.api.Sampler;
 
 import java.util.ArrayList;

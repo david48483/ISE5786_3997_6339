@@ -4,10 +4,8 @@ import primitives.Point;
 import sampling.api.Beam;
 import primitives.Ray;
 import primitives.Vector;
-import sampling.api.Point2D;
 import sampling.api.Sampler;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static primitives.Util.isZero;

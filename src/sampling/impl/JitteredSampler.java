@@ -1,6 +1,6 @@
 package sampling.impl;
 
-import sampling.api.Point2D;
+import primitives.Point2D;
 
 /**
  * Generates points with random jitter within each grid cell.
