@@ -13,9 +13,20 @@ import renderer.Camera;
 import renderer.RayTracerType;
 import scene.Scene;
 
+/**
+ * Integration test that parses an OBJ file (Camaro model), adds it to a scene,
+ * and renders the result with basic lighting and background geometry.
+ */
 public class CamaroRenderTest {
     /**
-     * פונקציה לייצור שלט לדים מבוסס מטריצה
+     * Default constructor for the test class.
+     */
+    public CamaroRenderTest() {
+    }
+    /**
+     * Creates a matrix-based neon LED sign and attaches it to the provided scene.
+     *
+     * @param scene the scene to which the neon sign geometries and lights will be added
      */
     private void createNeonSign(Scene scene) {
         // מטריצה המציירת 'בהוקרה לד"ר דן היקר!' (משמאל לימין)
@@ -63,6 +74,9 @@ public class CamaroRenderTest {
                 .setKl(0.05).setKq(0.005));
     }
 
+    /**
+     * Parses the Camaro OBJ and renders the scene to an image to validate end-to-end integration.
+     */
     @Test
     void testCamaroRender() {
         // 1. הגדרת הסצנה וצבע רקע כהה כדי שהרכב יבלוט

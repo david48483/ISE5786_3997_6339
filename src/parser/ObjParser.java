@@ -12,15 +12,26 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Simple Wavefront OBJ file parser that reads vertices and faces and adds the
+ * resulting triangle mesh into a {@link scene.Scene} with a uniform material and emission.
+ */
 public class ObjParser {
 
     /**
-     * קוראת קובץ OBJ ומכניסה את כל המשולשים שבו לתוך הסצנה.
+     * Utility class: prevent instantiation.
+     */
+    private ObjParser() {
+    }
+
+    /**
+     * Reads an OBJ file and adds all of its triangular faces into the scene.
+     * Indices are assumed to be 1-based as in the Wavefront format; only vertex positions are used.
      *
-     * @param filePath הנתיב לקובץ ה-OBJ
-     * @param scene    הסצנה שאליה נוסיף את המודל
-     * @param material החומר שיוגדר לכל משולשי הרכב
-     * @param emission צבע הרכב
+     * @param filePath path to the OBJ file
+     * @param scene    the scene to which the triangles will be added
+     * @param material material to assign to each triangle
+     * @param emission emission color for the triangles
      */
     public static void parseAndAdd(String filePath, Scene scene, Material material, Color emission) {
         // רשימה לשמירת כל הנקודות במרחב

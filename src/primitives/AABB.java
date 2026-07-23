@@ -1,5 +1,12 @@
 package primitives;
 
+/**
+ * Axis-Aligned Bounding Box (AABB).
+ * <p>
+ * A simple bounding volume aligned with the world axes, used primarily for
+ * broad-phase intersection tests and BVH acceleration. The box is defined by
+ * two corner points: {@code min} (smallest x/y/z) and {@code max} (largest x/y/z).
+ */
 public class AABB {
     /** Minimum coordinates point (bottom-left-back) */
     private final Point min;

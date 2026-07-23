@@ -12,8 +12,21 @@ import primitives.Vector;
 import sampling.impl.JitteredSampler;
 import scene.Scene;
 
-public class Checking_yuda {
+/**
+ * Procedural stress test that generates a large grid of spheres on a floor and
+ * renders it to evaluate lighting, sampling, and multithreading performance.
+ */
+public class CheckingYuda {
 
+    /**
+     * Default constructor for the test class.
+     */
+    public CheckingYuda() {
+    }
+
+    /**
+     * Renders a scene that contains a procedurally generated grid of spheres and a floor.
+     */
     @Test
     void testProceduralGridGeneration() {
         // 1. הגדרת הסצנה וצבע הרקע

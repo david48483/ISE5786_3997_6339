@@ -24,8 +24,17 @@ public abstract class Intersectable {
     protected Intersectable() {
     }
 
+    /**
+     * Global flag that controls whether BVH (bounding boxes) are used to accelerate
+     * intersection testing across all geometries.
+     */
     private static boolean _bvhEnabled = false;
 
+    /**
+     * Enables or disables BVH acceleration for all geometries.
+     *
+     * @param bvhEnabled {@code true} to enable BVH; {@code false} to disable
+     */
     public static void setBvhEnabled(boolean bvhEnabled) {
         Intersectable._bvhEnabled = bvhEnabled;
     }
@@ -111,6 +120,10 @@ public abstract class Intersectable {
             return _boundingBox;
         }
 
+    /**
+     * Resets the cached bounding box so it will be recalculated on the next access.
+     * Useful after geometry mutations that change the spatial extent.
+     */
     protected void resetBoundingBox() {
         this._boundingBox = null;
     }

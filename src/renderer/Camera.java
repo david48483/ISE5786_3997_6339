@@ -21,6 +21,7 @@ import static primitives.Util.isZero;
  *
  * @author David &amp; Yehuda
  */
+@SuppressWarnings("CloneableWithoutClone")
 public class Camera implements Cloneable {
 
     /**
@@ -440,7 +441,7 @@ public class Camera implements Cloneable {
          *
          * @param threads threading mode / number of threads
          * @return the Builder instance for method chaining
-         * @throws IllegalArgumentException if threads < -2
+         * @throws IllegalArgumentException if threads &lt; -2
          */
         public Builder setMultithreading(int threads) {
             if (threads < -2) throw new IllegalArgumentException("Multithreading must be -2 or higher");
@@ -493,6 +494,16 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        /**
+         * Enables or disables BVH (Bounding Volume Hierarchy) acceleration for intersections.
+         * <p>
+         * When enabled, ray-geometry intersection checks are first filtered using
+         * axis-aligned bounding boxes, significantly reducing the number of precise
+         * intersection calculations for complex scenes.
+         *
+         * @param isEnabled {@code true} to enable BVH acceleration; {@code false} to disable
+         * @return this Builder instance for method chaining
+         */
         public Builder setBvhEnabled(boolean isEnabled) {
             Intersectable.setBvhEnabled(isEnabled);
             return this; // החזרת הבילדר כדי לאפשר שרשור (Chaining)
