@@ -93,6 +93,7 @@ public class GlossyDiffusiveMultiTests {
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
+                .setSamplerShape(TargetShapeType.CIRCLE)
                 .setDebugPrint(0.1)
                 .setMultithreading(-2)
                 .setRaysAmount(9), "multi-2");
@@ -101,6 +102,7 @@ public class GlossyDiffusiveMultiTests {
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
+                .setSamplerShape(TargetShapeType.CIRCLE)
                 .setDebugPrint(0.1)
                 .setMultithreading(-1)
                 .setRaysAmount(9), "multi-1");
@@ -109,6 +111,7 @@ public class GlossyDiffusiveMultiTests {
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
+                .setSamplerShape(TargetShapeType.CIRCLE)
                 .setDebugPrint(0.1)
                 .setMultithreading(-0)
                 .setRaysAmount(9), "multi-0");
@@ -117,6 +120,7 @@ public class GlossyDiffusiveMultiTests {
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
+                .setSamplerShape(TargetShapeType.CIRCLE)
                 .setDebugPrint(0.1)
                 .setMultithreading(1)
                 .setRaysAmount(9), "multi_1");
@@ -125,6 +129,7 @@ public class GlossyDiffusiveMultiTests {
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
+                .setSamplerShape(TargetShapeType.CIRCLE)
                 .setDebugPrint(0.1)
                 .setMultithreading(4)
                 .setRaysAmount(9), "multi_4");
@@ -141,7 +146,7 @@ public class GlossyDiffusiveMultiTests {
         long startTime = System.currentTimeMillis();
 
         Camera cameraOn = cameraBuilder
-                .setRayTracer(scene, RayTracerType.SIMPLE) // ה-Builder יוצר את SimpleRayTracer פנימית ומעביר לו את ההגדרות
+                .setRayTracer(scene, RayTracerType.SIMPLE)
                 .build();
 
         cameraOn.renderImage();

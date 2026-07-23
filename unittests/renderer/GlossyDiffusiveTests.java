@@ -90,31 +90,31 @@ public class GlossyDiffusiveTests {
                 .setVpDistance(500)
                 .setResolution(600, 600);
 
-        // 1. ללא אפקטים מתקדמים
+
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(false)
                 .setRaysAmount(9), "GlossyDiffusive_DISABLED");
 
-        // 2. עם Jittered Sampler
+
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
                 .setRaysAmount(9), "GlossyDiffusive_Jitter_ENABLED");
 
-        // 2. עם Jittered Sampler
+
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSamplerShape(TargetShapeType.CIRCLE)
                 .setSampler(new JitteredSampler())
                 .setRaysAmount(9), "GlossyDiffusive_Jitter_Circle_ENABLED");
 
-        // 3. עם Grid Sampler
+
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new GridSampler())
                 .setRaysAmount(9), "GlossyDiffusive_Grid_ENABLED");
 
-        // 4. עם Random Sampler
+
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new RandomSampler())
@@ -205,7 +205,7 @@ public class GlossyDiffusiveTests {
         long startTime = System.currentTimeMillis();
 
         Camera cameraOn = cameraBuilder
-                .setRayTracer(scene, RayTracerType.SIMPLE) // ה-Builder יוצר את SimpleRayTracer פנימית ומעביר לו את ההגדרות
+                .setRayTracer(scene, RayTracerType.SIMPLE)
                 .build();
 
         cameraOn.renderImage();
