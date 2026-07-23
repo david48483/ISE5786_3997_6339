@@ -1,6 +1,7 @@
 package geometries.api;
 
 import lighting.api.LightSource;
+import primitives.AABB;
 import primitives.Material;
 import primitives.Point;
 import primitives.Ray;
@@ -68,6 +69,34 @@ public abstract class Intersectable {
     public final List<Intersection> calcIntersections(Ray ray, double maxDistance) {
         return calcIntersectionsHelper(ray, maxDistance);
     }
+
+        /**
+         * Field to store the bounding box (AABB) of the geometry.
+         * Utilizes lazy initialization to defer calculation until it is explicitly needed.
+         */
+        private AABB _boundingBox = null;
+
+        /**
+         * Abstract helper method to calculate the bounding box.
+         * Every specific geometry (e.g., Sphere, Triangle, Geometries) must
+         * implement this method according to its own geometric properties.
+         *
+         * @return the calculated Axis-Aligned Bounding Box (AABB) for this geometry
+         */
+        protected abstract AABB setBoundingBoxHelper();
+
+        /**
+         * Returns the bounding box of the geometry using lazy initialization.
+         * The bounding box is calculated only once, upon the first request, and cached for future use.
+         *
+         * @return the Axis-Aligned Bounding Box (AABB) of the geometry
+         */
+        public AABB getBoundingBox() {
+            if (_boundingBox == null) {
+                _boundingBox = setBoundingBoxHelper();
+            }
+            return _boundingBox;
+        }
 
     /**
      * Represents a single intersection between a ray and a geometry,

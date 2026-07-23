@@ -1,6 +1,7 @@
 package geometries.impl;
 
 import geometries.api.Geometry;
+import primitives.AABB;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
@@ -86,6 +87,11 @@ public class Plane extends Geometry {
 
         // If we reached here, the intersection is valid and within the light's range
         return List.of(new Intersection(ray.getPoint(t), this));
+    }
+
+    @Override
+    protected AABB setBoundingBoxHelper() {
+        return null;
     }
 
     @Override

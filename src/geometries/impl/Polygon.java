@@ -1,6 +1,7 @@
 package geometries.impl;
 
 import geometries.api.Geometry;
+import primitives.AABB;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
@@ -126,5 +127,45 @@ public class Polygon extends Geometry {
         // 4. The point is inside the polygon! Return the intersection point
         Point p0 = planeIntersections.getFirst().point;
         return List.of(new Intersection(p0, this));
+    }
+
+    /**
+     * Calculates the Axis-Aligned Bounding Box (AABB) for this polygon.
+     * It iterates through all the vertices of the polygon to find the
+     * absolute minimum and maximum coordinates across all three axes (X, Y, Z).
+     *
+     * @return a new AABB object enclosing the entire polygon
+     */
+    @Override
+    protected AABB setBoundingBoxHelper() {
+        // Initialize min values to positive infinity and max values to negative infinity
+        double minX = Double.POSITIVE_INFINITY;
+        double minY = Double.POSITIVE_INFINITY;
+        double minZ = Double.POSITIVE_INFINITY;
+
+        double maxX = Double.NEGATIVE_INFINITY;
+        double maxY = Double.NEGATIVE_INFINITY;
+        double maxZ = Double.NEGATIVE_INFINITY;
+
+        // Iterate through all vertices to find the extreme bounds
+        for (Point p : _vertices) {
+            // Extract coordinates (adjust access according to your Double3/Point implementation)
+            double x = p.getX();
+            double y = p.getY();
+            double z = p.getZ();
+
+            // Update minimums
+            if (x < minX) minX = x;
+            if (y < minY) minY = y;
+            if (z < minZ) minZ = z;
+
+            // Update maximums
+            if (x > maxX) maxX = x;
+            if (y > maxY) maxY = y;
+            if (z > maxZ) maxZ = z;
+        }
+
+        // Return a new bounding box using the calculated extreme points
+        return new AABB(new Point(minX, minY, minZ), new Point(maxX, maxY, maxZ));
     }
 }

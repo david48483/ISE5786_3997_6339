@@ -2,6 +2,7 @@ package geometries.impl;
 
 import java.util.List;
 
+import primitives.AABB;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Util;
@@ -48,7 +49,8 @@ public class Tube extends RadialGeometry {
         return null;
     }
 
-
+    @Override
+    protected AABB setBoundingBoxHelper() {return null; }
 
     @Override
     public String toString() {

@@ -81,6 +81,33 @@ public class Point {
         return Math.sqrt(distanceSquared(other));
     }
 
+    /**
+     * Returns the X coordinate of the point.
+     *
+     * @return the X coordinate
+     */
+    public double getX() {
+        return _xyz._d1();
+    }
+
+    /**
+     * Returns the Y coordinate of the point.
+     *
+     * @return the Y coordinate
+     */
+    public double getY() {
+        return _xyz._d2();
+    }
+
+    /**
+     * Returns the Z coordinate of the point.
+     *
+     * @return the Z coordinate
+     */
+    public double getZ() {
+        return _xyz._d3();
+    }
+
     @Override
     public boolean equals(Object obj) {
         return this == obj || obj != null && getClass() == obj.getClass() && _xyz.equals(((Point) obj)._xyz);

@@ -1,5 +1,6 @@
 package geometries.impl;
 
+import primitives.AABB;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
@@ -70,6 +71,22 @@ public class Sphere extends RadialGeometry {
         else
             return t1 <= 0 ? List.of(new Intersection(ray.getPoint(t2), this))
                     : List.of(new Intersection(ray.getPoint(t1), this), new Intersection(ray.getPoint(t2), this));
+    }
+
+    @Override
+    protected AABB setBoundingBoxHelper() {
+        // Extract the center coordinates
+        double cx = _center.getX();
+        double cy = _center.getY();
+        double cz = _center.getZ();
+
+        // Calculate the minimum extreme point
+        Point min = new Point(cx - _radius, cy - _radius, cz - _radius);
+
+        // Calculate the maximum extreme point
+        Point max = new Point(cx + _radius, cy + _radius, cz + _radius);
+
+        return new AABB(min, max);
     }
 
     @Override
