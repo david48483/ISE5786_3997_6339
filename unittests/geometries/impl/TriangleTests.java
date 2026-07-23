@@ -1,6 +1,7 @@
 package geometries.impl;
 
 import org.junit.jupiter.api.Test;
+import primitives.AABB;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
@@ -282,6 +283,7 @@ public class TriangleTests {
 
         // EP01: Ray intersects the plane and the triangle (1 point)
         var resultEP01 = TRIANGLE.calcIntersections(RAY_HIT);
+        assertNotNull(resultEP01, ERR_FIND_INTERSECTIONS);
         assertEquals(1, resultEP01.size(), ERR_FIND_INTERSECTIONS);
         assertSame(TRIANGLE, resultEP01.getFirst().geometry, ERR_FIND_INTERSECTIONS);
         assertEquals(P_HIT, resultEP01.getFirst().point, ERR_FIND_INTERSECTIONS);
@@ -311,7 +313,9 @@ public class TriangleTests {
         assertNull(TRIANGLE.calcIntersections(RAY_HIT, 0.5), ERR_FIND_INTERSECTIONS);
 
         //EP10 distance of point shorter than max distance
-        assertEquals(TRIANGLE.calcIntersections(RAY_HIT, 2).size(), 1, ERR_FIND_INTERSECTIONS);
+        var resultEP10 = TRIANGLE.calcIntersections(RAY_HIT, 2);
+        assertNotNull(resultEP10, ERR_FIND_INTERSECTIONS);
+        assertEquals(1, resultEP10.size(), ERR_FIND_INTERSECTIONS);
 
         //EP11 ray start after the triangle
         assertNull(TRIANGLE.calcIntersections(new Ray(new Point(2, 1, 1), Vector.AXIS_Z), 2), ERR_FIND_INTERSECTIONS);
@@ -326,6 +330,7 @@ public class TriangleTests {
 
         // BVA03: Ray is orthogonal to the plane and starts before the plane (1 point)
         var resultBVA03 = TRIANGLE.calcIntersections(RAY_HIT);
+        assertNotNull(resultBVA03, ERR_FIND_INTERSECTIONS);
         assertEquals(1, resultBVA03.size(), ERR_FIND_INTERSECTIONS);
         assertSame(TRIANGLE, resultBVA03.getFirst().geometry, ERR_FIND_INTERSECTIONS);
         assertEquals(P_HIT, resultBVA03.getFirst().point, ERR_FIND_INTERSECTIONS);
@@ -368,6 +373,107 @@ public class TriangleTests {
 
         // BVA16: Additional parallel-to-plane miss case (0 points)
         assertNull(TRIANGLE.calcIntersections(RAY_PARALLEL), ERR_FIND_INTERSECTIONS);
+    }
+
+    /**
+     * Tests the bounding box creation and intersection logic for {@link Triangle}.
+     * Verifies the AABB boundaries and tests ray intersections against the AABB
+     * (including rays starting outside, inside, on the boundaries, and distance limits).
+     */
+    @Test
+    void testBoundingBox() {
+        AABB aabb = TRIANGLE.getBoundingBox();
+
+        // ============ Equivalence Partitions Tests (Box Creation) ==============
+        // EP01: Verify the bounding box dimensions (Min and Max points)
+        assertEquals(new Point(0, 0, 0), aabb.getMin(),
+                "ERROR: Bounding box min point is incorrect");
+        assertEquals(new Point(4, 4, 0), aabb.getMax(),
+                "ERROR: Bounding box max point is incorrect");
+
+        // -----------------------------------------------------------------------
+        // Test Ray-AABB Intersections
+        // -----------------------------------------------------------------------
+        double maxDistance = Double.POSITIVE_INFINITY;
+
+        // ============ Equivalence Partitions Tests (Intersections) ==============
+        // EP11: Ray starts outside and intersects the AABB
+        assertTrue(aabb.intersects(new Ray(new Point(2, 2, -10), Vector.AXIS_Z), maxDistance),
+                "ERROR: Ray intersecting AABB from outside should return true");
+
+        // EP12: Ray misses the AABB entirely (y is out of range)
+        assertFalse(aabb.intersects(new Ray(new Point(2, 10, -10), Vector.AXIS_Z), maxDistance),
+                "ERROR: Ray missing the AABB should return false");
+
+        // EP13: Ray intersects the AABB, but intersection is beyond maxDistance
+        assertFalse(aabb.intersects(new Ray(new Point(2, 2, -10), Vector.AXIS_Z), 9.0),
+                "ERROR: Ray intersecting AABB beyond maxDistance should return false");
+
+        // ============ Boundary Values Tests (Intersections) ==================
+
+        // BVA01: Ray starts strictly INSIDE the AABB
+        assertTrue(aabb.intersects(new Ray(new Point(1, 1, 0), Vector.AXIS_Z), maxDistance),
+                "ERROR: Ray starting inside the AABB should return true");
+
+        // BVA02: Ray starts ON the AABB boundary (z = 0) pointing OUTWARDS
+        // (Since it starts on the boundary, t=0 is a valid intersection)
+        assertTrue(aabb.intersects(new Ray(new Point(2, 2, 0), Vector.AXIS_Z), maxDistance),
+                "ERROR: Ray starting on the AABB boundary pointing outwards should return true (intersects at t=0)");
+
+        // BVA03: Ray runs parallel to a bounding plane (Z-axis), sliding exactly on the edge (x=4, y=4)
+        assertTrue(aabb.intersects(new Ray(new Point(4, 4, -10), Vector.AXIS_Z), maxDistance),
+                "ERROR: Ray sliding perfectly along the AABB edge should return true");
+
+        // BVA04: Ray runs parallel to a bounding plane, strictly missing it (just outside x range)
+        assertFalse(aabb.intersects(new Ray(new Point(4.1, 4, -10), Vector.AXIS_Z), maxDistance),
+                "ERROR: Ray parallel to AABB but slightly outside should return false");
+
+        // BVA05: Ray starts inside, but maxDistance is exactly 0
+        assertTrue(aabb.intersects(new Ray(new Point(1, 1, 0), Vector.AXIS_Z), 0.0),
+                "ERROR: Ray starting inside with maxDistance 0 should intersect at t=0");
+    }
+
+    /**
+     * Tests the ray-AABB intersection logic for the triangle's AABB, focusing on maxDistance.
+     * Verifies that intersections are correctly identified or rejected based on finite distance limits.
+     */
+    @Test
+    void testAABBDistance() {
+        AABB aabb = TRIANGLE.getBoundingBox(); // min=(0,0,0), max=(4,4,0)
+
+        // Ray starts at z = -10, pointing towards +Z.
+        // It reaches the box at distance t = 10 (z=0 plane).
+        Ray rayOutside = new Ray(new Point(2, 2, -10), Vector.AXIS_Z);
+
+        // ============ Equivalence Partitions Tests ==============
+
+        // EP01: maxDistance is completely before the box (e.g., 9.0 < 10.0)
+        assertFalse(aabb.intersects(rayOutside, 9.0),
+                "ERROR: Ray should not intersect if maxDistance is shorter than the distance to the box");
+
+        // EP02: maxDistance is exactly at the entry (10.0)
+        assertTrue(aabb.intersects(rayOutside, 10.0),
+                "ERROR: Ray should intersect if maxDistance reaches the box entry boundary");
+
+        // EP03: maxDistance is beyond the box
+        assertTrue(aabb.intersects(rayOutside, 20.0),
+                "ERROR: Ray should intersect if maxDistance is beyond the box limits");
+
+        // ============ Boundary Values Tests ==================
+
+        // BVA01: Ray starts strictly inside the box, limited by a very short maxDistance
+        Ray rayInside = new Ray(new Point(2, 2, 0), Vector.AXIS_Z);
+        assertTrue(aabb.intersects(rayInside, 0.5),
+                "ERROR: Ray starting inside should intersect even with a very short maxDistance");
+
+        // BVA02: Ray starts inside/on the boundary, maxDistance is exactly 0.0
+        assertTrue(aabb.intersects(rayInside, 0.0),
+                "ERROR: Ray starting inside with maxDistance 0.0 should intersect at t=0");
+
+        // BVA03: Ray starts exactly ON the top boundary (z = 0), points outwards, maxDistance is exactly 0.0
+        Ray rayOnBoundary = new Ray(new Point(2, 2, 0), Vector.AXIS_Z);
+        assertTrue(aabb.intersects(rayOnBoundary, 0.0),
+                "ERROR: Ray starting on boundary pointing outwards with maxDistance 0.0 should intersect");
     }
 
 }

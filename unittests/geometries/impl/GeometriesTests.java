@@ -125,7 +125,9 @@ public class GeometriesTests {
         // ============ Equivalence Partitions Tests ============
 
         // EP01: Some (but not all) geometries are intersected — sphere + plane, not triangle
-        assertEquals(3, geometries.findIntersections(_raySome).size(), ERR_INTERSECTIONS);
+        var resultEP01Find = geometries.findIntersections(_raySome);
+        assertNotNull(resultEP01Find, ERR_INTERSECTIONS);
+        assertEquals(3, resultEP01Find.size(), ERR_INTERSECTIONS);
 
         // ============ Boundary Values Tests ============
 
@@ -133,10 +135,14 @@ public class GeometriesTests {
         assertNull(geometries.findIntersections(_rayNone), ERR_INTERSECTIONS);
 
         // BVA02: Exactly one geometry is intersected — sphere only
-        assertEquals(1, geometries.findIntersections(_rayOne).size(), ERR_INTERSECTIONS);
+        var resultBVA02Find = geometries.findIntersections(_rayOne);
+        assertNotNull(resultBVA02Find, ERR_INTERSECTIONS);
+        assertEquals(1, resultBVA02Find.size(), ERR_INTERSECTIONS);
 
         // BVA03: All geometries are intersected — sphere (2) + plane (1) + triangle (1)
-        assertEquals(4, geometries.findIntersections(_rayAll).size(), ERR_INTERSECTIONS);
+        var resultBVA03Find = geometries.findIntersections(_rayAll);
+        assertNotNull(resultBVA03Find, ERR_INTERSECTIONS);
+        assertEquals(4, resultBVA03Find.size(), ERR_INTERSECTIONS);
     }
 
     /**
@@ -162,11 +168,15 @@ public class GeometriesTests {
         assertEquals(3, resultEP01.size(), ERR_CALC_INTERSECTIONS);
 
         // EP02: maxDistance large enough to include all intersections (expect 3 points)
-        assertEquals(3, geometries.calcIntersections(_raySome, 16.0).size(),
+        var resultEP02 = geometries.calcIntersections(_raySome, 16.0);
+        assertNotNull(resultEP02, ERR_CALC_INTERSECTIONS);
+        assertEquals(3, resultEP02.size(),
                 ERR_CALC_INTERSECTIONS);
 
         // EP03: maxDistance excludes the farthest intersection (expect 2 points)
-        assertEquals(2, geometries.calcIntersections(_raySome, 10.0).size(),
+        var resultEP03 = geometries.calcIntersections(_raySome, 10.0);
+        assertNotNull(resultEP03, ERR_CALC_INTERSECTIONS);
+        assertEquals(2, resultEP03.size(),
                 ERR_CALC_INTERSECTIONS);
 
         // EP04: maxDistance too small to reach any intersection (expect null)
@@ -187,5 +197,30 @@ public class GeometriesTests {
         var resultBVA03 = geometries.calcIntersections(_rayAll);
         assertNotNull(resultBVA03, ERR_CALC_INTERSECTIONS);
         assertEquals(4, resultBVA03.size(), ERR_CALC_INTERSECTIONS);
+    }
+
+    /**
+     * Test method for {@link Geometries#getBoundingBox()} behavior.
+     * Verifies the general rule: if the composite contains an unbounded geometry (e.g., Plane),
+     * the resulting AABB should be null. Also verifies a non-null union when all children are bounded.
+     */
+    @Test
+    void testBoundingBoxWithAndWithoutPlane() {
+        // Case 1: Composite contains a Plane (unbounded) -> expect null AABB
+        Geometries withPlane = new Geometries(_plane, _sphere, _triangle);
+        assertNull(withPlane.getBoundingBox(),
+                "ERROR: Geometries AABB should be null if any child has no bounding box (e.g., Plane)");
+
+        // Case 2: Composite without Plane (all bounded) -> expect non-null AABB which is the union
+        Geometries withoutPlane = new Geometries(_sphere, _triangle);
+        var aabb = withoutPlane.getBoundingBox();
+        assertNotNull(aabb, "ERROR: Geometries AABB should not be null when all children are bounded");
+
+        // The union of Sphere(center=0,r=5) and Triangle([(0,0,0),(4,0,0),(0,4,0)])
+        // is dominated by the sphere: min=(-5,-5,-5), max=(5,5,5)
+        assertEquals(new Point(-5, -5, -5), aabb.getMin(),
+                "ERROR: Geometries AABB min point is incorrect");
+        assertEquals(new Point(5, 5, 5), aabb.getMax(),
+                "ERROR: Geometries AABB max point is incorrect");
     }
 }

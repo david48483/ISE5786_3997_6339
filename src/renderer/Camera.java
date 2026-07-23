@@ -21,7 +21,7 @@ import static primitives.Util.isZero;
  *
  * @author David &amp; Yehuda
  */
-@SuppressWarnings("CloneableWithoutClone")
+@SuppressWarnings("CloneableClassWithoutClone")
 public class Camera implements Cloneable {
 
     /**
