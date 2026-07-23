@@ -75,5 +75,34 @@ public class AABB {
         return true;
     }
 
+    /**
+     * Unites this bounding box with another bounding box to create a new enclosing AABB.
+     * It compares the minimum and maximum coordinates of both boxes and creates a new box
+     * that encompasses both.
+     *
+     * @param other the other AABB to merge with
+     * @return a new AABB enclosing both bounding boxes, or this box if other is null
+     */
+    public AABB union(AABB other) {
+        if (other == null) {
+            return this;
+        }
+
+        // Find the absolute minimums between both boxes
+        double newMinX = Math.min(this.min.getX(), other.min.getX());
+        double newMinY = Math.min(this.min.getY(), other.min.getY());
+        double newMinZ = Math.min(this.min.getZ(), other.min.getZ());
+
+        // Find the absolute maximums between both boxes
+        double newMaxX = Math.max(this.max.getX(), other.max.getX());
+        double newMaxY = Math.max(this.max.getY(), other.max.getY());
+        double newMaxZ = Math.max(this.max.getZ(), other.max.getZ());
+
+        return new AABB(
+                new Point(newMinX, newMinY, newMinZ),
+                new Point(newMaxX, newMaxY, newMaxZ)
+        );
+    }
+
 
 }

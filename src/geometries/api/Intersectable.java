@@ -98,6 +98,10 @@ public abstract class Intersectable {
             return _boundingBox;
         }
 
+    protected void resetBoundingBox() {
+        this._boundingBox = null;
+    }
+
     /**
      * Represents a single intersection between a ray and a geometry,
      * pairing the intersection point with the intersected geometry.

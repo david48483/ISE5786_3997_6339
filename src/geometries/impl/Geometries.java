@@ -1,6 +1,7 @@
 package geometries.impl;
 
 import geometries.api.Intersectable;
+import primitives.AABB;
 import primitives.Ray;
 
 import java.util.ArrayList;
@@ -33,7 +34,9 @@ public class Geometries extends Intersectable {
      * @param geometries one or more intersectable geometries to add
      */
     public Geometries(Intersectable... geometries) {
+
         add(geometries);
+        resetBoundingBox();
     }
 
     /**
@@ -61,5 +64,29 @@ public class Geometries extends Intersectable {
         }
         return result;
 
+    }
+
+    @Override
+    protected AABB setBoundingBoxHelper() {
+        if (_geometries.isEmpty()) {
+            return null;
+        }
+
+        AABB combinedBox = null;
+
+        for (Intersectable geo : _geometries) {
+            AABB geoBox = geo.getBoundingBox();
+
+            // Ignore infinite geometries that don't have a bounding box (like Plane)
+            if (geoBox != null) {
+                if (combinedBox == null) {
+                    combinedBox = geoBox;
+                } else {
+                    combinedBox = combinedBox.union(geoBox);
+                }
+            }
+        }
+
+        return combinedBox;
     }
 }
