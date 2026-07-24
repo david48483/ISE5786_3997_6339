@@ -1,6 +1,5 @@
 package renderer;
 
-import geometries.api.Intersectable;
 import primitives.Color;
 import primitives.Point;
 import primitives.Ray;

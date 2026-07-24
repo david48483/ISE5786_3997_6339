@@ -95,7 +95,7 @@ public class BvhBuilder {
         }
 
         // Step 1: Find the overall bounding box of all objects to know their spread.
-        AABB totalBox = geometries.get(0).getBoundingBox();
+        AABB totalBox = geometries.getFirst().getBoundingBox();
         for (int i = 1; i < size; i++) {
             totalBox = totalBox.union(geometries.get(i).getBoundingBox());
         }
