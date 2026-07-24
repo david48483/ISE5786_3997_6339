@@ -1,5 +1,6 @@
 package renderer;
 
+import geometries.api.Intersectable;
 import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
@@ -592,6 +593,27 @@ public class Camera implements Cloneable {
 
         }
 
+        private void checkBVH() {
+            if (_camera._rayTracer instanceof RayTracerBase rtb) {
+
+                // 1) If the user enabled BVH in the scene settings
+                if (rtb._scene.BvhEnabled()) {
+                    // Enable global AABB (required for BVH)
+                    Intersectable.setAABBEnabled(true);
+                    // Instruct the scene to actually build the BVH tree
+                    rtb._scene.geometries.buildBvhTree();
+                }
+                // 2) If BVH is disabled but flat AABB filtering is enabled in the scene
+                else if (rtb._scene.AAABBEnabled()) {
+                    Intersectable.setAABBEnabled(true);
+                }
+                // 3) If both are disabled, ensure the global AABB switch is off
+                else {
+                    Intersectable.setAABBEnabled(false);
+                }
+            }
+        }
+
         /**
          * Validates the camera parameters and builds the final Camera object.
          *
@@ -602,6 +624,7 @@ public class Camera implements Cloneable {
             checkLocationAndDirection();
             checkViewPlane();
             checkRayTracer();
+            checkBVH();
             try {
                 return (Camera) _camera.clone();
             } catch (CloneNotSupportedException _) {

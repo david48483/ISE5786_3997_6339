@@ -53,6 +53,21 @@ public class Scene {
     }
 
     /**
+     * Flag indicating whether flat AABB (axis-aligned bounding box) filtering
+     * is enabled for intersection tests (without BVH tree construction).
+     */
+    private boolean _AABBenable = false;
+
+    /**
+     * Flag indicating whether BVH (Bounding Volume Hierarchy) acceleration
+     * structure is enabled for this scene.
+     */
+    private boolean _bvhTreeEnable = false;
+
+
+
+
+    /**
      * Sets the scene background color.
      *
      * @param background background color
@@ -86,9 +101,44 @@ public class Scene {
     }
 
 
+    /**
+     * Enables or disables flat AABB filtering for intersection tests.
+     *
+     * @param isEnable true to enable AABB, false to disable
+     * @return this scene instance for chaining
+     */
     public Scene setAABB(boolean isEnable){
-        Intersectable.setAABBEnabled(isEnable);
+        this._AABBenable = isEnable;
         return this;
+    }
+
+    /**
+     * Enables or disables BVH tree construction for accelerating ray tracing.
+     *
+     * @param isEnable true to build and use BVH, false to disable
+     * @return this scene instance for chaining
+     */
+    public Scene setBvhTree(boolean isEnable){
+        this._bvhTreeEnable = isEnable;
+        return this;
+    }
+
+    /**
+     * Checks if the BVH tree optimization is enabled for this scene.
+     *
+     * @return true if BVH is enabled, false otherwise
+     */
+    public boolean BvhEnabled() {
+        return this._bvhTreeEnable;
+    }
+
+    /**
+     * Checks if the flat AABB bounding box filtering is enabled for this scene.
+     *
+     * @return true if AABB is enabled, false otherwise
+     */
+    public boolean AAABBEnabled() {
+        return this._AABBenable;
     }
 
 }
