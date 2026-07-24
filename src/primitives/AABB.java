@@ -8,10 +8,14 @@ package primitives;
  * two corner points: {@code min} (smallest x/y/z) and {@code max} (largest x/y/z).
  */
 public class AABB {
-    /** Minimum coordinates point (bottom-left-back) */
+    /**
+     * Minimum coordinates point (bottom-left-back)
+     */
     private final Point min;
 
-    /** Maximum coordinates point (top-right-front) */
+    /**
+     * Maximum coordinates point (top-right-front)
+     */
     private final Point max;
 
     /**
@@ -54,29 +58,48 @@ public class AABB {
         Point origin = ray.origin();
         Vector dir = ray.direction();
 
-        double[] o = { origin._xyz._d1(), origin._xyz._d2(), origin._xyz._d3() };
-        double[] d = { dir._xyz._d1(), dir._xyz._d2(), dir._xyz._d3() };
-        double[] bMin = { min._xyz._d1(), min._xyz._d2(), min._xyz._d3() };
-        double[] bMax = { max._xyz._d1(), max._xyz._d2(), max._xyz._d3() };
+        double ox = origin.getX(), oy = origin.getY(), oz = origin.getZ();
+        double dx = dir.getX(), dy = dir.getY(), dz = dir.getZ();
+        double minX = min.getX(), minY = min.getY(), minZ = min.getZ();
+        double maxX = max.getX(), maxY = max.getY(), maxZ = max.getZ();
 
         double tMin = 0.0;
         double tMax = maxDistance;
 
-        // מעבר על שלושת הצירים: X=0, Y=1, Z=2
-        for (int i = 0; i < 3; i++) {
-            if (d[i] != 0) {
-                double invDir = 1.0 / d[i];
-                double t1 = (bMin[i] - o[i]) * invDir;
-                double t2 = (bMax[i] - o[i]) * invDir;
+        // ציר X
+        if (dx != 0) {
+            double invDx = 1.0 / dx;
+            double t1 = (minX - ox) * invDx;
+            double t2 = (maxX - ox) * invDx;
+            tMin = Math.max(tMin, Math.min(t1, t2));
+            tMax = Math.min(tMax, Math.max(t1, t2));
+            if (tMin > tMax) return false;
+        } else if (ox < minX || ox > maxX) {
+            return false;
+        }
 
-                tMin = Math.max(tMin, Math.min(t1, t2));
-                tMax = Math.min(tMax, Math.max(t1, t2));
+        // ציר Y
+        if (dy != 0) {
+            double invDy = 1.0 / dy;
+            double t1 = (minY - oy) * invDy;
+            double t2 = (maxY - oy) * invDy;
+            tMin = Math.max(tMin, Math.min(t1, t2));
+            tMax = Math.min(tMax, Math.max(t1, t2));
+            if (tMin > tMax) return false;
+        } else if (oy < minY || oy > maxY) {
+            return false;
+        }
 
-                // Early exit - פספוס באחד הצירים פוסל את החיתוך מידית
-                if (tMin > tMax) return false;
-            } else if (o[i] < bMin[i] || o[i] > bMax[i]) {
-                return false;
-            }
+        // ציר Z
+        if (dz != 0) {
+            double invDz = 1.0 / dz;
+            double t1 = (minZ - oz) * invDz;
+            double t2 = (maxZ - oz) * invDz;
+            tMin = Math.max(tMin, Math.min(t1, t2));
+            tMax = Math.min(tMax, Math.max(t1, t2));
+            if (tMin > tMax) return false;
+        } else if (oz < minZ || oz > maxZ) {
+            return false;
         }
 
         return true;
@@ -110,6 +133,5 @@ public class AABB {
                 new Point(newMaxX, newMaxY, newMaxZ)
         );
     }
-
 
 }

@@ -18,7 +18,7 @@ public class BvhBuilder {
      */
     private static int BINS_COUNT = 16;
 
-    public void setBINS(int count){
+    public void setBINS(int count) {
         BINS_COUNT = count;
     }
 
@@ -90,7 +90,7 @@ public class BvhBuilder {
         int size = geometries.size();
 
         // Base case: If there are 2 or fewer geometries, stop splitting and make a leaf.
-        if (size <= 2) {
+        if (size <= 20) {
             return createLeaf(geometries);
         }
 
@@ -234,10 +234,14 @@ public class BvhBuilder {
      */
     private static double getCenter(AABB box, int axis) {
         switch (axis) {
-            case 0: return (box.getMin().getX() + box.getMax().getX()) / 2.0;
-            case 1: return (box.getMin().getY() + box.getMax().getY()) / 2.0;
-            case 2: return (box.getMin().getZ() + box.getMax().getZ()) / 2.0;
-            default: return 0;
+            case 0:
+                return (box.getMin().getX() + box.getMax().getX()) / 2.0;
+            case 1:
+                return (box.getMin().getY() + box.getMax().getY()) / 2.0;
+            case 2:
+                return (box.getMin().getZ() + box.getMax().getZ()) / 2.0;
+            default:
+                return 0;
         }
     }
 

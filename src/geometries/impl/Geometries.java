@@ -6,6 +6,7 @@ import primitives.Ray;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ public class Geometries extends Intersectable {
     public Geometries(Intersectable... geometries) {
 
         add(geometries);
-        
+
     }
 
     /**
@@ -49,11 +50,14 @@ public class Geometries extends Intersectable {
         resetBoundingBox();//if you add obj to list you must update the box
     }
 
-    @Override
-    protected List<Intersection> calcIntersectionsHelper(Ray ray, double maxDistance) {
+    protected List<Intersection> calcIntersectionsHelper22(Ray ray, double maxDistance) {
         List<Intersection> result = null;
 
-        for (Intersectable geometry : _geometries) {
+        //for (Intersectable geometry : _geometries) {
+        // שינוי קריטי מס' 1: שימוש בלולאת אינדקס כדי למנוע יצירת Iterator בזיכרון
+        int size = _geometries.size();
+        for (int i = 0; i < size; i++) {
+            Intersectable geometry = _geometries.get(i);
 
             List<Intersection> intersections = geometry.calcIntersections(ray, maxDistance);
             if (intersections != null)
@@ -65,6 +69,31 @@ public class Geometries extends Intersectable {
         }
         return result;
 
+    }
+
+    @Override
+    protected List<Intersection> calcIntersectionsHelper(Ray ray, double maxDistance) {
+        List<Intersection> result = null;
+
+        //for (Intersectable geometry : _geometries) {
+        int size = _geometries.size();
+        for (int i = 0; i < size; i++) {
+            Intersectable geometry = _geometries.get(i);
+            List<Intersection> intersections = geometry.calcIntersections(ray, maxDistance);
+            if (intersections != null) {
+                if (result == null) {
+                    // אופטימיזציה מטורפת: לא יוצרים רשימה חדשה! רק מצביעים לרשימה שחזרה מהילד.
+                    result = intersections;
+                } else {
+                    // רק אם פגענו בעוד גוף במקביל, ניצור רשימה חדשה שניתנת לשינוי (LinkedList יעילה יותר להוספה)
+                    if (!(result instanceof java.util.LinkedList)) {
+                        result = new LinkedList<>(result);
+                    }
+                    result.addAll(intersections);
+                }
+            }
+        }
+        return result;
     }
 
     @Override

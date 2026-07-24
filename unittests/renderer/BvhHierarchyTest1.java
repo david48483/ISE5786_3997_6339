@@ -9,7 +9,9 @@ import lighting.impl.DirectionalLight;
 import lighting.impl.PointLight;
 import lighting.impl.SpotLight;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import primitives.Color;
 import primitives.Material;
 import primitives.Point;
@@ -26,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  *
  * @author David & Yehuda
  */
+@TestMethodOrder(MethodOrderer.MethodName.class)
 public class BvhHierarchyTest1 {
 
     private static Scene scene;
@@ -42,6 +45,15 @@ public class BvhHierarchyTest1 {
      */
     @BeforeAll
     public static void setupScene() {
+
+        // חומר מאט (Matte) - בולע הרבה אור, כמעט לא מבריק
+        Material matteMat = new Material().setKD(0.8).setKS(0.2).setShininess(20);
+
+// חומר פלסטיק מבריק (Shiny) - מחזיר אור נקודתי יפה
+        Material shinyMat = new Material().setKD(0.5).setKS(0.5).setShininess(100);
+
+// חומר מתכתי אטום (Metallic) - החזר אור חזק וממוקד מאוד, ללא השתקפות סביבתית
+        Material metallicMat = new Material().setKD(0.3).setKS(0.8).setShininess(300);
         // 1. הכנת החומרים
         Material glossyMat = new Material().setKD(0.2).setKS(0.8).setShininess(200).setKR(0.6).setKG(4.0);
         Material glassyMat = new Material().setKD(0.2).setKS(0.5).setShininess(120).setKT(0.85);
@@ -56,10 +68,10 @@ public class BvhHierarchyTest1 {
                         .setMaterial(new Material().setKD(0.5).setKS(0.1).setShininess(10))
         );
 
-        Geometries clusterA = buildSphereCluster(new Point(-80, -10, -90), 8, 8, 3, 14, 6, glossyMat, new Color(30, 80, 30));
-        Geometries clusterB = buildSphereCluster(new Point(85, -5, -95), 8, 8, 3, 14, 6, glassyMat, new Color(80, 30, 30));
-        Geometries clusterC = buildSphereCluster(new Point(0, 35, -110), 8, 8, 3, 14, 5.5, milkyMat, new Color(30, 30, 80));
-
+        // אשכולות קטנים וצפופים יותר (למשל 8x8x8 שזה 512 כדורים לאשכול - סה"כ מעל 1500 כדורים)
+        Geometries clusterA = buildSphereCluster(new Point(-60, -10, -150), 8, 8, 8, 12, 5, matteMat, new Color(30, 80, 30));
+        Geometries clusterB = buildSphereCluster(new Point(60, -5, -150), 8, 8, 8, 12, 5, shinyMat, new Color(80, 30, 30));
+        Geometries clusterC = buildSphereCluster(new Point(0, 35, -180), 8, 8, 8, 12, 4.5, metallicMat, new Color(30, 30, 80));
         Geometries trianglesBranch = new Geometries();
         Point p1 = new Point(-40, -69, -30), p2 = new Point(-20, -69, -30), p3 = new Point(-30, -69, -50), pTop = new Point(-30, -45, -40);
         trianglesBranch.add(
