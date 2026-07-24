@@ -82,7 +82,6 @@ public class GlossyDiffusiveTests {
         scene.geometries.add(new Triangle(p3, p1, pTop).setMaterial(pyramidMat));
         scene.geometries.add(new Triangle(p1, p2, p3).setMaterial(pyramidMat));
 
-        // בסיס המצלמה המשותף לכל ההרצות
         Camera.Builder cameraBuilder = Camera.getBuilder()
                 .setLocation(new Point(0, 0, 500))
                 .setDirection(new Vector(0, 0, -1), Vector.AXIS_Y)
@@ -90,17 +89,14 @@ public class GlossyDiffusiveTests {
                 .setVpDistance(500)
                 .setResolution(600, 600);
 
-
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(false)
                 .setRaysAmount(9), "GlossyDiffusive_DISABLED");
-
 
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
                 .setRaysAmount(9), "GlossyDiffusive_Jitter_ENABLED");
-
 
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
@@ -108,12 +104,10 @@ public class GlossyDiffusiveTests {
                 .setSampler(new JitteredSampler())
                 .setRaysAmount(9), "GlossyDiffusive_Jitter_Circle_ENABLED");
 
-
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new GridSampler())
                 .setRaysAmount(9), "GlossyDiffusive_Grid_ENABLED");
-
 
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
@@ -183,11 +177,9 @@ public class GlossyDiffusiveTests {
                 .setVpDistance(150)
                 .setResolution(600, 600);
 
-        // 1. ללא אפקטים
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(false), "SelfGlossyDiffusive_DISABLED");
 
-        // 2. עם אפקטים מתקדמים
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setRaysAmount(9)
@@ -198,7 +190,7 @@ public class GlossyDiffusiveTests {
      * Helper method to render an image using the configured camera builder and scene.
      *
      * @param scene                   the scene to render
-     * @param cameraBuilder            the fully configured camera builder
+     * @param cameraBuilder           the fully configured camera builder
      * @param glossyDiffusiveFileName the output image file name
      */
     private void createImage(Scene scene, Camera.Builder cameraBuilder, String glossyDiffusiveFileName) {

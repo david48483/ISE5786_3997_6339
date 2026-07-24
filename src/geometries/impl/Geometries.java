@@ -36,7 +36,7 @@ public class Geometries extends Intersectable {
     public Geometries(Intersectable... geometries) {
 
         add(geometries);
-        resetBoundingBox();
+        
     }
 
     /**
@@ -46,6 +46,7 @@ public class Geometries extends Intersectable {
      */
     public void add(Intersectable... geometries) {
         Collections.addAll(_geometries, geometries);
+        resetBoundingBox();//if you add obj to list you must update the box
     }
 
     @Override
@@ -92,48 +93,65 @@ public class Geometries extends Intersectable {
     }
 
     /**
+     * Flattens the hierarchical geometries structure into a single-level flat Geometries object.
+     * This is required for testing CBR on a flat scene.
+     *
+     * @return a new Geometries object containing all basic intersectables in a flat list
+     */
+    public Geometries flatten() {
+        List<Intersectable> flatList = flattenAsList();
+        return new Geometries(flatList.toArray(new Intersectable[0]));
+    }
+
+    /**
+     * Flattens the hierarchy and returns it as a List.
+     * Useful for feeding the SAH BVH builder.
+     *
+     * @return a list of all basic geometric shapes
+     */
+    public List<Intersectable> flattenAsList() {
+        List<Intersectable> flatList = new ArrayList<>();
+        flattenHelper(this, flatList);
+        return flatList;
+    }
+
+    /**
+     * A recursive helper method to extract all basic geometries from the hierarchy.
+     *
+     * @param current  the current intersectable being checked
+     * @param flatList the list accumulating the basic geometries
+     */
+    private void flattenHelper(Intersectable current, List<Intersectable> flatList) {
+        if (current instanceof Geometries) {
+            Geometries group = (Geometries) current;
+            for (Intersectable child : group._geometries) {
+                flattenHelper(child, flatList); // קריאה רקורסיבית פנימה
+            }
+        } else {
+            flatList.add(current); // עצירה והוספה - הגענו לגוף בסיסי
+        }
+    }
+
+    /**
      * Rebuilds the Bounding Volume Hierarchy (BVH) tree for the current geometries.
      * This method flattens any existing hierarchical structure into a single list
      * of basic shapes and then delegates the construction of an optimized SAH
      * (Surface Area Heuristic) tree to the {@code BvhBuilder}.
      */
     public void buildBvhTree() {
-        // 1. Flatten the existing tree into a single list of basic geometries
-        List<Intersectable> flatList = flattenTree(this);
+        // 1. קבלת רשימה שטוחה באמצעות המתודה החדשה
+        List<Intersectable> flatList = flattenAsList();
 
-        // 2. Build the optimized SAH tree (assumes BvhBuilder is in the same package)
+        // 2. בניית עץ ה-SAH האופטימלי
         Geometries optimizedTree = BvhBuilder.buildSahTree(flatList);
 
-        // 3. Clear the current internal list of geometries
+        // 3. ניקוי המצב הפנימי הקיים
         this._geometries.clear();
 
-        // 4. Add the optimized branches back to this Geometries object
+        // 4. הוספת הענפים החדשים פנימה
         for (Intersectable geo : optimizedTree._geometries) {
             this.add(geo);
         }
     }
 
-    /**
-     * Helper method to recursively flatten a hierarchical Geometries structure
-     * into a single list of basic intersectable shapes (e.g., Sphere, Triangle, Plane).
-     *
-     * @param geometries the root of the hierarchy to flatten
-     * @return a flat list containing only basic geometries
-     */
-    private List<Intersectable> flattenTree(Geometries geometries) {
-        List<Intersectable> flatList = new java.util.ArrayList<>();
-
-        // Iterate through all direct children of the current geometries branch
-        for (Intersectable geo : geometries._geometries) {
-            if (geo instanceof Geometries) {
-                // If the child is also a Geometries collection, flatten it recursively
-                flatList.addAll(flattenTree((Geometries) geo));
-            } else {
-                // If it is a basic shape, add it directly to the list
-                flatList.add(geo);
-            }
-        }
-
-        return flatList;
-    }
 }

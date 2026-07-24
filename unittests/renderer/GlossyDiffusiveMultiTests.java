@@ -131,7 +131,7 @@ public class GlossyDiffusiveMultiTests {
                 .setSampler(new JitteredSampler())
                 .setSamplerShape(TargetShapeType.CIRCLE)
                 .setDebugPrint(0.1)
-                .setMultithreading(4)
+                .setMultithreading(8)
                 .setRaysAmount(9), "multi_4");
     }
 
