@@ -28,15 +28,15 @@ public abstract class Intersectable {
      * Global flag that controls whether BVH (bounding boxes) are used to accelerate
      * intersection testing across all geometries.
      */
-    private static boolean _bvhEnabled = false;
+    private static boolean _AABBEnabled = false;
 
     /**
      * Enables or disables BVH acceleration for all geometries.
      *
      * @param bvhEnabled {@code true} to enable BVH; {@code false} to disable
      */
-    public static void setBvhEnabled(boolean bvhEnabled) {
-        Intersectable._bvhEnabled = bvhEnabled;
+    public static void setAABBEnabled(boolean bvhEnabled) {
+        Intersectable._AABBEnabled = bvhEnabled;
     }
 
     /**
@@ -82,7 +82,7 @@ public abstract class Intersectable {
      * @return a list of Intersection objects, or null if no intersections exist
      */
     public final List<Intersection> calcIntersections(Ray ray, double maxDistance) {
-        if (_bvhEnabled) {
+        if (_AABBEnabled) {
             AABB box = getBoundingBox();
 
             if (box != null && !box.intersects(ray, maxDistance)) {

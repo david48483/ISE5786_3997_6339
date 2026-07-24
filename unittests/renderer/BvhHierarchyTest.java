@@ -114,6 +114,8 @@ public class BvhHierarchyTest {
 
         scene.setGeometries(rootGeometries);
 
+        scene.setBvhEnable(true);
+
         // בדיקה לדוגמה לוודא שהסצנה הוקמה בהצלחה והגופים נטענו
         assertNotNull(scene, "Scene should not be null");
 
@@ -131,70 +133,60 @@ public class BvhHierarchyTest {
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
                 .setMultithreading(-2)
-                .setBvhEnabled(false)
                 .setRaysAmount(9), "BVH-50plus-noBVH-2");
 
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
                 .setMultithreading(-2)
-                .setBvhEnabled(true)
                 .setRaysAmount(9), "BVH-50plus-BVH-2");
 
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
                 .setMultithreading(-1)
-                .setBvhEnabled(false)
                 .setRaysAmount(9), "BVH-50plus-noBVH-1");
 
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
                 .setMultithreading(-1)
-                .setBvhEnabled(true)
                 .setRaysAmount(9), "BVH-50plus-BVH-1");
 
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
                 .setMultithreading(0)
-                .setBvhEnabled(false)
                 .setRaysAmount(9), "BVH-50plus-noBVH_0");
 
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
                 .setMultithreading(0)
-                .setBvhEnabled(true)
                 .setRaysAmount(9), "BVH-50plus-BVH_0");
 
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
                 .setMultithreading(1)
-                .setBvhEnabled(false)
                 .setRaysAmount(9), "BVH-50plus-noBVH_1");
 
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
                 .setMultithreading(1)
-                .setBvhEnabled(true)
                 .setRaysAmount(9), "BVH-50plus-BVH_1");
 
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
                 .setMultithreading(4)
-                .setBvhEnabled(false)
                 .setRaysAmount(9), "BVH-50plus-noBVH_4");
 
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
                 .setMultithreading(4)
-                .setBvhEnabled(true)
                 .setRaysAmount(9), "BVH-50plus-BVH_4");
     }
 

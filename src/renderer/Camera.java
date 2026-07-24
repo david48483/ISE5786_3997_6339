@@ -495,21 +495,6 @@ public class Camera implements Cloneable {
         }
 
         /**
-         * Enables or disables BVH (Bounding Volume Hierarchy) acceleration for intersections.
-         * <p>
-         * When enabled, ray-geometry intersection checks are first filtered using
-         * axis-aligned bounding boxes, significantly reducing the number of precise
-         * intersection calculations for complex scenes.
-         *
-         * @param isEnabled {@code true} to enable BVH acceleration; {@code false} to disable
-         * @return this Builder instance for method chaining
-         */
-        public Builder setBvhEnabled(boolean isEnabled) {
-            Intersectable.setBvhEnabled(isEnabled);
-            return this; // החזרת הבילדר כדי לאפשר שרשור (Chaining)
-        }
-
-        /**
          * Computes the orthonormal camera basis vectors.
          */
         private void calcVectors() {

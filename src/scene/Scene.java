@@ -1,5 +1,6 @@
 package scene;
 
+import geometries.api.Intersectable;
 import geometries.impl.Geometries;
 import lighting.api.LightSource;
 import lighting.impl.AmbientLight;
@@ -81,6 +82,12 @@ public class Scene {
      */
     public Scene setGeometries(Geometries geometries) {
         this.geometries = geometries;
+        return this;
+    }
+
+
+    public Scene setAABB(boolean isEnable){
+        Intersectable.setAABBEnabled(isEnable);
         return this;
     }
 
