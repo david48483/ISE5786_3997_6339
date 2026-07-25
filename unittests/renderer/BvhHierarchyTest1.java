@@ -126,22 +126,22 @@ public class BvhHierarchyTest1 {
 
     @Test
     public void test01_Flat_NoCBR_NoMT() {
-        runMeasurement(flatScene, false, 0, "01-Flat-NoCBR-NoMT");
+        runMeasurement(flatScene, false, 0, "01-Flat-NoCBR-NoMT.");
     }
 
     @Test
     public void test02_Flat_WithCBR_NoMT() {
-        runMeasurement(flatScene, true, 0, "02-Flat-WithCBR-NoMT");
+        runMeasurement(flatScene, true, 0, "02-Flat-WithCBR-NoMT.");
     }
 
     @Test
     public void test03_Flat_NoCBR_MT() {
-        runMeasurement(flatScene, false, MT_THREADS, "03-Flat-NoCBR-MT");
+        runMeasurement(flatScene, false, MT_THREADS, "03-Flat-NoCBR-MT.");
     }
 
     @Test
     public void test04_Flat_WithCBR_MT() {
-        runMeasurement(flatScene, true, MT_THREADS, "04-Flat-WithCBR-MT");
+        runMeasurement(flatScene, true, MT_THREADS, "04-Flat-WithCBR-MT.");
     }
 
     // =========================================================
@@ -150,22 +150,22 @@ public class BvhHierarchyTest1 {
 
     @Test
     public void test05_Manual_NoCBR_NoMT() {
-        runMeasurement(manualHierarchy, false, 0, "05-Manual-NoCBR-NoMT");
+        runMeasurement(manualHierarchy, false, 0, "05-Manual-NoCBR-NoMT.");
     }
 
     @Test
     public void test06_Manual_WithCBR_NoMT() {
-        runMeasurement(manualHierarchy, true, 0, "06-Manual-WithCBR-NoMT");
+        runMeasurement(manualHierarchy, true, 0, "06-Manual-WithCBR-NoMT.");
     }
 
     @Test
     public void test07_Manual_NoCBR_MT() {
-        runMeasurement(manualHierarchy, false, MT_THREADS, "07-Manual-NoCBR-MT");
+        runMeasurement(manualHierarchy, false, MT_THREADS, "07-Manual-NoCBR-MT.");
     }
 
     @Test
     public void test08_Manual_WithCBR_MT() {
-        runMeasurement(manualHierarchy, true, MT_THREADS, "08-Manual-WithCBR-MT");
+        runMeasurement(manualHierarchy, true, MT_THREADS, "08-Manual-WithCBR-MT.");
     }
 
     // =========================================================
@@ -174,22 +174,22 @@ public class BvhHierarchyTest1 {
 
     @Test
     public void test09_Auto_NoCBR_NoMT() {
-        runMeasurement(autoHierarchy, false, 0, "09-Auto-NoCBR-NoMT");
+        runMeasurement(autoHierarchy, false, 0, "09-Auto-NoCBR-NoMT.");
     }
 
     @Test
     public void test10_Auto_WithCBR_NoMT() {
-        runMeasurement(autoHierarchy, true, 0, "10-Auto-WithCBR-NoMT");
+        runMeasurement(autoHierarchy, true, 0, "10-Auto-WithCBR-NoMT.");
     }
 
     @Test
     public void test11_Auto_NoCBR_MT() {
-        runMeasurement(autoHierarchy, false, MT_THREADS, "11-Auto-NoCBR-MT");
+        runMeasurement(autoHierarchy, false, MT_THREADS, "11-Auto-NoCBR-MT.");
     }
 
     @Test
     public void test12_Auto_WithCBR_MT() {
-        runMeasurement(autoHierarchy, true, MT_THREADS, "12-Auto-WithCBR-MT");
+        runMeasurement(autoHierarchy, true, MT_THREADS, "12-Auto-WithCBR-MT.");
     }
 
     // =========================================================
