@@ -8,45 +8,69 @@ import java.util.List;
 
 /**
  * A builder class for creating a Bounding Volume Hierarchy (BVH) tree.
- * It uses the Surface Area Heuristic (SAH) algorithm with bins to optimize ray tracing.
+ * It uses the Surface Area Heuristic (SAH) algorithm and supports N-ary trees
+ * (e.g., Binary, Quaternary).
  */
 public class BvhBuilder {
 
     /**
      * The number of bins to use for the SAH algorithm.
-     * 16 is a good balance between building speed and rendering performance.
      */
     private static int BINS_COUNT = 16;
 
-    public void setBINS(int count) {
+    /**
+     * The maximum number of branches (children) a single node can have.
+     * 2 = Binary Tree, 4 = Quad Tree (QBVH), 8 = Octree-like BVH.
+     */
+    private static int MAX_BRANCHES = 2;
+
+    public static void setBINS(int count) {
         BINS_COUNT = count;
     }
 
     /**
-     * A simple helper class to represent a "Bin" (a bucket) for the SAH algorithm.
+     * Sets the maximum number of branches per tree node.
+     *
+     * @param count the number of branches (minimum 2)
+     */
+    public static void setMaxBranches(int count) {
+        if (count >= 2) {
+            MAX_BRANCHES = count;
+        }
+    }
+
+    /**
+     * A simple helper class to represent a "Bin" for the SAH algorithm.
      */
     private static class Bin {
         AABB bounds = null;
         int count = 0;
 
-        /**
-         * Adds a geometry's bounding box to this bin.
-         *
-         * @param box the bounding box of the geometry
-         */
         void add(AABB box) {
             count++;
             if (bounds == null) {
-                bounds = box; // Copy the box if it is the first one
+                bounds = box;
             } else {
-                bounds = bounds.union(box); // Merge with the existing box
+                bounds = bounds.union(box);
             }
         }
     }
 
     /**
+     * Helper record/class to hold the result of a single binary split.
+     */
+    private static class SplitResult {
+        List<Intersectable> left;
+        List<Intersectable> right;
+
+        SplitResult(List<Intersectable> left, List<Intersectable> right) {
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    /**
      * Builds the main BVH tree from a list of geometries.
-     * It separates infinite geometries (like planes) from finite ones.
      *
      * @param allGeometries the full list of geometries in the scene
      * @return a single Geometries object containing the optimized tree
@@ -55,8 +79,6 @@ public class BvhBuilder {
         List<Intersectable> infiniteGeometries = new ArrayList<>();
         List<Intersectable> finiteGeometries = new ArrayList<>();
 
-        // Step 1: Separate geometries.
-        // Planes do not have a bounding box (it is null), so they go to infiniteGeometries.
         for (Intersectable geo : allGeometries) {
             if (geo.getBoundingBox() == null) {
                 infiniteGeometries.add(geo);
@@ -67,12 +89,10 @@ public class BvhBuilder {
 
         Geometries root = new Geometries();
 
-        // Step 2: Add all infinite geometries (Planes) directly to the root level.
         for (Intersectable geo : infiniteGeometries) {
             root.add(geo);
         }
 
-        // Step 3: Build the SAH tree for the finite geometries and add it to the root.
         if (!finiteGeometries.isEmpty()) {
             root.add(buildNode(finiteGeometries));
         }
@@ -81,26 +101,69 @@ public class BvhBuilder {
     }
 
     /**
-     * Recursively builds a BVH node using the Binned SAH algorithm.
+     * Recursively builds a BVH node, splitting the list up to MAX_BRANCHES chunks.
      *
      * @param geometries the list of finite geometries to organize
      * @return a Geometries object representing a branch in the tree
      */
     private static Geometries buildNode(List<Intersectable> geometries) {
-        int size = geometries.size();
-
-        // Base case: If there are 2 or fewer geometries, stop splitting and make a leaf.
-        if (size <= 20) {
+        // Base case: If there are 20 or fewer geometries, stop splitting and make a leaf.
+        if (geometries.size() <= 20) {
             return createLeaf(geometries);
         }
 
-        // Step 1: Find the overall bounding box of all objects to know their spread.
+        // List to hold the geometric chunks for the current node level
+        List<List<Intersectable>> chunks = new ArrayList<>();
+        chunks.add(geometries);
+
+        // Iteratively split the largest chunk until we reach the desired number of branches
+        while (chunks.size() < MAX_BRANCHES) {
+            int largestIdx = -1;
+            int maxSize = 20; // Only split chunks that are larger than the leaf threshold
+
+            // Find the chunk with the most geometries to split next
+            for (int i = 0; i < chunks.size(); i++) {
+                if (chunks.get(i).size() > maxSize) {
+                    maxSize = chunks.get(i).size();
+                    largestIdx = i;
+                }
+            }
+
+            // If no chunk is large enough to be split, break early
+            if (largestIdx == -1) {
+                break;
+            }
+
+            // Remove the chunk and split it using SAH
+            List<Intersectable> toSplit = chunks.remove(largestIdx);
+            SplitResult splitResult = performSahSplit(toSplit);
+
+            // Add the two new sub-chunks back into our working list
+            chunks.add(splitResult.left);
+            chunks.add(splitResult.right);
+        }
+
+        // Now we have up to MAX_BRANCHES chunks. Recursively build them as children.
+        Geometries parentNode = new Geometries();
+        for (List<Intersectable> chunk : chunks) {
+            parentNode.add(buildNode(chunk));
+        }
+
+        return parentNode;
+    }
+
+    /**
+     * Performs a single optimal binary split using the SAH algorithm.
+     *
+     * @param geometries the list to split
+     * @return a SplitResult containing the two sub-lists
+     */
+    private static SplitResult performSahSplit(List<Intersectable> geometries) {
         AABB totalBox = geometries.getFirst().getBoundingBox();
-        for (int i = 1; i < size; i++) {
+        for (int i = 1; i < geometries.size(); i++) {
             totalBox = totalBox.union(geometries.get(i).getBoundingBox());
         }
 
-        // Step 2: Find the longest axis to split (0 = X, 1 = Y, 2 = Z).
         double xLength = totalBox.getMax().getX() - totalBox.getMin().getX();
         double yLength = totalBox.getMax().getY() - totalBox.getMin().getY();
         double zLength = totalBox.getMax().getZ() - totalBox.getMin().getZ();
@@ -109,7 +172,6 @@ public class BvhBuilder {
         if (yLength > xLength && yLength > zLength) axis = 1;
         else if (zLength > xLength && zLength > yLength) axis = 2;
 
-        // Find the minimum and maximum center points along the chosen axis.
         double minCenter = Double.MAX_VALUE;
         double maxCenter = -Double.MAX_VALUE;
 
@@ -119,13 +181,10 @@ public class BvhBuilder {
             if (center > maxCenter) maxCenter = center;
         }
 
-        // If all objects are at the exact same place, we cannot split them by space.
-        // Just split the list in half.
         if (minCenter == maxCenter) {
             return splitInHalf(geometries);
         }
 
-        // Step 3: Create the bins and put geometries into them.
         Bin[] bins = new Bin[BINS_COUNT];
         for (int i = 0; i < BINS_COUNT; i++) {
             bins[i] = new Bin();
@@ -133,18 +192,14 @@ public class BvhBuilder {
 
         for (Intersectable geo : geometries) {
             double center = getCenter(geo.getBoundingBox(), axis);
-            // Calculate which bin the geometry belongs to (0 to BINS_COUNT - 1).
             int binIndex = (int) (((center - minCenter) / (maxCenter - minCenter)) * BINS_COUNT);
-            if (binIndex == BINS_COUNT) binIndex = BINS_COUNT - 1; // Fix edge case
-
+            if (binIndex == BINS_COUNT) binIndex = BINS_COUNT - 1;
             bins[binIndex].add(geo.getBoundingBox());
         }
 
-        // Step 4: Calculate SAH cost for each possible split between the bins.
         double minCost = Double.MAX_VALUE;
         int bestSplit = -1;
 
-        // There are BINS_COUNT - 1 possible ways to split the bins.
         for (int i = 0; i < BINS_COUNT - 1; i++) {
             AABB leftBox = null;
             int leftCount = 0;
@@ -164,7 +219,6 @@ public class BvhBuilder {
                 }
             }
 
-            // Calculate cost: (Left Surface Area * Left Count) + (Right Surface Area * Right Count)
             if (leftCount > 0 && rightCount > 0) {
                 double leftArea = calculateSurfaceArea(leftBox);
                 double rightArea = calculateSurfaceArea(rightBox);
@@ -177,9 +231,7 @@ public class BvhBuilder {
             }
         }
 
-        // Step 5: Split the geometries into two lists based on the best split found.
         if (bestSplit == -1) {
-            // Fallback if we couldn't find a good split.
             return splitInHalf(geometries);
         }
 
@@ -198,25 +250,13 @@ public class BvhBuilder {
             }
         }
 
-        // Edge case: if one side is empty, just split in half to avoid infinite recursion.
         if (leftList.isEmpty() || rightList.isEmpty()) {
             return splitInHalf(geometries);
         }
 
-        // Step 6: Recursively build the left and right branches.
-        Geometries parentNode = new Geometries();
-        parentNode.add(buildNode(leftList));
-        parentNode.add(buildNode(rightList));
-
-        return parentNode;
+        return new SplitResult(leftList, rightList);
     }
 
-    /**
-     * Helper method to calculate the surface area of a bounding box.
-     *
-     * @param box the bounding box
-     * @return the surface area, or 0 if the box is null
-     */
     private static double calculateSurfaceArea(AABB box) {
         if (box == null) return 0;
         double x = box.getMax().getX() - box.getMin().getX();
@@ -225,32 +265,15 @@ public class BvhBuilder {
         return 2.0 * (x * y + y * z + z * x);
     }
 
-    /**
-     * Helper method to get the center point of a bounding box along a specific axis.
-     *
-     * @param box  the bounding box
-     * @param axis the axis (0 for X, 1 for Y, 2 for Z)
-     * @return the center coordinate
-     */
     private static double getCenter(AABB box, int axis) {
         switch (axis) {
-            case 0:
-                return (box.getMin().getX() + box.getMax().getX()) / 2.0;
-            case 1:
-                return (box.getMin().getY() + box.getMax().getY()) / 2.0;
-            case 2:
-                return (box.getMin().getZ() + box.getMax().getZ()) / 2.0;
-            default:
-                return 0;
+            case 0: return (box.getMin().getX() + box.getMax().getX()) / 2.0;
+            case 1: return (box.getMin().getY() + box.getMax().getY()) / 2.0;
+            case 2: return (box.getMin().getZ() + box.getMax().getZ()) / 2.0;
+            default: return 0;
         }
     }
 
-    /**
-     * Helper method to create a leaf node containing a few geometries.
-     *
-     * @param geometries the list of geometries
-     * @return a Geometries object containing these geometries
-     */
     private static Geometries createLeaf(List<Intersectable> geometries) {
         Geometries leaf = new Geometries();
         for (Intersectable geo : geometries) {
@@ -259,20 +282,11 @@ public class BvhBuilder {
         return leaf;
     }
 
-    /**
-     * Fallback method to simply split the list in half if SAH cannot find a good split.
-     *
-     * @param geometries the list to split
-     * @return a Geometries object with two equal branches
-     */
-    private static Geometries splitInHalf(List<Intersectable> geometries) {
+    private static SplitResult splitInHalf(List<Intersectable> geometries) {
         int mid = geometries.size() / 2;
-        List<Intersectable> leftList = geometries.subList(0, mid);
-        List<Intersectable> rightList = geometries.subList(mid, geometries.size());
-
-        Geometries parentNode = new Geometries();
-        parentNode.add(buildNode(leftList));
-        parentNode.add(buildNode(rightList));
-        return parentNode;
+        return new SplitResult(
+                new ArrayList<>(geometries.subList(0, mid)),
+                new ArrayList<>(geometries.subList(mid, geometries.size()))
+        );
     }
 }
