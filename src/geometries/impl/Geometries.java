@@ -75,19 +75,16 @@ public class Geometries extends Intersectable {
     protected List<Intersection> calcIntersectionsHelper(Ray ray, double maxDistance) {
         List<Intersection> result = null;
 
-        //for (Intersectable geometry : _geometries) {
         int size = _geometries.size();
         for (int i = 0; i < size; i++) {
             Intersectable geometry = _geometries.get(i);
             List<Intersection> intersections = geometry.calcIntersections(ray, maxDistance);
             if (intersections != null) {
                 if (result == null) {
-                    // אופטימיזציה מטורפת: לא יוצרים רשימה חדשה! רק מצביעים לרשימה שחזרה מהילד.
                     result = intersections;
                 } else {
-                    // רק אם פגענו בעוד גוף במקביל, ניצור רשימה חדשה שניתנת לשינוי (LinkedList יעילה יותר להוספה)
-                    if (!(result instanceof java.util.LinkedList)) {
-                        result = new LinkedList<>(result);
+                    if (!(result instanceof java.util.ArrayList)) {
+                        result = new ArrayList<>(result);
                     }
                     result.addAll(intersections);
                 }
