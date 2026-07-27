@@ -50,42 +50,17 @@ public class Geometries extends Intersectable {
         resetBoundingBox();//if you add obj to list you must update the box
     }
 
-    protected List<Intersection> calcIntersectionsHelper22(Ray ray, double maxDistance) {
-        List<Intersection> result = null;
-
-        //for (Intersectable geometry : _geometries) {
-        // שינוי קריטי מס' 1: שימוש בלולאת אינדקס כדי למנוע יצירת Iterator בזיכרון
-        int size = _geometries.size();
-        for (int i = 0; i < size; i++) {
-            Intersectable geometry = _geometries.get(i);
-
-            List<Intersection> intersections = geometry.calcIntersections(ray, maxDistance);
-            if (intersections != null)
-                if (result == null)
-                    result = new ArrayList<>(intersections);
-                else
-                    result.addAll(intersections);
-
-        }
-        return result;
-
-    }
-
     @Override
     protected List<Intersection> calcIntersectionsHelper(Ray ray, double maxDistance) {
         List<Intersection> result = null;
 
         int size = _geometries.size();
-        for (int i = 0; i < size; i++) {
-            Intersectable geometry = _geometries.get(i);
+        for (Intersectable geometry : _geometries) {
             List<Intersection> intersections = geometry.calcIntersections(ray, maxDistance);
             if (intersections != null) {
                 if (result == null) {
-                    result = intersections;
+                    result = new ArrayList<>(intersections);
                 } else {
-                    if (!(result instanceof java.util.ArrayList)) {
-                        result = new ArrayList<>(result);
-                    }
                     result.addAll(intersections);
                 }
             }
@@ -108,11 +83,7 @@ public class Geometries extends Intersectable {
                 return null;
             }
 
-            if (combinedBox == null) {
-                combinedBox = geoBox;
-            } else {
-                combinedBox = combinedBox.union(geoBox);
-            }
+            combinedBox = (combinedBox == null) ? geoBox : combinedBox.union(geoBox);
         }
 
         return combinedBox;
@@ -125,8 +96,9 @@ public class Geometries extends Intersectable {
      * @return a new Geometries object containing all basic intersectables in a flat list
      */
     public Geometries flatten() {
-        List<Intersectable> flatList = flattenAsList();
-        return new Geometries(flatList.toArray(new Intersectable[0]));
+        Geometries flatContainer = new Geometries();
+        flattenHelper(this, flatContainer._geometries);
+        return flatContainer;
     }
 
     /**
@@ -148,13 +120,12 @@ public class Geometries extends Intersectable {
      * @param flatList the list accumulating the basic geometries
      */
     private void flattenHelper(Intersectable current, List<Intersectable> flatList) {
-        if (current instanceof Geometries) {
-            Geometries group = (Geometries) current;
+        if (current instanceof Geometries group) {
             for (Intersectable child : group._geometries) {
-                flattenHelper(child, flatList); // קריאה רקורסיבית פנימה
+                flattenHelper(child, flatList);
             }
         } else {
-            flatList.add(current); // עצירה והוספה - הגענו לגוף בסיסי
+            flatList.add(current);
         }
     }
 
@@ -165,19 +136,12 @@ public class Geometries extends Intersectable {
      * (Surface Area Heuristic) tree to the {@code BvhBuilder}.
      */
     public void buildBvhTree() {
-        // 1. קבלת רשימה שטוחה באמצעות המתודה החדשה
         List<Intersectable> flatList = flattenAsList();
 
-        // 2. בניית עץ ה-SAH האופטימלי
         Geometries optimizedTree = BvhBuilder.buildSahTree(flatList);
 
-        // 3. ניקוי המצב הפנימי הקיים
-        this._geometries.clear();
-
-        // 4. הוספת הענפים החדשים פנימה
-        for (Intersectable geo : optimizedTree._geometries) {
-            this.add(geo);
-        }
+        _geometries.clear();
+        _geometries.addAll(optimizedTree._geometries);
     }
 
 }

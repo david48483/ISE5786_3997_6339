@@ -38,7 +38,7 @@ public class BvhHierarchyTest1 {
     private static Geometries manualHierarchy;
     private static Geometries autoHierarchy;
 
-    private static final int MT_THREADS = 4; // המספר האופטימלי שלכם לריבוי תהליכונים
+    private static final int MT_THREADS = -1; // המספר האופטימלי שלכם לריבוי תהליכונים
 
     /**
      * מתודת עזר סטטית הבונה את הסצנה פעם אחת עבור כל סדרת המדידות.
@@ -84,7 +84,7 @@ public class BvhHierarchyTest1 {
         // 3. יצירת שלושת המצבים המבניים בזיכרון (רק דרך הממשק הציבורי של Geometries!)
 
         // מצב 1: היררכיה ידנית (Manual)
-        manualHierarchy = new Geometries(planesBranch, clusterA, clusterB, clusterC, trianglesBranch);
+        manualHierarchy = new Geometries( clusterA, clusterB, clusterC, trianglesBranch);
 
         // מצב 2: סצנה משוטחת לחלוטין (Flat)
         flatScene = manualHierarchy.flatten();
@@ -112,9 +112,9 @@ public class BvhHierarchyTest1 {
                 .setDirection(new Vector(0, 0, -1), Vector.AXIS_Y)
                 .setVpSize(200, 200)
                 .setVpDistance(500)
-                .setDebugPrint(0.0)
+                .setDebugPrint(0.5)
                 .setSamplerShape(TargetShapeType.CIRCLE)
-                .setResolution(50, 50)
+                .setResolution(800, 800)
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
                 .setRaysAmount(9);
@@ -126,22 +126,22 @@ public class BvhHierarchyTest1 {
 
     @Test
     public void test01_Flat_NoCBR_NoMT() {
-        runMeasurement(flatScene, false, 0, "01-Flat-NoCBR-NoMT.");
+        runMeasurement(flatScene, false, false, 0, "01-Flat-NoCBR-NoMT.");
     }
 
     @Test
     public void test02_Flat_WithCBR_NoMT() {
-        runMeasurement(flatScene, true, 0, "02-Flat-WithCBR-NoMT.");
+        runMeasurement(flatScene, true, false, 0, "02-Flat-WithCBR-NoMT.");
     }
 
     @Test
     public void test03_Flat_NoCBR_MT() {
-        runMeasurement(flatScene, false, MT_THREADS, "03-Flat-NoCBR-MT.");
+        runMeasurement(flatScene, false, false, MT_THREADS, "03-Flat-NoCBR-MT.");
     }
 
     @Test
     public void test04_Flat_WithCBR_MT() {
-        runMeasurement(flatScene, true, MT_THREADS, "04-Flat-WithCBR-MT.");
+        runMeasurement(flatScene, true, false, MT_THREADS, "04-Flat-WithCBR-MT.");
     }
 
     // =========================================================
@@ -150,22 +150,22 @@ public class BvhHierarchyTest1 {
 
     @Test
     public void test05_Manual_NoCBR_NoMT() {
-        runMeasurement(manualHierarchy, false, 0, "05-Manual-NoCBR-NoMT.");
+        runMeasurement(manualHierarchy, false, false, 0, "05-Manual-NoCBR-NoMT.");
     }
 
     @Test
     public void test06_Manual_WithCBR_NoMT() {
-        runMeasurement(manualHierarchy, true, 0, "06-Manual-WithCBR-NoMT.");
+        runMeasurement(manualHierarchy, true, false, 0, "06-Manual-WithCBR-NoMT.");
     }
 
     @Test
     public void test07_Manual_NoCBR_MT() {
-        runMeasurement(manualHierarchy, false, MT_THREADS, "07-Manual-NoCBR-MT.");
+        runMeasurement(manualHierarchy, false, false, MT_THREADS, "07-Manual-NoCBR-MT.");
     }
 
     @Test
     public void test08_Manual_WithCBR_MT() {
-        runMeasurement(manualHierarchy, true, MT_THREADS, "08-Manual-WithCBR-MT.");
+        runMeasurement(manualHierarchy, true, false, MT_THREADS, "08-Manual-WithCBR-MT.");
     }
 
     // =========================================================
@@ -174,22 +174,22 @@ public class BvhHierarchyTest1 {
 
     @Test
     public void test09_Auto_NoCBR_NoMT() {
-        runMeasurement(autoHierarchy, false, 0, "09-Auto-NoCBR-NoMT.");
+        runMeasurement(autoHierarchy, false, true, 0, "09-Auto-NoCBR-NoMT.");
     }
 
     @Test
     public void test10_Auto_WithCBR_NoMT() {
-        runMeasurement(autoHierarchy, true, 0, "10-Auto-WithCBR-NoMT.");
+        runMeasurement(autoHierarchy, true, true, 0, "10-Auto-WithCBR-NoMT.");
     }
 
     @Test
     public void test11_Auto_NoCBR_MT() {
-        runMeasurement(autoHierarchy, false, MT_THREADS, "11-Auto-NoCBR-MT.");
+        runMeasurement(autoHierarchy, false, true, MT_THREADS, "11-Auto-NoCBR-MT.");
     }
 
     @Test
     public void test12_Auto_WithCBR_MT() {
-        runMeasurement(autoHierarchy, true, MT_THREADS, "12-Auto-WithCBR-MT.");
+        runMeasurement(autoHierarchy, true, true, MT_THREADS, "12-Auto-WithCBR-MT.");
     }
 
     // =========================================================
@@ -199,12 +199,13 @@ public class BvhHierarchyTest1 {
     /**
      * מתודת עזר שמבצעת מדידה אחת מלאה ומדפיסה את התוצאות.
      */
-    private void runMeasurement(Geometries geometries, boolean useCbr, int threads, String testName) {
+    private void runMeasurement(Geometries geometries, boolean cbr, boolean bvh,  int threads, String testName) {
         // הגדרת המבנה הגיאומטרי לסצנה
         scene.setGeometries(geometries);
 
-        // הפעלה או כיבוי של מנגנון הקופסאות
-        Intersectable.setAABBEnabled(useCbr);
+        scene.setBvhTree(bvh);
+
+        scene.setAABB(cbr);
 
         // הגדרת ריבוי תהליכונים
         cameraBuilder.setMultithreading(threads);
