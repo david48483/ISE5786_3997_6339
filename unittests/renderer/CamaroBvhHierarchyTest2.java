@@ -51,7 +51,7 @@ public class CamaroBvhHierarchyTest2 {
     @BeforeAll
     public static void setupScene() {
         // 1. נתיב לקובץ ה-JSON
-        String jsonPath = "C:\\Users\\david\\Downloads\\home.json";
+        String jsonPath = "C:\\Users\\admin\\Downloads\\Home\\Home.json";
 
         // 2. טעינת הגיאומטריות ישירות מתוך ה-JSON ללא ModelLoader
         Geometries loadedCarModel = loadGeometriesFromJson(jsonPath);
@@ -60,8 +60,25 @@ public class CamaroBvhHierarchyTest2 {
                         .setEmission(new Color(130, 130, 130))
                         .setMaterial(new Material().setKD(0.1).setKS(0.2).setShininess(10).setKA(0.8)));
 
+        // --- הוספת שלושת הכדורים ---
+        Geometries spheres = new Geometries(
+                // 1. כדור שקוף (זכוכית) - ממוקם שמאלה ומאחורי הרכב
+                new Sphere(new Point(14, 15, 5), 1)
+                        .setEmission(new Color(5, 5, 5)) // צבע בסיס כהה כדי שהשקיפות תעבוד נקי
+                        .setMaterial(new Material().setKD(0.1).setKS(0.9).setShininess(100).setKT(0.85)),
+
+                // 2. כדור חלבי (חצי שקוף וחלבי) - ממוקם ימינה וקרוב (אך לא מסתיר)
+                new Sphere(new Point(11, 15, 5), 1)
+                        .setEmission(new Color(220, 220, 230)) // גוון לבן-אפרפר
+                        .setMaterial(new Material().setKD(0.5).setKS(0.3).setShininess(20).setKT(0.5).setKG(50.0)),
+                // 3. כדור אטום לגמרי (מתכתי ומבריק) - ממוקם רחוק מאחור בצד ימין
+                new Sphere(new Point(18, 15, 5), 1)
+                        .setEmission(new Color(30, 100, 200)) // צבע כחול עמוק (ניתן לשנות)
+                        .setMaterial(new Material().setKD(0.2).setKS(0.8).setShininess(200).setKT(0.0))
+        );
+
         // 3. איחוד הסצנה
-        Geometries fullScene = new Geometries(loadedCarModel, planeScena);
+        Geometries fullScene = new Geometries(loadedCarModel, planeScena, spheres);
 
         flatScene = fullScene;
         manualHierarchy = fullScene;
@@ -81,26 +98,29 @@ public class CamaroBvhHierarchyTest2 {
         scene.lights.add(new PointLight(new Color(50, 100, 200), new Point(-25, 5, -25))
                 .setKl(0.001).setKq(0.0001));
 
+        scene.lights.add(new PointLight(new Color(800, 800, 800), new Point(11, 15, 5))
+                .setKl(0.001).setKq(0.0001));
+
         assertNotNull(scene, "Scene should not be null");
 
         // הגדרת מצלמה
         cameraBuilder = Camera.getBuilder()
                 // 1. מיקום המצלמה: מול חזית הרכב (-30, -20) ובגובה קל (15)
-                .setLocation(new Point(-24, -12, 12))
+                .setLocation(new Point(-22, -22, 4))
 
                 // 2. וקטור כיוון הראייה (To-Vector):
                 // כיוון שהמצלמה ב-(-30, -20, 15) והרכב ב-(0, 0, 0),
                 // הווקטור שמביט אל הרכב הוא בדיוק הנגדי: (30, 20, -15)
-                .setDirection(new Vector(30, 18, -13), new Vector(0, 0, 1))
+                .setDirection(new Vector(25, 26, -2), new Vector(0, 0, 1))
 
-                .setVpSize(15, 15)
-                .setVpDistance(40)
+                .setVpSize(18, 18)
+                .setVpDistance(80)
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
                 .setSamplerShape(TargetShapeType.CIRCLE)
                 .setRaysAmount(9)
                 .setDebugPrint(0.5)
-                .setResolution(300, 300);
+                .setResolution(900, 900);
     }
 
     /**
@@ -247,7 +267,7 @@ public class CamaroBvhHierarchyTest2 {
 
     @Test
     public void test12_Auto_WithCBR_MT() {
-        runMeasurement(autoHierarchy, true, true, MT_THREADS, "camaro-12-Auto-WithCBR-MT");
+        runMeasurement(autoHierarchy, true, true, MT_THREADS, "MERCEDES-12-Auto-WithCBR-MT");
     }
 
     private void runMeasurement(Geometries geometries, boolean useCbr, boolean bvh, int threads, String testName) {
