@@ -66,7 +66,7 @@ public class AABB {
         double tMin = 0.0;
         double tMax = maxDistance;
 
-        // ציר X
+        // X axis
         if (dx != 0) {
             double invDx = 1.0 / dx;
             double t1 = (minX - ox) * invDx;
@@ -78,7 +78,7 @@ public class AABB {
             return false;
         }
 
-        // ציר Y
+        // Y axis
         if (dy != 0) {
             double invDy = 1.0 / dy;
             double t1 = (minY - oy) * invDy;
@@ -90,7 +90,7 @@ public class AABB {
             return false;
         }
 
-        // ציר Z
+        // Z axis
         if (dz != 0) {
             double invDz = 1.0 / dz;
             double t1 = (minZ - oz) * invDz;

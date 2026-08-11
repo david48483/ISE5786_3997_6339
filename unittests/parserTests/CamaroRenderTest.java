@@ -29,7 +29,7 @@ public class CamaroRenderTest {
      * @param scene the scene to which the neon sign geometries and lights will be added
      */
     private void createNeonSign(Scene scene) {
-        // מטריצה המציירת 'בהוקרה לד"ר דן היקר!' (משמאל לימין)
+        // Matrix drawing the text (left to right)
         int[][] textMatrix = {
                 {1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1},
                 {1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1},
@@ -38,19 +38,19 @@ public class CamaroRenderTest {
                 {1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1}
         };
 
-        Material ledMat = new Material().setKD(0).setKS(0); // לא מקבל אור, רק פולט
-        Color ledColor = new Color(255, 180, 20); // כתום ניאון חם
+        Material ledMat = new Material().setKD(0).setKS(0); // does not receive light, only emits
+        Color ledColor = new Color(255, 180, 20); // warm neon orange
 
-        // מידות מותאמות למשפט ארוך
+        // Adjusted dimensions for a long sentence
         double radius = 0.08;
         double spacing = 0.18;
 
-        // מיקום התחלתי לשלט: שמאלה (כדי שיתמרכז), למעלה, וקצת לפני הקיר האחורי
+        // Starting position for the sign: left (to center it), up, and slightly in front of the back wall
         double startX = -10;
         double startY = 3.5;
         double startZ = -5.8;
 
-        // יצירת הכדורים
+        // Create spheres
         for (int row = 0; row < textMatrix.length; row++) {
             for (int col = 0; col < textMatrix[row].length; col++) {
                 if (textMatrix[row][col] == 1) {
@@ -65,7 +65,7 @@ public class CamaroRenderTest {
             }
         }
 
-        // 3 מנורות רפאים באוויר כדי לפזר את התאורה באופן שווה על פני כל השלט הרחב
+        // 3 ghost lights in the air to evenly distribute illumination across the wide sign
         scene.lights.add(new PointLight(new Color(255, 180, 20), new Point(-4, 2.5, -4.5))
                 .setKl(0.05).setKq(0.005));
         scene.lights.add(new PointLight(new Color(255, 180, 20), new Point(0, 2.5, -4.5))
@@ -79,27 +79,27 @@ public class CamaroRenderTest {
      */
     @Test
     void testCamaroRender() {
-        // 1. הגדרת הסצנה וצבע רקע כהה כדי שהרכב יבלוט
+        // 1. Set up the scene and a dark background so the car stands out
         Scene scene = new Scene("Camaro Test Scene")
                 .setBackground(new Color(15, 15, 20));
 
-        // 2. הגדרת הפח של הרכב (מבריק כדי שיראו השתקפויות של התאורה)
+        // 2. Set the car body material (shiny so lighting reflections are visible)
         Material carMaterial = new Material().setKD(0.5).setKS(0.5).setShininess(300).setKR(1);
-        Color carColor = new Color(200, 20, 20); // רכב אדום ספורטיבי
+        Color carColor = new Color(200, 20, 20); // sporty red car
 
         String desktop = "C:\\Users\\admin\\Desktop\\Camaro.obj";
-        // 3. קריאה לפארסר! (ודא שהקובץ camaro.obj נמצא בתיקיית הבסיס של הפרויקט)
+        // 3. Call the parser! (make sure the camaro.obj file is in the project base directory)
         System.out.println("Loading OBJ file... This might take a few seconds.");
         ObjParser.parseAndAdd(desktop, scene, carMaterial, carColor);
         System.out.println("Loaded " + " triangles successfully.");
         System.out.println("Finished loading geometry!");
 
-        // 4. הוספת תאורה (מחליף את מנורות הסטודיו שמחקנו בבלנדר)
-        // מנורה חזקה מלמעלה ומימין
+        // 4. Add lighting (replaces the studio lights removed in Blender)
+        // Strong light from above and to the right
         scene.lights.add(new PointLight(new Color(800, 800, 800), new Point(200, 300, 100))
                 .setKl(0.0001).setKq(0.00005));
 
-        // מנורת "מילוי" חלשה יותר משמאל כדי לרכך צללים
+        // Weaker "fill" light from the left to soften shadows
         scene.lights.add(new PointLight(new Color(300, 300, 400), new Point(-200, 100, 150))
                 .setKl(0.0001).setKq(0.00005));
 
