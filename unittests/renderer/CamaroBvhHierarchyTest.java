@@ -1,6 +1,5 @@
 package renderer;
 
-import geometries.api.Intersectable;
 import geometries.impl.Geometries;
 import geometries.impl.Plane;
 import geometries.impl.Triangle;
@@ -193,7 +192,7 @@ public class CamaroBvhHierarchyTest {
                 .setSampler(new sampling.impl.JitteredSampler())
                 .setRaysAmount(9)
                 .setDebugPrint(0.1)
-                .setResolution(300, 300); // הורדתי מעט כדי שהטסטים יסתיימו מהר
+                .setResolution(600, 600); // הורדתי מעט כדי שהטסטים יסתיימו מהר
     }
 
     // =========================================================
@@ -202,22 +201,22 @@ public class CamaroBvhHierarchyTest {
 
     @Test
     public void test01_Flat_NoCBR_NoMT() {
-        runMeasurement(flatScene, false,false, 0, "camaro-01-Flat-NoCBR-NoMT");
+        runMeasurement(flatScene, false, false, 0, "camaro-01-Flat-NoCBR-NoMT");
     }
 
     @Test
     public void test02_Flat_WithCBR_NoMT() {
-        runMeasurement(flatScene, true,false, 0, "camaro-02-Flat-WithCBR-NoMT");
+        runMeasurement(flatScene, true, false, 0, "camaro-02-Flat-WithCBR-NoMT");
     }
 
     @Test
     public void test03_Flat_NoCBR_MT() {
-        runMeasurement(flatScene, false,false, MT_THREADS, "camaro-03-Flat-NoCBR-MT");
+        runMeasurement(flatScene, false, false, MT_THREADS, "camaro-03-Flat-NoCBR-MT");
     }
 
     @Test
     public void test04_Flat_WithCBR_MT() {
-        runMeasurement(flatScene, true,false, MT_THREADS, "camaro-04-Flat-WithCBR-MT");
+        runMeasurement(flatScene, true, false, MT_THREADS, "camaro-04-Flat-WithCBR-MT");
     }
 
     // =========================================================
@@ -226,22 +225,22 @@ public class CamaroBvhHierarchyTest {
 
     @Test
     public void test05_Manual_NoCBR_NoMT() {
-        runMeasurement(manualHierarchy, false,false, 0, "camaro-05-Manual-NoCBR-NoMT");
+        runMeasurement(manualHierarchy, false, false, 0, "camaro-05-Manual-NoCBR-NoMT");
     }
 
     @Test
     public void test06_Manual_WithCBR_NoMT() {
-        runMeasurement(manualHierarchy, true,false, 0, "camaro-06-Manual-WithCBR-NoMT");
+        runMeasurement(manualHierarchy, true, false, 0, "camaro-06-Manual-WithCBR-NoMT");
     }
 
     @Test
     public void test07_Manual_NoCBR_MT() {
-        runMeasurement(manualHierarchy, false,false, MT_THREADS, "camaro-07-Manual-NoCBR-MT");
+        runMeasurement(manualHierarchy, false, false, MT_THREADS, "camaro-07-Manual-NoCBR-MT");
     }
 
     @Test
     public void test08_Manual_WithCBR_MT() {
-        runMeasurement(manualHierarchy, true,false, MT_THREADS, "camaro-08-Manual-WithCBR-MT");
+        runMeasurement(manualHierarchy, true, false, MT_THREADS, "camaro-08-Manual-WithCBR-MT");
     }
 
     // =========================================================
@@ -255,24 +254,24 @@ public class CamaroBvhHierarchyTest {
 
     @Test
     public void test10_Auto_WithCBR_NoMT() {
-        runMeasurement(autoHierarchy, true, true,0, "camaro-10-Auto-WithCBR-NoMT");
+        runMeasurement(autoHierarchy, true, true, 0, "camaro-10-Auto-WithCBR-NoMT");
     }
 
     @Test
     public void test11_Auto_NoCBR_MT() {
-        runMeasurement(autoHierarchy, false,true, MT_THREADS, "camaro-11-Auto-NoCBR-MT");
+        runMeasurement(autoHierarchy, false, true, MT_THREADS, "camaro-11-Auto-NoCBR-MT");
     }
 
     @Test
     public void test12_Auto_WithCBR_MT() {
-        runMeasurement(autoHierarchy, true,true, MT_THREADS, "camaro-12-Auto-WithCBR-MT");
+        runMeasurement(autoHierarchy, true, true, MT_THREADS, "camaro-12-Auto-WithCBR-MT");
     }
 
     // =========================================================
     // מתודות עזר והדפסת סיכום בסוף
     // =========================================================
 
-    private void runMeasurement(Geometries geometries, boolean useCbr,boolean bvh, int threads, String testName) {
+    private void runMeasurement(Geometries geometries, boolean useCbr, boolean bvh, int threads, String testName) {
         scene.setGeometries(geometries);
         scene.setAABB(useCbr);
         scene.setBvhTree(bvh);
