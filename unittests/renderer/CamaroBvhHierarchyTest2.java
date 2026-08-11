@@ -86,21 +86,21 @@ public class CamaroBvhHierarchyTest2 {
         // Set up camera
         cameraBuilder = Camera.getBuilder()
                 // 1. Camera location: in front of the car (-30, -20) and slightly elevated (15)
-                .setLocation(new Point(-24, -12, 12))
+                .setLocation(new Point(-22, -22, 4))
 
                 // 2. View direction vector (To-Vector):
                 // Since the camera is at (-30, -20, 15) and the car is at (0, 0, 0),
                 // the vector pointing toward the car is exactly: (30, 20, -15)
-                .setDirection(new Vector(30, 18, -13), new Vector(0, 0, 1))
+                .setDirection(new Vector(25, 26, -2), new Vector(0, 0, 1))
 
-                .setVpSize(15, 15)
-                .setVpDistance(40)
+                .setVpSize(18, 18)
+                .setVpDistance(80)
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
                 .setSamplerShape(TargetShapeType.CIRCLE)
                 .setRaysAmount(9)
                 .setDebugPrint(0.5)
-                .setResolution(300, 300);
+                .setResolution(900, 900);
     }
 
     /**
@@ -247,7 +247,7 @@ public class CamaroBvhHierarchyTest2 {
 
     @Test
     public void test12_Auto_WithCBR_MT() {
-        runMeasurement(autoHierarchy, true, true, MT_THREADS, "camaro-12-Auto-WithCBR-MT");
+        runMeasurement(autoHierarchy, true, true, MT_THREADS, "MERCEDES-12-Auto-WithCBR-MT");
     }
 
     private void runMeasurement(Geometries geometries, boolean useCbr, boolean bvh, int threads, String testName) {
