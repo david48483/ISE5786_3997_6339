@@ -58,10 +58,36 @@ public class CamaroBvhHierarchyTest2 {
         Geometries planeScena = new Geometries(
                 new Plane(new Point(1, 0, 0), new Vector(0, 0, 1))
                         .setEmission(new Color(130, 130, 130))
-                        .setMaterial(new Material().setKD(0.1).setKS(0.2).setShininess(10).setKA(0.8)));
+                        .setMaterial(new Material().setKD(0.1).setKS(0.2).setKR(0.5).setKG(15).setShininess(10).setKA(0.8)));
 
-        // 3. Merge the scene
-        Geometries fullScene = new Geometries(loadedCarModel, planeScena);
+        // --- הוספת שלושת הכדורים ---
+        Geometries spheres = new Geometries(
+                // כדור אדום חגיגי - שקוף וחלבי (רדיוס 0.5)
+                new Sphere(new Point(-1, -2, 0.3), 0.3)
+                        .setEmission(new Color(220, 20, 40)) // אדום חגיגי
+                        .setMaterial(new Material()
+                                .setKD(0.3)      // נותן קצת "גוף" לאדום כדי שלא ייעלם
+                                .setKS(0.7).setShininess(50) // קצת ברק חיצוני
+                                .setKT(0.9)      // שקיפות גבוהה
+                                .setKB(0.9)),   // <--- פה נמצא הקסם! רדיוס טשטוש השקיפות (החלביות)
+                // כדור לבן-אפרפר - מראה מטושטשת (Glossy Reflection)
+                // כדור לבן-אפרפר - תוקן למראה שיושבת על הרצפה
+                new Sphere(new Point(40, 43, 0.70), 0.70)
+                        .setEmission(new Color(20, 20, 20)) // צבע בסיס כמעט שחור כדי שההשתקפות תבלוט
+                        .setMaterial(new Material()
+                                .setKD(0.1)
+                                .setKS(0.9).setShininess(10)
+                                .setKR(0.7)      // זה מה שעושה אותו מראה
+                                .setKT(0.0)
+                                .setKG(50.0)),
+                // כחול
+                new Sphere(new Point(22, 20, 0.70), 0.70)
+                        .setEmission(new Color(30, 100, 200)) // צבע כחול עמוק (ניתן לשנות)
+                        .setMaterial(new Material().setKD(0.2).setKS(0.8).setShininess(200).setKT(0.0))
+        );
+
+        // 3. איחוד הסצנה
+        Geometries fullScene = new Geometries(loadedCarModel, planeScena, spheres);
 
         flatScene = fullScene;
         manualHierarchy = fullScene;
@@ -79,6 +105,9 @@ public class CamaroBvhHierarchyTest2 {
                 .setKl(0.001).setKq(0.0001));
 
         scene.lights.add(new PointLight(new Color(50, 100, 200), new Point(-25, 5, -25))
+                .setKl(0.001).setKq(0.0001));
+
+        scene.lights.add(new PointLight(new Color(100, 100, 100), new Point(11, 15, 5))
                 .setKl(0.001).setKq(0.0001));
 
         assertNotNull(scene, "Scene should not be null");
@@ -100,7 +129,7 @@ public class CamaroBvhHierarchyTest2 {
                 .setSamplerShape(TargetShapeType.CIRCLE)
                 .setRaysAmount(9)
                 .setDebugPrint(0.5)
-                .setResolution(900, 900);
+                .setResolution(2000, 2000);
     }
 
     /**
@@ -248,6 +277,18 @@ public class CamaroBvhHierarchyTest2 {
     @Test
     public void test12_Auto_WithCBR_MT() {
         runMeasurement(autoHierarchy, true, true, MT_THREADS, "MERCEDES-12-Auto-WithCBR-MT");
+    }
+
+    @Test
+    public void test13_Auto_WithCBR_MT_NoEffects() {
+        // מכבים את האפקטים המתקדמים
+        cameraBuilder.setUseAdvancedEffects(false);
+
+        // מריצים את הרינדור ושומרים בשם קובץ חדש
+        runMeasurement(autoHierarchy, true, true, MT_THREADS, "MERCEDES-13-Auto-WithCBR-MT-NoEffects");
+
+        // מחזירים למצב המקורי כדי שהטסטים האחרים לא יושפעו
+        cameraBuilder.setUseAdvancedEffects(true);
     }
 
     private void runMeasurement(Geometries geometries, boolean useCbr, boolean bvh, int threads, String testName) {
