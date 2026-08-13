@@ -51,7 +51,7 @@ public class CamaroBvhHierarchyTest2 {
     @BeforeAll
     public static void setupScene() {
         // 1. Path to the JSON file
-        String jsonPath = "C:\\Users\\david\\Downloads\\home.json";
+        String jsonPath = "C:\\Users\\admin\\Downloads\\Home\\home.json";
 
         // 2. Load geometries directly from JSON without ModelLoader
         Geometries loadedCarModel = loadGeometriesFromJson(jsonPath);
@@ -347,13 +347,11 @@ public class CamaroBvhHierarchyTest2 {
 
     @Test
     public void test13_Auto_WithCBR_MT_NoEffects() {
-        // מכבים את האפקטים המתקדמים
+
         cameraBuilder.setUseAdvancedEffects(false);
 
-        // מריצים את הרינדור ושומרים בשם קובץ חדש
         runMeasurement(autoHierarchy, true, true, MT_THREADS, "MERCEDES-13-Auto-WithCBR-MT-NoEffects");
 
-        // מחזירים למצב המקורי כדי שהטסטים האחרים לא יושפעו
         cameraBuilder.setUseAdvancedEffects(true);
     }
 

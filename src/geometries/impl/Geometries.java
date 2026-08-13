@@ -6,7 +6,6 @@ import primitives.Ray;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -52,6 +51,12 @@ public class Geometries extends Intersectable {
 
     @Override
     protected List<Intersection> calcIntersectionsHelper(Ray ray, double maxDistance) {
+
+        AABB box = getBoundingBox();
+        if (box != null && !box.intersects(ray, maxDistance)) {
+            return null;
+        }
+
         List<Intersection> result = null;
 
         int size = _geometries.size();
