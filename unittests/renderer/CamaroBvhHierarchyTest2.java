@@ -129,7 +129,7 @@ public class CamaroBvhHierarchyTest2 {
                 .setSamplerShape(TargetShapeType.CIRCLE)
                 .setRaysAmount(9)
                 .setDebugPrint(0.5)
-                .setResolution(200, 200);
+                .setResolution(2000, 2000);
     }
 
     /**
@@ -274,8 +274,8 @@ public class CamaroBvhHierarchyTest2 {
         return geometries;
     }
 // =========================================================
-    // מדידות סצנה משוטחת (Flat)
-    // =========================================================
+    //flat
+// =========================================================
 
     @Test
     public void test01_Flat_NoCBR_NoMT() {
@@ -298,7 +298,7 @@ public class CamaroBvhHierarchyTest2 {
     }
 
     // =========================================================
-    // מדידות היררכיה ידנית (Manual BVH)
+    //  (Manual BVH)
     // =========================================================
 
     @Test
@@ -322,7 +322,7 @@ public class CamaroBvhHierarchyTest2 {
     }
 
     // =========================================================
-    // מדידות היררכיה אוטומטית (Auto BVH)
+    //  (Auto BVH)
     // =========================================================
 
     @Test

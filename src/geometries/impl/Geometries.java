@@ -52,10 +52,10 @@ public class Geometries extends Intersectable {
     @Override
     protected List<Intersection> calcIntersectionsHelper(Ray ray, double maxDistance) {
 
-        AABB box = getBoundingBox();
+       /* AABB box = getBoundingBox();
         if (box != null && !box.intersects(ray, maxDistance)) {
             return null;
-        }
+        }*/
 
         List<Intersection> result = null;
 
