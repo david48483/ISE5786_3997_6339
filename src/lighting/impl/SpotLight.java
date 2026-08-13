@@ -18,6 +18,13 @@ public class SpotLight extends PointLight {
      */
     private final Vector _direction;
 
+    private int _narrowBeam = 1;
+
+    public SpotLight setNarrowBeam(int narrowBeam) {
+        _narrowBeam = narrowBeam;
+        return this;
+    }
+
     /**
      * Creates a spotlight with the given color, position, and direction.
      *
@@ -54,7 +61,15 @@ public class SpotLight extends PointLight {
             return _intensity;
         }
         double projection = alignZero(_direction.dotProduct(l));
-        return projection <= 0 ? Color.BLACK : super.getIntensity(p).scale(projection);
+        /* return projection <= 0 ? Color.BLACK : super.getIntensity(p).scale(projection);*/
+
+        if (projection <= 0) {
+            return Color.BLACK;
+        }
+
+        double factor = Math.pow(projection, _narrowBeam);
+
+        return super.getIntensity(p).scale(factor);
     }
 
 }

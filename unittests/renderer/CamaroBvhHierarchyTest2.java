@@ -101,11 +101,11 @@ public class CamaroBvhHierarchyTest2 {
         scene.lights.add(new PointLight(new Color(250, 250, 250), new Point(0, 30, 0))
                 .setKl(0.001).setKq(0.0001));
 
-        scene.lights.add(new SpotLight(new Color(180, 120, 80), new Point(25, 10, 25), new Vector(-1, -0.5, -1))
-                .setKl(0.001).setKq(0.0001));
+        scene.lights.add(new SpotLight(new Color(400, 400, 0), new Point(-1, -2, 4), new Vector(1, 0.9, -1))
+                .setKl(0.001).setKq(0.0001).setNarrowBeam(19));
 
-        scene.lights.add(new PointLight(new Color(50, 100, 200), new Point(-25, 5, -25))
-                .setKl(0.001).setKq(0.0001));
+       /* scene.lights.add(new PointLight(new Color(50, 100, 200), new Point(-25, 5, -25))
+                .setKl(0.001).setKq(0.0001));*/
 
         scene.lights.add(new PointLight(new Color(100, 100, 100), new Point(11, 15, 5))
                 .setKl(0.001).setKq(0.0001));
@@ -129,7 +129,7 @@ public class CamaroBvhHierarchyTest2 {
                 .setSamplerShape(TargetShapeType.CIRCLE)
                 .setRaysAmount(9)
                 .setDebugPrint(0.5)
-                .setResolution(2000, 2000);
+                .setResolution(200, 200);
     }
 
     /**
@@ -272,6 +272,72 @@ public class CamaroBvhHierarchyTest2 {
         }
 
         return geometries;
+    }
+// =========================================================
+    // מדידות סצנה משוטחת (Flat)
+    // =========================================================
+
+    @Test
+    public void test01_Flat_NoCBR_NoMT() {
+        runMeasurement(flatScene, false, false, 0, "MERCEDES-01-Flat-NoCBR-NoMT");
+    }
+
+    @Test
+    public void test02_Flat_WithCBR_NoMT() {
+        runMeasurement(flatScene, true, false, 0, "MERCEDES-02-Flat-WithCBR-NoMT");
+    }
+
+    @Test
+    public void test03_Flat_NoCBR_MT() {
+        runMeasurement(flatScene, false, false, MT_THREADS, "MERCEDES-03-Flat-NoCBR-MT");
+    }
+
+    @Test
+    public void test04_Flat_WithCBR_MT() {
+        runMeasurement(flatScene, true, false, MT_THREADS, "MERCEDES-04-Flat-WithCBR-MT");
+    }
+
+    // =========================================================
+    // מדידות היררכיה ידנית (Manual BVH)
+    // =========================================================
+
+    @Test
+    public void test05_Manual_NoCBR_NoMT() {
+        runMeasurement(manualHierarchy, false, false, 0, "MERCEDES-05-Manual-NoCBR-NoMT");
+    }
+
+    @Test
+    public void test06_Manual_WithCBR_NoMT() {
+        runMeasurement(manualHierarchy, true, false, 0, "MERCEDES-06-Manual-WithCBR-NoMT");
+    }
+
+    @Test
+    public void test07_Manual_NoCBR_MT() {
+        runMeasurement(manualHierarchy, false, false, MT_THREADS, "MERCEDES-07-Manual-NoCBR-MT");
+    }
+
+    @Test
+    public void test08_Manual_WithCBR_MT() {
+        runMeasurement(manualHierarchy, true, false, MT_THREADS, "MERCEDES-08-Manual-WithCBR-MT");
+    }
+
+    // =========================================================
+    // מדידות היררכיה אוטומטית (Auto BVH)
+    // =========================================================
+
+    @Test
+    public void test09_Auto_NoCBR_NoMT() {
+        runMeasurement(autoHierarchy, false, true, 0, "MERCEDES-09-Auto-NoCBR-NoMT");
+    }
+
+    @Test
+    public void test10_Auto_WithCBR_NoMT() {
+        runMeasurement(autoHierarchy, true, true, 0, "MERCEDES-10-Auto-WithCBR-NoMT");
+    }
+
+    @Test
+    public void test11_Auto_NoCBR_MT() {
+        runMeasurement(autoHierarchy, false, true, MT_THREADS, "MERCEDES-11-Auto-NoCBR-MT");
     }
 
     @Test
