@@ -38,7 +38,7 @@ public class BvhHierarchyTest {
     public void testBvhHierarchyStructure() {
 
 
-        // 1. ענף עבור המישורים בלבד (הגופים האינסופיים שיוחזרו כ-null בתיבה התוחמת)
+        // 1. Branch for planes only (infinite geometries that return null for bounding box)
         Geometries planesBranch = new Geometries(
                 new Plane(new Point(0, -70, 0), Vector.AXIS_Y)
                         .setMaterial(new Material().setKD(0.2).setKS(0.2).setShininess(30)
@@ -47,16 +47,16 @@ public class BvhHierarchyTest {
                         .setMaterial(new Material().setKD(0.5).setKS(0.1).setShininess(10))
         );
 
-        // 2. שלושה ענפים של קבוצות גופים קרובים (יותר מ-50 גופים בסה"כ)
-        //    כל ענף מכיל מטריצה צפופה של כדורים עם חומרים בצבעים/שקיפויות/חלביות שונים
+        // 2. Three branches of closely grouped geometry (more than 50 bodies total)
+        //    Each branch contains a dense matrix of spheres with different materials/colors/transparency
 
-        // חומרים לדוגמה: מבריק, שקוף, "חלבי"
+        // Sample materials: glossy, transparent, "milky"
         Material glossyMat = new Material().setKD(0.2).setKS(0.8).setShininess(200).setKR(0.6).setKG(4.0);
         Material glassyMat = new Material().setKD(0.2).setKS(0.5).setShininess(120).setKT(0.85);
         Material milkyMat = new Material().setKD(0.4).setKS(0.2).setShininess(40).setKT(0.5).setKB(80.0);
 
         Geometries clusterA = buildSphereCluster(
-                new Point(-80, -10, -90), // מיקום כללי
+                new Point(-80, -10, -90), // general position
                 4, 4, 1,                   // 16 כדורים
                 14, 6,                     // מרווח ורדיוס
                 glossyMat,
@@ -79,7 +79,7 @@ public class BvhHierarchyTest {
                 new Color(30, 30, 80)
         );
 
-        // 3. ענף שני של גופים סופיים (למשל, קבוצת משולשים/פירמידות המורכבת מ-12 משולשים שונים)
+        // 3. Second branch of finite bodies (e.g., group of triangles/pyramids with 12 different triangles)
         Geometries trianglesBranch = new Geometries();
             Point p1 = new Point(-40, -69, -30);
             Point p2 = new Point(-20, -69, -30);
@@ -92,7 +92,7 @@ public class BvhHierarchyTest {
                     new Triangle(p3, p1, pTop).setMaterial(pyramidMat),
                     new Triangle(p1, p2, p3).setMaterial(pyramidMat)
             );
-        // הוספת כמה משולשים "דגל" קטנים ליצירת פרטים נוספים בענף זה
+        // Add a few small "flag" triangles to create additional detail in this branch
         trianglesBranch.add(
                 new Triangle(new Point(15, -69, -60), new Point(25, -69, -60), new Point(20, -60, -50))
                         .setMaterial(new Material().setKD(0.5).setKS(0.2).setShininess(30).setKR(0.1)),
@@ -100,7 +100,7 @@ public class BvhHierarchyTest {
                         .setMaterial(new Material().setKD(0.5).setKS(0.2).setShininess(30).setKT(0.3))
         );
 
-        // 4. מבנה העץ הראשי: ענף המישורים + שלוש קבוצות קרובות + ענף המשולשים
+        // 4. Main tree structure: planes branch + three close clusters + triangles branch
         Geometries rootGeometries = new Geometries(planesBranch, clusterA, clusterB, clusterC, trianglesBranch);
         Scene scene = new Scene("BVH Hierarchy Test Scene");
          scene.lights.add(new SpotLight(new Color(700, 400, 400), new Point(60, 50, 100), new Vector(-1, -1, -3))
@@ -115,7 +115,7 @@ public class BvhHierarchyTest {
         scene.setGeometries(rootGeometries);
 
 
-        // בדיקה לדוגמה לוודא שהסצנה הוקמה בהצלחה והגופים נטענו
+        // Sample assertion to verify the scene was set up successfully and geometries were loaded
         assertNotNull(scene, "Scene should not be null");
 
         Camera.Builder cameraBuilder = Camera.getBuilder()
@@ -127,7 +127,7 @@ public class BvhHierarchyTest {
                 .setSamplerShape(TargetShapeType.CIRCLE)
                 .setResolution(600, 600);
 
-        // מריצים תמונות לדוגמה, עם/בלי BVH כדי להמחיש האצה על סצנה עשירה
+        // Run sample renders with/without BVH to demonstrate acceleration on a rich scene
         scene.setAABB(false);
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
@@ -234,17 +234,17 @@ public class BvhHierarchyTest {
     }
 
     /**
-     * יוצר קבוצה צפופה של כדורים סביב נקודת מוצא במטריצה בגודל nx*ny*nz.
+     * Builds a dense cluster of spheres around an origin point in an nx*ny*nz grid.
      *
-     * @param origin   מרכז כללי לקבוצה
-     * @param nx       כמות כדורים בציר X
-     * @param ny       כמות כדורים בציר Y
-     * @param nz       כמות כדורים בציר Z
-     * @param spacing  מרחק בין מרכזי הכדורים
-     * @param radius   רדיוס בסיס לכל כדור
-     * @param mat      חומר לשיוך לכדורים
-     * @param emission צבע פליטה לכדורים
-     * @return ענף גיאומטריות המכיל את הכדורים
+     * @param origin   general center of the cluster
+     * @param nx       number of spheres along the X axis
+     * @param ny       number of spheres along the Y axis
+     * @param nz       number of spheres along the Z axis
+     * @param spacing  distance between sphere centers
+     * @param radius   base radius for each sphere
+     * @param mat      material to assign to the spheres
+     * @param emission emission color for the spheres
+     * @return a geometries branch containing the spheres
      */
     private Geometries buildSphereCluster(Point origin, int nx, int ny, int nz,
                                           double spacing, double radius,
@@ -262,7 +262,7 @@ public class BvhHierarchyTest {
                             startY + iy * spacing,
                             startZ + iz * spacing
                     );
-                    // וריאציה קלה ברדיוס כדי לשבור סימטריה
+                    // Slight radius variation to break symmetry
                     double r = radius * (0.85 + 0.3 * ((ix + iy + iz) % 3) / 3.0);
                     g.add(new Sphere(c, r)
                             .setEmission(emission)

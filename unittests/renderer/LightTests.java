@@ -256,14 +256,14 @@ class LightsTests {
     void testSphereMulti() {
         _scene1.geometries.add(SPHERE);
 
-        // 1. תאורה כיוונית - אור אדמדם חלש המאיר מזווית אחורית
+        // 1. Directional light - weak reddish light illuminating from a rear angle
         _scene1.lights.add(new DirectionalLight(new Color(255, 255, 0), new Vector(1, -1, -1)));
 
-        // 2. תאורה נקודתית - אור ירוק הממוקם בחלקה העליון-ימני של הסצנה
+        // 2. Point light - green light positioned in the upper-right area of the scene
         _scene1.lights.add(new PointLight(new Color(0, 300, 0), new Point(50, 50, 50)) //
                 .setKl(0.0001));
 
-        // 3. תאורת ספוט - אור אדום ממוקד המאיר מלמעלה משמאל כלפי מרכז הכדור
+        // 3. Spot light - focused red light shining from upper-left toward the sphere center
         _scene1.lights.add(new SpotLight(new Color(300, 0, 00), new Point(-50, 50, 50), new Vector(1, -1, -2)) //
                 .setKl(0.0001).setKq(0.00001));
 
@@ -282,14 +282,14 @@ class LightsTests {
     void testTrianglesMulti() {
         _scene2.geometries.add(TRIANGLE1, TRIANGLE2);
 
-        // 1. תאורה כיוונית - אור ירוק חלש המאיר באלכסון מלמעלה
+        // 1. Directional light - weak green light illuminating diagonally from above
         _scene2.lights.add(new DirectionalLight(new Color(50, 150, 50), new Vector(0, -1, -1)));
 
-        // 2. תאורה נקודתית - אור אדום הממוקם מעל המשולשים מצד ימין
+        // 2. Point light - red light positioned above the triangles on the right side
         _scene2.lights.add(new PointLight(new Color(300, 0, 0), new Point(40, -40, -130)) //
                 .setKl(0.001));
 
-        // 3. תאורת ספוט - אור כחול ממוקד המאיר על המשולשים מצד שמאל
+        // 3. Spot light - focused blue light shining on the triangles from the left side
         _scene2.lights.add(new SpotLight(new Color(0, 0, 300), new Point(-40, -40, -130), new Vector(2, 2, -1)) //
                 .setKl(0.0001));
 

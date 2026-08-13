@@ -80,7 +80,7 @@ public class GlossyDiffusiveMultiTests {
         scene.geometries.add(new Triangle(p3, p1, pTop).setMaterial(pyramidMat));
         scene.geometries.add(new Triangle(p1, p2, p3).setMaterial(pyramidMat));
 
-        // בסיס המצלמה המשותף לכל ההרצות
+        // Common camera base for all runs
         Camera.Builder cameraBuilder = Camera.getBuilder()
                 .setLocation(new Point(0, 0, 500))
                 .setDirection(new Vector(0, 0, -1), Vector.AXIS_Y)
@@ -89,7 +89,7 @@ public class GlossyDiffusiveMultiTests {
                 .setSamplerShape(TargetShapeType.CIRCLE)
                 .setResolution(600, 600);
 
-        // 2. עם Jittered Sampler
+        // 2. With Jittered Sampler
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
@@ -98,7 +98,7 @@ public class GlossyDiffusiveMultiTests {
                 .setMultithreading(-2)
                 .setRaysAmount(9), "multi-2");
 
-        // 2. עם Jittered Sampler
+        // 2. With Jittered Sampler
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
@@ -107,7 +107,7 @@ public class GlossyDiffusiveMultiTests {
                 .setMultithreading(-1)
                 .setRaysAmount(9), "multi-1");
 
-        // 2. עם Jittered Sampler
+        // 2. With Jittered Sampler
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
@@ -116,7 +116,7 @@ public class GlossyDiffusiveMultiTests {
                 .setMultithreading(-0)
                 .setRaysAmount(9), "multi-0");
 
-        // 2. עם Jittered Sampler
+        // 2. With Jittered Sampler
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())
@@ -125,7 +125,7 @@ public class GlossyDiffusiveMultiTests {
                 .setMultithreading(1)
                 .setRaysAmount(9), "multi_1");
 
-        // 2. עם Jittered Sampler
+        // 2. With Jittered Sampler
         createImage(scene, cameraBuilder
                 .setUseAdvancedEffects(true)
                 .setSampler(new JitteredSampler())

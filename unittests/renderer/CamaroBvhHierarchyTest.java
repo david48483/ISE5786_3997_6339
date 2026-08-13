@@ -32,14 +32,14 @@ public class CamaroBvhHierarchyTest {
     private static Geometries manualHierarchy;
     private static Geometries autoHierarchy;
 
-    private static final int MT_THREADS = -1; // מספר תהליכונים אופטימלי
+    private static final int MT_THREADS = -1; // optimal thread count
 
-    // מפה לשמירת זמני הריצה של כל הטסטים כדי להדפיס אותם במרוכז בסוף
+    // Map to store render times for all tests, printed as a summary at the end
     private static final Map<String, Double> renderTimes = new LinkedHashMap<>();
 
     @BeforeAll
     public static void setupScene() {
-        // 1. יצירת אובייקטי Point
+        // 1. Create Point objects
         Point[] points = new Point[CamaroData.RAW_VERTICES.length / 3];
         for (int i = 0; i < CamaroData.RAW_VERTICES.length; i += 3) {
             points[i / 3] = new Point(
@@ -49,11 +49,11 @@ public class CamaroBvhHierarchyTest {
             );
         }
 
-        // 2. בניית היררכיה ידנית (Manual) והחלת החומרים מהמערך
+        // 2. Build manual hierarchy and apply materials from the array
         manualHierarchy = new Geometries();
         Geometries currentCarChunk = new Geometries();
         int trianglesCount = 0;
-        int faceIndex = 0; // עוקב אחרי האינדקס במערך החומרים של הפרצופים
+        int faceIndex = 0; // tracks the current face index in the materials array
 
         for (int i = 0; i < CamaroData.RAW_INDICES.length; i += 3) {
             Point p1 = points[CamaroData.RAW_INDICES[i]];
@@ -62,54 +62,54 @@ public class CamaroBvhHierarchyTest {
 
             if (!p1.equals(p2) && !p1.equals(p3) && !p2.equals(p3)) {
 
-                // שליפת מזהה החומר למשולש הספציפי הזה
+                // Retrieve the material ID for this specific triangle
                 int materialId = CamaroData.RAW_FACE_MATERIALS[faceIndex];
 
-                Color faceColor = new Color(100, 100, 100); // ברירת מחדל אפורה
+                Color faceColor = new Color(100, 100, 100); // default gray
                 Material faceMaterial = new Material().setKD(0.5).setKS(0.5).setShininess(50);
 
-                // הגדרת המאפיינים הפיזיקליים בהתאם למזהה שהתקבל מה-OBJ
+                // Set physical properties according to the material ID from the OBJ
                 switch (materialId) {
-                    case 0: // Lataria - פח הרכב
-                        faceColor = new Color(2, 2, 2); // שחור עמוק עם נגיעה כחלחלה למראה יוקרתי
-                        faceMaterial = new Material().setKD(0.05).setKS(0.9).setShininess(500).setKR(0.25); // KR מוסיף השתקפות חלשה של הסביבה
+                    case 0: // Lataria - car body panel
+                        faceColor = new Color(2, 2, 2); // deep black with a bluish tint for a luxurious look
+                        faceMaterial = new Material().setKD(0.05).setKS(0.9).setShininess(500).setKR(0.25); // KR adds a subtle environment reflection
 
                         break;
-                    case 1: // Chroma - כרום/מתכת
+                    case 1: // Chroma - chrome/metal
                         faceColor = new Color(20, 20, 20);
                         faceMaterial = new Material().setKD(0.2).setKS(0.8).setShininess(300).setKR(0.8);
                         break;
-                    case 2: // Vidro - חלונות/זכוכית
+                    case 2: // Vidro - windows/glass
                         faceColor = new Color(10, 10, 10);
                         faceMaterial = new Material().setKD(0.1).setKS(0.9).setShininess(300).setKT(0.8).setKR(0.1);
                         break;
-                    case 3: // Material.002 - חלקי פנים וכו'
+                    case 3: // Material.002 - interior parts etc.
                         faceColor = new Color(40, 40, 40);
                         faceMaterial = new Material().setKD(0.6).setKS(0.4).setShininess(60);
                         break;
-                    case 4: // Farol.001 - כיסוי הפנסים
+                    case 4: // Farol.001 - headlight cover
                         faceColor = new Color(200, 200, 200);
                         faceMaterial = new Material().setKD(0.2).setKS(0.8).setShininess(200).setKT(0.6);
                         break;
-                    case 5: // Lamp - המנורה עצמה (פנסים דולקים)
-                        faceColor = new Color(255, 255, 255); // לבן בוהק אבסולוטי
-                        // נאפס KD ו-KS כי פנס דולק לא מושפע מאור חיצוני, הוא רק פולט אור
+                    case 5: // Lamp - the actual light bulb (active headlights)
+                        faceColor = new Color(255, 255, 255); // absolute bright white
+                        // Reset KD and KS because an active light is not affected by external light, it only emits
                         faceMaterial = new Material().setKD(0.0).setKS(0.0).setShininess(0);
 
                         break;
-                    case 6: // Pneu - צמיגי גומי
+                    case 6: // Pneu - rubber tires
                         faceColor = new Color(15, 15, 15);
                         faceMaterial = new Material().setKD(0.8).setKS(0.1).setShininess(10);
                         break;
-                    case 7: // Aro - ג'אנטים (חישוקים) ואלמנטים נוספים
+                    case 7: // Aro - rims (wheels) and additional elements
                         faceColor = new Color(20, 20, 20);
                         faceMaterial = new Material().setKD(0.1).setKS(0.9).setShininess(300).setKR(0.7);
                         break;
-                    case 8: // Material - כללי
+                    case 8: // Material - general
                         faceColor = new Color(100, 100, 100);
                         faceMaterial = new Material().setKD(0.5).setKS(0.5).setShininess(50);
                         break;
-                    case 9: // Preto - פלסטיק שחור (גריל, פגושים תחתונים)
+                    case 9: // Preto - black plastic (grille, lower bumpers)
                         faceColor = new Color(20, 20, 20);
                         faceMaterial = new Material().setKD(0.6).setKS(0.4).setShininess(80);
                         break;
@@ -162,21 +162,21 @@ public class CamaroBvhHierarchyTest {
         System.out.println("--- Overhead: Auto BVH Tree built in " + (endTreeTime - startTreeTime) / 1000.0 + " seconds ---");
 
         scene = new Scene("Camaro Test Scene")
-                .setBackground(new Color(100, 100, 144)); // רקע אפלולי
+                .setBackground(new Color(100, 100, 144)); // dim background
 
-// 1. תאורת מפתח (Key Light) ישירה מלמעלה - מאירה את הרכב חזק, מונעת צללים ארוכים הצידה
+// 1. Key light (direct from above) - strongly illuminates the car, prevents long side shadows
         scene.lights.add(new lighting.impl.SpotLight(new Color(600, 600, 600), new Point(0, 150, 0), new Vector(0, -1, 0))
                 .setKl(2E-5).setKq(1E-6));
 
-// 2. תאורת מילוי מקיפה כדי לבטל את שאריות הצל הצידה ולהאיר את הפלסטיקה השחורה
+// 2. Fill light (all-around) to eliminate remaining side shadows and illuminate the black plastic
         scene.lights.add(new lighting.impl.PointLight(new Color(120, 120, 120), new Point(100, 100, 100))
                 .setKl(0.0001).setKq(0.00005));
 
-// 3. תאורה אחורית להדגשת קווי המתאר של הגג
+// 3. Rim/back light to emphasize the roof outline
         scene.lights.add(new lighting.impl.PointLight(new Color(80, 80, 120), new Point(-50, 100, -150))
                 .setKl(0.0001).setKq(0.00005));
 
-// 4. אלומות אור מהפנסים הקדמיים של הרכב (מדמה זריקת אור קדימה)
+// 4. Light beams from the car's front headlights (simulates forward light projection)
         scene.lights.add(new lighting.impl.SpotLight(new Color(800, 800, 800), new Point(-2, 3, 10), new Vector(0, -0.1, 1))
                 .setKl(1E-4).setKq(1E-5));
         scene.lights.add(new lighting.impl.SpotLight(new Color(800, 800, 800), new Point(2, 3, 10), new Vector(0, -0.1, 1))
@@ -192,11 +192,11 @@ public class CamaroBvhHierarchyTest {
                 .setSampler(new sampling.impl.JitteredSampler())
                 .setRaysAmount(9)
                 .setDebugPrint(0.1)
-                .setResolution(600, 600); // הורדתי מעט כדי שהטסטים יסתיימו מהר
+                .setResolution(600, 600); // reduced slightly so tests complete faster
     }
 
     // =========================================================
-    // מדידות סצנה משוטחת (Flat)
+    // Flat scene measurements
     // =========================================================
 
     @Test
@@ -220,7 +220,7 @@ public class CamaroBvhHierarchyTest {
     }
 
     // =========================================================
-    // מדידות היררכיה ידנית (Manual BVH)
+    // Manual BVH hierarchy measurements
     // =========================================================
 
     @Test
@@ -244,7 +244,7 @@ public class CamaroBvhHierarchyTest {
     }
 
     // =========================================================
-    // מדידות היררכיה אוטומטית (Auto BVH)
+    // Automatic BVH hierarchy measurements
     // =========================================================
 
     @Test
@@ -268,7 +268,7 @@ public class CamaroBvhHierarchyTest {
     }
 
     // =========================================================
-    // מתודות עזר והדפסת סיכום בסוף
+    // Helper methods and end-of-run summary
     // =========================================================
 
     private void runMeasurement(Geometries geometries, boolean useCbr, boolean bvh, int threads, String testName) {
@@ -291,13 +291,12 @@ public class CamaroBvhHierarchyTest {
 
         System.out.println(">>> Render time for [" + testName + "]: " + timeInSeconds + " seconds.");
 
-        // שומרים את הזמן בתוך המפה כדי שנוכל להדפיס בסוף
+        // store render time in the map to print as a summary at the end
         renderTimes.put(testName, timeInSeconds);
     }
 
     /**
-     * פונקציה זו תרוץ באופן אוטומטי ברגע שכל 12 הטסטים יסתיימו,
-     * ותדפיס טבלה מרוכזת ויפה של כל הזמנים!
+     * Runs automatically after all 12 tests complete and prints a consolidated summary table of all render times.
      */
     @org.junit.jupiter.api.AfterAll
     public static void printSummary() {

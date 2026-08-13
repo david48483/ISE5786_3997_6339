@@ -43,17 +43,17 @@ public class CamaroBvhHierarchyTest2 {
     private static Geometries manualHierarchy;
     private static Geometries autoHierarchy;
 
-    private static final int MT_THREADS = -1; // מספר תהליכונים אופטימלי
+    private static final int MT_THREADS = -1; // optimal thread count
 
-    // מפה לשמירת זמני הריצה של כל הטסטים
+    // Map to store render times for all tests
     private static final Map<String, Double> renderTimes = new LinkedHashMap<>();
 
     @BeforeAll
     public static void setupScene() {
-        // 1. נתיב לקובץ ה-JSON
-        String jsonPath = "C:\\Users\\admin\\Downloads\\Home\\Home.json";
+        // 1. Path to the JSON file
+        String jsonPath = "C:\\Users\\david\\Downloads\\home.json";
 
-        // 2. טעינת הגיאומטריות ישירות מתוך ה-JSON ללא ModelLoader
+        // 2. Load geometries directly from JSON without ModelLoader
         Geometries loadedCarModel = loadGeometriesFromJson(jsonPath);
         Geometries planeScena = new Geometries(
                 new Plane(new Point(1, 0, 0), new Vector(0, 0, 1))
@@ -97,7 +97,7 @@ public class CamaroBvhHierarchyTest2 {
         scene.setBackground(new Color(100, 100, 100));
         scene.setAmbientLight(new AmbientLight(new Color(30, 30, 30)));
 
-        // תאורות
+        // Lights
         scene.lights.add(new PointLight(new Color(250, 250, 250), new Point(0, 30, 0))
                 .setKl(0.001).setKq(0.0001));
 
@@ -112,14 +112,14 @@ public class CamaroBvhHierarchyTest2 {
 
         assertNotNull(scene, "Scene should not be null");
 
-        // הגדרת מצלמה
+        // Set up camera
         cameraBuilder = Camera.getBuilder()
-                // 1. מיקום המצלמה: מול חזית הרכב (-30, -20) ובגובה קל (15)
+                // 1. Camera location: in front of the car (-30, -20) and slightly elevated (15)
                 .setLocation(new Point(-22, -22, 4))
 
-                // 2. וקטור כיוון הראייה (To-Vector):
-                // כיוון שהמצלמה ב-(-30, -20, 15) והרכב ב-(0, 0, 0),
-                // הווקטור שמביט אל הרכב הוא בדיוק הנגדי: (30, 20, -15)
+                // 2. View direction vector (To-Vector):
+                // Since the camera is at (-30, -20, 15) and the car is at (0, 0, 0),
+                // the vector pointing toward the car is exactly: (30, 20, -15)
                 .setDirection(new Vector(25, 26, -2), new Vector(0, 0, 1))
 
                 .setVpSize(18, 18)
@@ -133,7 +133,7 @@ public class CamaroBvhHierarchyTest2 {
     }
 
     /**
-     * פונקציה פנימית לטעינה ישירה של ה-JSON ובניית ה-Geometries
+     * Internal function to load geometries directly from JSON and build Geometries.
      */
     private static Geometries loadGeometriesFromJson(String filePath) {
         Geometries geometries = new Geometries();
@@ -156,16 +156,16 @@ public class CamaroBvhHierarchyTest2 {
                             col.getDouble(2) * 255
                     );
 
-                    // שליפת ה-KT (שקיפות) מתוך ה-JSON
+                    // Extract KT (transparency) from JSON
                     double kt = m.optDouble("kt", 0.0);
 
-                    // אם שם החומר מכיל glass וה-kt עדיין 0, נגדיר שקיפות ברירת מחדל
+                    // If the material name contains "glass" and kt is still 0, set a default transparency
                     if (matName.toLowerCase().contains("glass") && kt == 0.0) {
-                        kt = 0.85; // 85% שקיפות לזכוכית
+                        kt = 0.85; // 85% transparency for glass
                     }
                     double roughness = m.optDouble("roughness", 0.5);
 
-// ככל שה-roughness נמוך יותר, ה-Kd קטן וה-Ks גדל לקבלת ברק מבריק
+// Lower roughness → smaller Kd, larger Ks for a shiny look
                     double kd = roughness;
                     double ks = 1.0 - roughness;
 
@@ -180,7 +180,7 @@ public class CamaroBvhHierarchyTest2 {
                 }
             }
 
-            // ב. טעינת כדורים (Spheres)
+            // B. Load spheres
             if (root.has("spheres")) {
                 JSONArray spheres = root.getJSONArray("spheres");
                 for (int i = 0; i < spheres.length(); i++) {
@@ -198,7 +198,7 @@ public class CamaroBvhHierarchyTest2 {
                 }
             }
 
-            // ג. טעינת מישורים (Planes)
+            // C. Load planes
             if (root.has("planes")) {
                 JSONArray planes = root.getJSONArray("planes");
                 for (int i = 0; i < planes.length(); i++) {
@@ -218,11 +218,11 @@ public class CamaroBvhHierarchyTest2 {
                 }
             }
 
-// ד. טעינת משולשים (Triangles)
+// D. Load triangles
             if (root.has("triangles")) {
                 JSONArray triangles = root.getJSONArray("triangles");
 
-                // הגדרת דלתא קטנה להשוואת נקודה צפה
+                // Set a small delta for floating-point comparison
                 final double EPSILON = 0.000001;
 
                 for (int i = 0; i < triangles.length(); i++) {
@@ -235,24 +235,24 @@ public class CamaroBvhHierarchyTest2 {
                     Point p1 = new Point(v1.getDouble(0), v1.getDouble(1), v1.getDouble(2));
                     Point p2 = new Point(v2.getDouble(0), v2.getDouble(1), v2.getDouble(2));
 
-                    // 1. בדיקת מרחק בין נקודות עם דלתא (לפני יצירת המשולש!)
+                    // 1. Check distance between points with delta (before creating the triangle!)
                     if (p0.distance(p1) < EPSILON || p1.distance(p2) < EPSILON || p2.distance(p0) < EPSILON) {
-                        continue; // הנקודות כמעט חופפות - דלג מיד
+                        continue; // points almost coincide - skip immediately
                     }
 
-                    // 2. בדיקת collinearity (האם הנקודות כמעט על אותו קו ישר) עם דלתא
+                    // 2. Collinearity check (are the points nearly on the same line) with delta
                     // v1 = p1 - p0, v2 = p2 - p0
                     try {
                         Vector vec1 = p1.subtract(p0);
                         Vector vec2 = p2.subtract(p0);
 
-                        // אם המכפלה הוקטורית קרובה מאוד לאפס, הן על אותו קו
+                        // If the cross product is near zero, the points are collinear
                         Vector cross = vec1.crossProduct(vec2);
                         if (cross.length() < EPSILON) {
-                            continue; // דלג על משולש מנוון על קו ישר
+                            continue; // skip degenerate triangle on a line
                         }
                     } catch (IllegalArgumentException e) {
-                        // תופס מקרה שבו p1-p0 או p2-p0 יצרו וקטור אפס
+                        // Catches the case where p1-p0 or p2-p0 produced a zero vector
                         continue;
                     }
                     Triangle triangle = new Triangle(p0, p1, p2);
@@ -260,7 +260,7 @@ public class CamaroBvhHierarchyTest2 {
 
                     if (materialsMap.containsKey(matName)) {
                         triangle.setMaterial(materialsMap.get(matName));
-                        triangle.setEmission(colorsMap.get(matName)); // <-- הקריטי: הגדרת הצבע שנראה לעין!
+                        triangle.setEmission(colorsMap.get(matName)); // <-- critical: sets the visible color!
                     }
                     geometries.add(triangle);
                 }

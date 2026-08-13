@@ -38,21 +38,21 @@ public class BvhHierarchyTest1 {
     private static Geometries manualHierarchy;
     private static Geometries autoHierarchy;
 
-    private static final int MT_THREADS = -1; // המספר האופטימלי שלכם לריבוי תהליכונים
+    private static final int MT_THREADS = -1; // optimal thread count for multithreading
 
     /**
-     * מתודת עזר סטטית הבונה את הסצנה פעם אחת עבור כל סדרת המדידות.
+     * Static helper method that builds the scene once for the entire measurement series.
      */
     @BeforeAll
     public static void setupScene() {
 
-        // חומר מאט (Matte) - בולע הרבה אור, כמעט לא מבריק
+        // Matte material - absorbs a lot of light, barely shiny
         Material matteMat = new Material().setKD(0.8).setKS(0.2).setShininess(20);
 
-// חומר פלסטיק מבריק (Shiny) - מחזיר אור נקודתי יפה
+// Shiny plastic material - produces a nice specular highlight
         Material shinyMat = new Material().setKD(0.5).setKS(0.5).setShininess(100);
 
-// חומר מתכתי אטום (Metallic) - החזר אור חזק וממוקד מאוד, ללא השתקפות סביבתית
+// Opaque metallic material - strong and very focused highlight, no ambient reflection
         Material metallicMat = new Material().setKD(0.3).setKS(0.8).setShininess(300);
         // 1. הכנת החומרים
         Material glossyMat = new Material().setKD(0.2).setKS(0.8).setShininess(200).setKR(0.6).setKG(4.0);
@@ -60,7 +60,7 @@ public class BvhHierarchyTest1 {
         Material milkyMat = new Material().setKD(0.4).setKS(0.2).setShininess(40).setKT(0.5).setKB(80.0);
         Material pyramidMat = new Material().setKD(0.5).setKS(0.5).setShininess(60).setKR(0.2).setKG(3.0);
 
-        // 2. בניית ענפי ההיררכיה הידנית (מצב 2) - מאות גופים להדגמת ההאצה
+        // 2. Build manual hierarchy branches (state 2) - hundreds of bodies to demonstrate acceleration
         Geometries planesBranch = new Geometries(
                 new Plane(new Point(0, -70, 0), Vector.AXIS_Y)
                         .setMaterial(new Material().setKD(0.2).setKS(0.2).setShininess(30).setKR(1).setKG(7.0)),
@@ -68,7 +68,7 @@ public class BvhHierarchyTest1 {
                         .setMaterial(new Material().setKD(0.5).setKS(0.1).setShininess(10))
         );
 
-        // אשכולות קטנים וצפופים יותר (למשל 8x8x8 שזה 512 כדורים לאשכול - סה"כ מעל 1500 כדורים)
+        // Small and denser clusters (e.g. 8x8x8 = 512 spheres per cluster - over 1500 spheres total)
         Geometries clusterA = buildSphereCluster(new Point(-60, -10, -150), 8, 8, 8, 12, 5, matteMat, new Color(30, 80, 30));
         Geometries clusterB = buildSphereCluster(new Point(60, -5, -150), 8, 8, 8, 12, 5, shinyMat, new Color(80, 30, 30));
         Geometries clusterC = buildSphereCluster(new Point(0, 35, -180), 8, 8, 8, 12, 4.5, metallicMat, new Color(30, 30, 80));
@@ -81,26 +81,26 @@ public class BvhHierarchyTest1 {
                 new Triangle(p1, p2, p3).setMaterial(pyramidMat)
         );
 
-        // 3. יצירת שלושת המצבים המבניים בזיכרון (רק דרך הממשק הציבורי של Geometries!)
+        // 3. Create three structural states in memory (only via the public API of Geometries!)
 
-        // מצב 1: היררכיה ידנית (Manual)
+        // State 1: Manual hierarchy
         manualHierarchy = new Geometries( clusterA, clusterB, clusterC, trianglesBranch);
 
-        // מצב 2: סצנה משוטחת לחלוטין (Flat)
+        // State 2: Fully flattened scene
         flatScene = manualHierarchy.flatten();
 
-        // מצב 3: היררכיה אוטומטית (Auto BVH)
-        // אנחנו יוצרים עוד עותק שטוח, ואז אומרים *לו* לבנות את עצמו כעץ.
+        // State 3: Automatic BVH hierarchy
+        // Create another flat copy, then tell it to build itself as a tree.
         autoHierarchy = manualHierarchy.flatten();
 
         long startTreeTime = System.currentTimeMillis();
-        // קריאה חוקית לחלוטין ששומרת על הכימוס!
-        // המתודה הזו כבר תפעיל את ה-BvhBuilder הפנימי ותסדר את autoHierarchy כעץ.
+        // Fully legal call that preserves encapsulation!
+        // This method triggers the internal BvhBuilder and reorganizes autoHierarchy as a tree.
         autoHierarchy.buildBvhTree();
         long endTreeTime = System.currentTimeMillis();
 
         System.out.println("--- Overhead: Auto BVH Tree built in " + (endTreeTime - startTreeTime) / 1000.0 + " seconds ---");
-        // 4. הגדרת הסצנה הכללית והמצלמה
+        // 4. Set up the general scene and camera
         scene = new Scene("BVH Hierarchy Test Scene");
         scene.lights.add(new SpotLight(new Color(700, 400, 400), new Point(60, 50, 100), new Vector(-1, -1, -3)).setKl(4E-4).setKq(2E-5));
         scene.lights.add(new PointLight(new Color(500, 250, 250), new Point(-60, -50, 100)).setKl(0.0005).setKq(0.0005));
@@ -121,7 +121,7 @@ public class BvhHierarchyTest1 {
     }
 
     // =========================================================
-    // מדידות סצנה משוטחת (Flat)
+    // Flat scene measurements
     // =========================================================
 
     @Test
@@ -145,7 +145,7 @@ public class BvhHierarchyTest1 {
     }
 
     // =========================================================
-    // מדידות היררכיה ידנית (Manual BVH)
+    // Manual BVH hierarchy measurements
     // =========================================================
 
     @Test
@@ -169,7 +169,7 @@ public class BvhHierarchyTest1 {
     }
 
     // =========================================================
-    // מדידות היררכיה אוטומטית (Auto BVH)
+    // Automatic BVH hierarchy measurements
     // =========================================================
 
     @Test
@@ -193,21 +193,21 @@ public class BvhHierarchyTest1 {
     }
 
     // =========================================================
-    // מתודות עזר (Helpers)
+    // Helper methods
     // =========================================================
 
     /**
-     * מתודת עזר שמבצעת מדידה אחת מלאה ומדפיסה את התוצאות.
+     * Helper method that performs a single full measurement and prints the results.
      */
     private void runMeasurement(Geometries geometries, boolean cbr, boolean bvh,  int threads, String testName) {
-        // הגדרת המבנה הגיאומטרי לסצנה
+        // Set the geometric structure for the scene
         scene.setGeometries(geometries);
 
         scene.setBvhTree(bvh);
 
         scene.setAABB(cbr);
 
-        // הגדרת ריבוי תהליכונים
+        // Set multithreading
         cameraBuilder.setMultithreading(threads);
 
         long startTime = System.currentTimeMillis();

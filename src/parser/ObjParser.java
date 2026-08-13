@@ -34,11 +34,11 @@ public class ObjParser {
      * @param emission emission color for the triangles
      */
     public static void parseAndAdd(String filePath, Scene scene, Material material, Color emission) {
-        // רשימה לשמירת כל הנקודות במרחב
+        // List to store all vertices in space
         List<Point> vertices = new ArrayList<>();
 
-        // טריק קריטי: בקבצי OBJ, האינדקסים מתחילים מ-1 ולא מ-0!
-        // לכן נוסיף נקודת "דמי" במקום ה-0 כדי שהאינדקסים יתאימו בדיוק לקובץ.
+        // Critical: in OBJ files, indices are 1-based, not 0-based!
+        // Add a dummy point at index 0 so indices match exactly with the file.
         vertices.add(new Point(0, 0, 0));
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -46,7 +46,7 @@ public class ObjParser {
             while ((line = br.readLine()) != null) {
                 line = line.trim();
 
-                // קריאת קודקוד (Vertex)
+                // Read vertex
                 if (line.startsWith("v ")) {
                     String[] parts = line.split("\\s+");
                     double x = Double.parseDouble(parts[1]);
@@ -54,13 +54,13 @@ public class ObjParser {
                     double z = Double.parseDouble(parts[3]);
                     vertices.add(new Point(x, y, z));
                 }
-                // קריאת משולש (Face)
+                // Read face
                 else if (line.startsWith("f ")) {
                     String[] parts = line.split("\\s+");
 
                     try {
-                        // בבלנדר, הפנים מיוצאות לרוב בפורמט v/vt/vn
-                        // אנחנו צריכים רק את המספר הראשון (הקודקוד), לכן נחתוך לפי "/"
+                        // In Blender, faces are usually exported in v/vt/vn format.
+                        // We only need the first number (vertex index), so split by "/"
                         int v1 = Integer.parseInt(parts[1].split("/")[0]);
                         int v2 = Integer.parseInt(parts[2].split("/")[0]);
                         int v3 = Integer.parseInt(parts[3].split("/")[0]);
@@ -72,7 +72,7 @@ public class ObjParser {
                         scene.geometries.add(t);
 
                     } catch (IllegalArgumentException e) {
-                        // תופס את השגיאה של "Zero vector is not allowed" ומתעלם מהמשולש הפגום
+                        // Catches "Zero vector is not allowed" and skips the degenerate triangle
                     } catch (IndexOutOfBoundsException e) {
                         // תופס למקרה שיש שורת משולש שמפנה לנקודה שלא קיימת
                         System.err.println("Invalid vertex index in face definition: " + line);
@@ -80,7 +80,7 @@ public class ObjParser {
                 }
             }
         } catch (IOException e) {
-            // הבלוק הזה היה חסר לך! תופס שגיאות של קריאת קובץ מהדיסק הקשיח
+            // Catches file I/O errors
             System.err.println("Failed to read OBJ file: " + e.getMessage());
         }
     }
