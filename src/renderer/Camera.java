@@ -596,12 +596,16 @@ public class Camera implements Cloneable {
         private void checkBVH() {
             if (_camera._rayTracer instanceof RayTracerBase rtb) {
                 // 1) If BVH is disabled but flat AABB filtering is enabled in the scene
-                if (rtb._scene.AAABBEnabled()) {
+               /* if (rtb._scene.AAABBEnabled()) {
                     Intersectable.setAABBEnabled(true);
                 }
                 // 2) If the user enabled BVH in the scene settings
                 if (rtb._scene.BvhEnabled()) {
                     rtb._scene.geometries.buildBvhTree();
+                }
+            }*/
+                if (rtb._scene.AAABBEnabled() || rtb._scene.BvhEnabled()) {
+                    Intersectable.setAABBEnabled(true);
                 }
             }
         }

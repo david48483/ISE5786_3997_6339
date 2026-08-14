@@ -21,11 +21,12 @@ import sampling.impl.JitteredSampler;
 import sampling.impl.TargetShapeType;
 import scene.Scene;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -51,7 +52,7 @@ public class CamaroBvhHierarchyTest2 {
     @BeforeAll
     public static void setupScene() {
         // 1. Path to the JSON file
-        String jsonPath = "C:\\Users\\admin\\Downloads\\Home\\home.json";
+        String jsonPath = "unittests/renderer/MercedesData.zip";
 
         // 2. Load geometries directly from JSON without ModelLoader
         Geometries loadedCarModel = loadGeometriesFromJson(jsonPath);
@@ -60,38 +61,45 @@ public class CamaroBvhHierarchyTest2 {
                         .setEmission(new Color(130, 130, 130))
                         .setMaterial(new Material().setKD(0.1).setKS(0.2).setKR(0.5).setKG(15).setShininess(10).setKA(0.8)));
 
-        // --- הוספת שלושת הכדורים ---
         Geometries spheres = new Geometries(
-                // כדור אדום חגיגי - שקוף וחלבי (רדיוס 0.5)
+
                 new Sphere(new Point(-1, -2, 0.3), 0.3)
                         .setEmission(new Color(220, 20, 40)) // אדום חגיגי
                         .setMaterial(new Material()
-                                .setKD(0.3)      // נותן קצת "גוף" לאדום כדי שלא ייעלם
-                                .setKS(0.7).setShininess(50) // קצת ברק חיצוני
-                                .setKT(0.9)      // שקיפות גבוהה
-                                .setKB(0.9)),   // <--- פה נמצא הקסם! רדיוס טשטוש השקיפות (החלביות)
-                // כדור לבן-אפרפר - מראה מטושטשת (Glossy Reflection)
-                // כדור לבן-אפרפר - תוקן למראה שיושבת על הרצפה
+                                .setKD(0.3)
+                                .setKS(0.7).setShininess(50)
+                                .setKT(0.9)
+                                .setKB(0.9)),
+                //  (Glossy Reflection)
                 new Sphere(new Point(40, 43, 0.70), 0.70)
-                        .setEmission(new Color(20, 20, 20)) // צבע בסיס כמעט שחור כדי שההשתקפות תבלוט
+                        .setEmission(new Color(20, 20, 20))
                         .setMaterial(new Material()
                                 .setKD(0.1)
                                 .setKS(0.9).setShininess(10)
-                                .setKR(0.7)      // זה מה שעושה אותו מראה
+                                .setKR(0.7)
                                 .setKT(0.0)
                                 .setKG(50.0)),
-                // כחול
+
                 new Sphere(new Point(22, 20, 0.70), 0.70)
-                        .setEmission(new Color(30, 100, 200)) // צבע כחול עמוק (ניתן לשנות)
+                        .setEmission(new Color(30, 100, 200))
                         .setMaterial(new Material().setKD(0.2).setKS(0.8).setShininess(200).setKT(0.0))
         );
 
-        // 3. איחוד הסצנה
         Geometries fullScene = new Geometries(loadedCarModel, planeScena, spheres);
 
-        flatScene = fullScene;
         manualHierarchy = fullScene;
-        autoHierarchy = fullScene;
+        flatScene = manualHierarchy.flatten();
+
+        autoHierarchy = manualHierarchy.flatten();
+
+        long startBuild = System.currentTimeMillis();
+        autoHierarchy.buildBvhTree();
+        long endBuild = System.currentTimeMillis();
+
+        double buildTimeSec = (endBuild - startBuild) / 1000.0;
+        System.out.println("==================================================");
+        System.out.println(">>> Automatic BVH Tree Build Time: " + buildTimeSec + " seconds.");
+        System.out.println("==================================================");
 
         scene = new Scene("Direct JSON Scene");
         scene.setBackground(new Color(100, 100, 100));
@@ -118,8 +126,6 @@ public class CamaroBvhHierarchyTest2 {
                 .setLocation(new Point(-22, -22, 4))
 
                 // 2. View direction vector (To-Vector):
-                // Since the camera is at (-30, -20, 15) and the car is at (0, 0, 0),
-                // the vector pointing toward the car is exactly: (30, 20, -15)
                 .setDirection(new Vector(25, 26, -2), new Vector(0, 0, 1))
 
                 .setVpSize(18, 18)
@@ -129,7 +135,7 @@ public class CamaroBvhHierarchyTest2 {
                 .setSamplerShape(TargetShapeType.CIRCLE)
                 .setRaysAmount(9)
                 .setDebugPrint(0.5)
-                .setResolution(2000, 2000);
+                .setResolution(4500, 4500);
     }
 
     /**
@@ -140,48 +146,56 @@ public class CamaroBvhHierarchyTest2 {
         Map<String, Material> materialsMap = new HashMap<>();
         Map<String, Color> colorsMap = new HashMap<>();
 
-        try {
-            String content = new String(Files.readAllBytes(Paths.get(filePath)));
-            JSONObject root = new JSONObject(content);
+        try (ZipFile zipFile = new ZipFile(filePath)) {
 
-            if (root.has("materials")) {
-                JSONObject materialsObj = root.getJSONObject("materials");
-                for (String matName : materialsObj.keySet()) {
-                    JSONObject m = materialsObj.getJSONObject(matName);
+            ZipEntry entry = zipFile.getEntry("Home.json");
 
-                    JSONArray col = m.getJSONArray("color");
-                    Color baseColor = new Color(
-                            col.getDouble(0) * 255,
-                            col.getDouble(1) * 255,
-                            col.getDouble(2) * 255
-                    );
-
-                    // Extract KT (transparency) from JSON
-                    double kt = m.optDouble("kt", 0.0);
-
-                    // If the material name contains "glass" and kt is still 0, set a default transparency
-                    if (matName.toLowerCase().contains("glass") && kt == 0.0) {
-                        kt = 0.85; // 85% transparency for glass
-                    }
-                    double roughness = m.optDouble("roughness", 0.5);
-
-// Lower roughness → smaller Kd, larger Ks for a shiny look
-                    double kd = roughness;
-                    double ks = 1.0 - roughness;
-
-                    Material mat = new Material()
-                            .setKD(kd)
-                            .setKS(ks)
-                            .setShininess((int) ((1.0 - roughness) * 100))
-                            .setKT(kt);
-
-                    materialsMap.put(matName, mat);
-                    colorsMap.put(matName, baseColor);
-                }
+            if (entry == null) {
+                throw new RuntimeException("The file Home.json was not found inside the ZIP.");
             }
 
-            // B. Load spheres
-            if (root.has("spheres")) {
+            try (InputStream inputStream = zipFile.getInputStream(entry)) {
+                String content = new String(inputStream.readAllBytes());
+                JSONObject root = new JSONObject(content);
+
+                if (root.has("materials")) {
+                    JSONObject materialsObj = root.getJSONObject("materials");
+                    for (String matName : materialsObj.keySet()) {
+                        JSONObject m = materialsObj.getJSONObject(matName);
+
+                        JSONArray col = m.getJSONArray("color");
+                        Color baseColor = new Color(
+                                col.getDouble(0) * 255,
+                                col.getDouble(1) * 255,
+                                col.getDouble(2) * 255
+                        );
+
+                        // Extract KT (transparency) from JSON
+                        double kt = m.optDouble("kt", 0.0);
+
+                        // If the material name contains "glass" and kt is still 0, set a default transparency
+                        if (matName.toLowerCase().contains("glass") && kt == 0.0) {
+                            kt = 0.85; // 85% transparency for glass
+                        }
+                        double roughness = m.optDouble("roughness", 0.5);
+
+// Lower roughness → smaller Kd, larger Ks for a shiny look
+                        double kd = roughness;
+                        double ks = 1.0 - roughness;
+
+                        Material mat = new Material()
+                                .setKD(kd)
+                                .setKS(ks)
+                                .setShininess((int) ((1.0 - roughness) * 100))
+                                .setKT(kt);
+
+                        materialsMap.put(matName, mat);
+                        colorsMap.put(matName, baseColor);
+                    }
+                }
+
+                // B. Load spheres
+           /* if (root.has("spheres")) {
                 JSONArray spheres = root.getJSONArray("spheres");
                 for (int i = 0; i < spheres.length(); i++) {
                     JSONObject s = spheres.getJSONObject(i);
@@ -196,10 +210,10 @@ public class CamaroBvhHierarchyTest2 {
                     }
                     geometries.add(sphere);
                 }
-            }
+            }*/
 
-            // C. Load planes
-            if (root.has("planes")) {
+                // C. Load planes
+           /* if (root.has("planes")) {
                 JSONArray planes = root.getJSONArray("planes");
                 for (int i = 0; i < planes.length(); i++) {
                     JSONObject p = planes.getJSONObject(i);
@@ -216,53 +230,54 @@ public class CamaroBvhHierarchyTest2 {
                     }
                     geometries.add(plane);
                 }
-            }
+            }*/
 
 // D. Load triangles
-            if (root.has("triangles")) {
-                JSONArray triangles = root.getJSONArray("triangles");
+                if (root.has("triangles")) {
+                    JSONArray triangles = root.getJSONArray("triangles");
 
-                // Set a small delta for floating-point comparison
-                final double EPSILON = 0.000001;
+                    // Set a small delta for floating-point comparison
+                    final double EPSILON = 0.000001;
 
-                for (int i = 0; i < triangles.length(); i++) {
-                    JSONObject t = triangles.getJSONObject(i);
-                    JSONArray v0 = t.getJSONArray("v0");
-                    JSONArray v1 = t.getJSONArray("v1");
-                    JSONArray v2 = t.getJSONArray("v2");
+                    for (int i = 0; i < triangles.length(); i++) {
+                        JSONObject t = triangles.getJSONObject(i);
+                        JSONArray v0 = t.getJSONArray("v0");
+                        JSONArray v1 = t.getJSONArray("v1");
+                        JSONArray v2 = t.getJSONArray("v2");
 
-                    Point p0 = new Point(v0.getDouble(0), v0.getDouble(1), v0.getDouble(2));
-                    Point p1 = new Point(v1.getDouble(0), v1.getDouble(1), v1.getDouble(2));
-                    Point p2 = new Point(v2.getDouble(0), v2.getDouble(1), v2.getDouble(2));
+                        Point p0 = new Point(v0.getDouble(0), v0.getDouble(1), v0.getDouble(2));
+                        Point p1 = new Point(v1.getDouble(0), v1.getDouble(1), v1.getDouble(2));
+                        Point p2 = new Point(v2.getDouble(0), v2.getDouble(1), v2.getDouble(2));
 
-                    // 1. Check distance between points with delta (before creating the triangle!)
-                    if (p0.distance(p1) < EPSILON || p1.distance(p2) < EPSILON || p2.distance(p0) < EPSILON) {
-                        continue; // points almost coincide - skip immediately
-                    }
-
-                    // 2. Collinearity check (are the points nearly on the same line) with delta
-                    // v1 = p1 - p0, v2 = p2 - p0
-                    try {
-                        Vector vec1 = p1.subtract(p0);
-                        Vector vec2 = p2.subtract(p0);
-
-                        // If the cross product is near zero, the points are collinear
-                        Vector cross = vec1.crossProduct(vec2);
-                        if (cross.length() < EPSILON) {
-                            continue; // skip degenerate triangle on a line
+                        // 1. Check distance between points with delta (before creating the triangle!)
+                        if (p0.distance(p1) < EPSILON || p1.distance(p2) < EPSILON || p2.distance(p0) < EPSILON) {
+                            continue; // points almost coincide - skip immediately
                         }
-                    } catch (IllegalArgumentException e) {
-                        // Catches the case where p1-p0 or p2-p0 produced a zero vector
-                        continue;
-                    }
-                    Triangle triangle = new Triangle(p0, p1, p2);
-                    String matName = t.optString("material", "");
 
-                    if (materialsMap.containsKey(matName)) {
-                        triangle.setMaterial(materialsMap.get(matName));
-                        triangle.setEmission(colorsMap.get(matName)); // <-- critical: sets the visible color!
+                        // 2. Collinearity check (are the points nearly on the same line) with delta
+                        // v1 = p1 - p0, v2 = p2 - p0
+                        try {
+                            Vector vec1 = p1.subtract(p0);
+                            Vector vec2 = p2.subtract(p0);
+
+                            // If the cross product is near zero, the points are collinear
+                            Vector cross = vec1.crossProduct(vec2);
+                            if (cross.length() < EPSILON) {
+                                continue; // skip degenerate triangle on a line
+                            }
+                        } catch (IllegalArgumentException e) {
+                            // Catches the case where p1-p0 or p2-p0 produced a zero vector
+                            continue;
+                        }
+                        Triangle triangle = new Triangle(p0, p1, p2);
+                        String matName = t.optString("material", "");
+
+                        if (materialsMap.containsKey(matName)) {
+                            triangle.setMaterial(materialsMap.get(matName));
+                            triangle.setEmission(colorsMap.get(matName)); // <-- critical: sets the visible color!
+                        }
+                        geometries.add(triangle);
                     }
-                    geometries.add(triangle);
                 }
             }
 
@@ -350,7 +365,7 @@ public class CamaroBvhHierarchyTest2 {
 
         cameraBuilder.setUseAdvancedEffects(false);
 
-        runMeasurement(autoHierarchy, true, true, MT_THREADS, "MERCEDES-13-Auto-WithCBR-MT-NoEffects");
+        runMeasurement(autoHierarchy, true, true, MT_THREADS, "MERCEDES-13-Auto-WithCBR-MT-NoEffects-4.5K-check import");
 
         cameraBuilder.setUseAdvancedEffects(true);
     }

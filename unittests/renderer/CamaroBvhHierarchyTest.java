@@ -135,19 +135,17 @@ public class CamaroBvhHierarchyTest {
         }
 
         Geometries backgroundBranch = new Geometries(
-                // רצפה: נשארת עם ההשתקפות (KR) היפה, אבל כהה כדי שלא תישרף
+              
                 new Plane(new Point(0, -1, 0), new Vector(0, 1, 0))
                         .setEmission(new Color(130, 130, 130))
                         .setMaterial(new Material().setKD(0.1).setKS(0.2).setShininess(10).setKR(0.4))
 
-                // קיר אחורי (ימין של התמונה): צבע קרם אבל מונמך מאוד. האור החזק יבהיר אותו.
-                // מיקום ב- Z = -8 כדי שיהיה קרוב וייצור זווית ישרה אמיתית
+
                /* new Plane(new Point(0, 0, -8), new Vector(0, 0, 1))
                         .setEmission(new Color(90, 75, 65))
                         .setMaterial(new Material().setKD(0.15).setKS(0)),*/
 
-                // קיר שמאלי (שמאל של התמונה): צבע אפור, מונמך מאוד.
-                // מיקום ב- X = -8, חותך את הקיר הקודם ב-90 מעלות
+
               /*  new Plane(new Point(-8, 0, 0), new Vector(1, 0, 0))
                         .setEmission(new Color(90, 75, 65))
                         .setMaterial(new Material().setKD(0.15).setKS(0))*/
