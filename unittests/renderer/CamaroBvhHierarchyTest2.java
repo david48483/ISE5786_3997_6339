@@ -5,6 +5,7 @@ import geometries.impl.Plane;
 import geometries.impl.Sphere;
 import geometries.impl.Triangle;
 import lighting.impl.AmbientLight;
+import lighting.impl.DirectionalLight;
 import lighting.impl.PointLight;
 import lighting.impl.SpotLight;
 import org.json.JSONArray;
@@ -46,6 +47,9 @@ public class CamaroBvhHierarchyTest2 {
 
     private static final int MT_THREADS = -1; // optimal thread count
 
+    private static final int RESOLUTION = 2006;
+    private static final String RES_SUFFIX = "-" + RESOLUTION + "R";
+
     // Map to store render times for all tests
     private static final Map<String, Double> renderTimes = new LinkedHashMap<>();
 
@@ -64,7 +68,7 @@ public class CamaroBvhHierarchyTest2 {
         Geometries spheres = new Geometries(
 
                 new Sphere(new Point(-1, -2, 0.3), 0.3)
-                        .setEmission(new Color(220, 20, 40)) // אדום חגיגי
+                        .setEmission(new Color(220, 20, 40))
                         .setMaterial(new Material()
                                 .setKD(0.3)
                                 .setKS(0.7).setShininess(50)
@@ -72,13 +76,13 @@ public class CamaroBvhHierarchyTest2 {
                                 .setKB(0.9)),
                 //  (Glossy Reflection)
                 new Sphere(new Point(40, 43, 0.70), 0.70)
-                        .setEmission(new Color(20, 20, 20))
+                        //.setEmission(new Color(20, 20, 20))
                         .setMaterial(new Material()
-                                .setKD(0.1)
-                                .setKS(0.9).setShininess(10)
-                                .setKR(0.7)
+                                .setKD(0.0)
+                                .setKS(1).setShininess(300)
+                                .setKR(1)
                                 .setKT(0.0)
-                                .setKG(50.0)),
+                                .setKG(2.0)),
 
                 new Sphere(new Point(22, 20, 0.70), 0.70)
                         .setEmission(new Color(30, 100, 200))
@@ -112,11 +116,13 @@ public class CamaroBvhHierarchyTest2 {
         scene.lights.add(new SpotLight(new Color(400, 400, 0), new Point(-1, -2, 4), new Vector(1, 0.9, -1))
                 .setKl(0.001).setKq(0.0001).setNarrowBeam(19));
 
-       /* scene.lights.add(new PointLight(new Color(50, 100, 200), new Point(-25, 5, -25))
-                .setKl(0.001).setKq(0.0001));*/
+        scene.lights.add(new PointLight(new Color(50, 100, 200), new Point(40, 43, 15))
+                .setKl(0.001).setKq(0.0001));
 
         scene.lights.add(new PointLight(new Color(100, 100, 100), new Point(11, 15, 5))
                 .setKl(0.001).setKq(0.0001));
+
+        scene.lights.add(new DirectionalLight(new Color(100, 80, 100), new Vector(-1, -0.9, -0.05)));
 
         assertNotNull(scene, "Scene should not be null");
 
@@ -135,7 +141,7 @@ public class CamaroBvhHierarchyTest2 {
                 .setSamplerShape(TargetShapeType.CIRCLE)
                 .setRaysAmount(9)
                 .setDebugPrint(0.5)
-                .setResolution(24, 24);
+                .setResolution(RESOLUTION, RESOLUTION);
     }
 
     /**
@@ -294,22 +300,22 @@ public class CamaroBvhHierarchyTest2 {
 
     @Test
     public void test01_Flat_NoCBR_NoMT() {
-        runMeasurement(flatScene, false, false, 0, "MERCEDES-01-Flat-NoCBR-NoMT-24K");
+        runMeasurement(flatScene, false, false, 0, "MERCEDES-01-Flat-NoCBR-NoMT");
     }
 
     @Test
     public void test02_Flat_WithCBR_NoMT() {
-        runMeasurement(flatScene, true, false, 0, "MERCEDES-02-Flat-WithCBR-NoMT-24K");
+        runMeasurement(flatScene, true, false, 0, "MERCEDES-02-Flat-WithCBR-NoMT");
     }
 
     @Test
     public void test03_Flat_NoCBR_MT() {
-        runMeasurement(flatScene, false, false, MT_THREADS, "MERCEDES-03-Flat-NoCBR-MT-24K");
+        runMeasurement(flatScene, false, false, MT_THREADS, "MERCEDES-03-Flat-NoCBR-MT");
     }
 
     @Test
     public void test04_Flat_WithCBR_MT() {
-        runMeasurement(flatScene, true, false, MT_THREADS, "MERCEDES-04-Flat-WithCBR-MT-24K");
+        runMeasurement(flatScene, true, false, MT_THREADS, "MERCEDES-04-Flat-WithCBR-MT");
     }
 
     // =========================================================
@@ -318,22 +324,22 @@ public class CamaroBvhHierarchyTest2 {
 
     @Test
     public void test05_Manual_NoCBR_NoMT() {
-        runMeasurement(manualHierarchy, false, false, 0, "MERCEDES-05-Manual-NoCBR-NoMT-24K");
+        runMeasurement(manualHierarchy, false, false, 0, "MERCEDES-05-Manual-NoCBR-NoMT");
     }
 
     @Test
     public void test06_Manual_WithCBR_NoMT() {
-        runMeasurement(manualHierarchy, true, false, 0, "MERCEDES-06-Manual-WithCBR-NoMT-24K");
+        runMeasurement(manualHierarchy, true, false, 0, "MERCEDES-06-Manual-WithCBR-NoMT");
     }
 
     @Test
     public void test07_Manual_NoCBR_MT() {
-        runMeasurement(manualHierarchy, false, false, MT_THREADS, "MERCEDES-07-Manual-NoCBR-MT-24K");
+        runMeasurement(manualHierarchy, false, false, MT_THREADS, "MERCEDES-07-Manual-NoCBR-MT");
     }
 
     @Test
     public void test08_Manual_WithCBR_MT() {
-        runMeasurement(manualHierarchy, true, false, MT_THREADS, "MERCEDES-08-Manual-WithCBR-MT-24K");
+        runMeasurement(manualHierarchy, true, false, MT_THREADS, "MERCEDES-08-Manual-WithCBR-MT");
     }
 
     // =========================================================
@@ -342,22 +348,22 @@ public class CamaroBvhHierarchyTest2 {
 
     @Test
     public void test09_Auto_NoCBR_NoMT() {
-        runMeasurement(autoHierarchy, false, true, 0, "MERCEDES-09-Auto-NoCBR-NoMT-24K");
+        runMeasurement(autoHierarchy, false, true, 0, "MERCEDES-09-Auto-NoCBR-NoMT");
     }
 
     @Test
     public void test10_Auto_WithCBR_NoMT() {
-        runMeasurement(autoHierarchy, true, true, 0, "MERCEDES-10-Auto-WithCBR-NoMT-24K");
+        runMeasurement(autoHierarchy, true, true, 0, "MERCEDES-10-Auto-WithCBR-NoMT");
     }
 
     @Test
     public void test11_Auto_NoCBR_MT() {
-        runMeasurement(autoHierarchy, false, true, MT_THREADS, "MERCEDES-11-Auto-NoCBR-MT-24K");
+        runMeasurement(autoHierarchy, false, true, MT_THREADS, "MERCEDES-11-Auto-NoCBR-MT");
     }
 
     @Test
     public void test12_Auto_WithCBR_MT() {
-        runMeasurement(autoHierarchy, true, true, MT_THREADS, "MERCEDES-12-Auto-WithCBR-MT-24K");
+        runMeasurement(autoHierarchy, true, true, MT_THREADS, "MERCEDES-12-Auto-WithCBR-MT");
     }
 
     @Test
@@ -365,7 +371,7 @@ public class CamaroBvhHierarchyTest2 {
 
         cameraBuilder.setUseAdvancedEffects(false);
 
-        runMeasurement(autoHierarchy, true, true, MT_THREADS, "MERCEDES-13-Auto-WithCBR-MT-NoEffects-24K");
+        runMeasurement(autoHierarchy, true, true, MT_THREADS, "MERCEDES-13-Auto-WithCBR-MT-NoEffects");
 
         cameraBuilder.setUseAdvancedEffects(true);
     }
@@ -376,6 +382,8 @@ public class CamaroBvhHierarchyTest2 {
         scene.setBvhTree(bvh);
         cameraBuilder.setMultithreading(threads);
 
+        String finalTestName = testName + RES_SUFFIX;
+
         long startTime = System.currentTimeMillis();
 
         Camera cameraOn = cameraBuilder
@@ -383,13 +391,13 @@ public class CamaroBvhHierarchyTest2 {
                 .build();
 
         cameraOn.renderImage();
-        cameraOn.writeToImage(testName);
+        cameraOn.writeToImage(finalTestName);
 
         long endTime = System.currentTimeMillis();
         double timeInSeconds = (endTime - startTime) / 1000.0;
 
-        System.out.println(">>> Render time for [" + testName + "]: " + timeInSeconds + " seconds.");
-        renderTimes.put(testName, timeInSeconds);
+        System.out.println(">>> Render time for [" + finalTestName + "]: " + timeInSeconds + " seconds.");
+        renderTimes.put(finalTestName, timeInSeconds);
     }
 
     @org.junit.jupiter.api.AfterAll

@@ -604,10 +604,10 @@ public class Camera implements Cloneable {
                     rtb._scene.geometries.buildBvhTree();
                 }
             }*/
-                if (rtb._scene.AAABBEnabled() || rtb._scene.BvhEnabled()) {
-                    // Intersectable.setAABBEnabled(true);
-                    Intersectable.setAABBEnabled(rtb._scene.AAABBEnabled());
-                }
+                //  if (rtb._scene.AAABBEnabled() || rtb._scene.BvhEnabled()) {
+                // Intersectable.setAABBEnabled(true);
+                Intersectable.setAABBEnabled(rtb._scene.AAABBEnabled());
+
             }
         }
 
