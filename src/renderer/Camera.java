@@ -605,7 +605,8 @@ public class Camera implements Cloneable {
                 }
             }*/
                 if (rtb._scene.AAABBEnabled() || rtb._scene.BvhEnabled()) {
-                    Intersectable.setAABBEnabled(true);
+                    // Intersectable.setAABBEnabled(true);
+                    Intersectable.setAABBEnabled(rtb._scene.AAABBEnabled());
                 }
             }
         }

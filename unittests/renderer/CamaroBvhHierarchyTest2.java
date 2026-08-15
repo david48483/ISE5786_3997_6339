@@ -135,7 +135,7 @@ public class CamaroBvhHierarchyTest2 {
                 .setSamplerShape(TargetShapeType.CIRCLE)
                 .setRaysAmount(9)
                 .setDebugPrint(0.5)
-                .setResolution(4500, 4500);
+                .setResolution(24, 24);
     }
 
     /**
@@ -294,22 +294,22 @@ public class CamaroBvhHierarchyTest2 {
 
     @Test
     public void test01_Flat_NoCBR_NoMT() {
-        runMeasurement(flatScene, false, false, 0, "MERCEDES-01-Flat-NoCBR-NoMT");
+        runMeasurement(flatScene, false, false, 0, "MERCEDES-01-Flat-NoCBR-NoMT-24K");
     }
 
     @Test
     public void test02_Flat_WithCBR_NoMT() {
-        runMeasurement(flatScene, true, false, 0, "MERCEDES-02-Flat-WithCBR-NoMT");
+        runMeasurement(flatScene, true, false, 0, "MERCEDES-02-Flat-WithCBR-NoMT-24K");
     }
 
     @Test
     public void test03_Flat_NoCBR_MT() {
-        runMeasurement(flatScene, false, false, MT_THREADS, "MERCEDES-03-Flat-NoCBR-MT");
+        runMeasurement(flatScene, false, false, MT_THREADS, "MERCEDES-03-Flat-NoCBR-MT-24K");
     }
 
     @Test
     public void test04_Flat_WithCBR_MT() {
-        runMeasurement(flatScene, true, false, MT_THREADS, "MERCEDES-04-Flat-WithCBR-MT");
+        runMeasurement(flatScene, true, false, MT_THREADS, "MERCEDES-04-Flat-WithCBR-MT-24K");
     }
 
     // =========================================================
@@ -318,22 +318,22 @@ public class CamaroBvhHierarchyTest2 {
 
     @Test
     public void test05_Manual_NoCBR_NoMT() {
-        runMeasurement(manualHierarchy, false, false, 0, "MERCEDES-05-Manual-NoCBR-NoMT");
+        runMeasurement(manualHierarchy, false, false, 0, "MERCEDES-05-Manual-NoCBR-NoMT-24K");
     }
 
     @Test
     public void test06_Manual_WithCBR_NoMT() {
-        runMeasurement(manualHierarchy, true, false, 0, "MERCEDES-06-Manual-WithCBR-NoMT");
+        runMeasurement(manualHierarchy, true, false, 0, "MERCEDES-06-Manual-WithCBR-NoMT-24K");
     }
 
     @Test
     public void test07_Manual_NoCBR_MT() {
-        runMeasurement(manualHierarchy, false, false, MT_THREADS, "MERCEDES-07-Manual-NoCBR-MT");
+        runMeasurement(manualHierarchy, false, false, MT_THREADS, "MERCEDES-07-Manual-NoCBR-MT-24K");
     }
 
     @Test
     public void test08_Manual_WithCBR_MT() {
-        runMeasurement(manualHierarchy, true, false, MT_THREADS, "MERCEDES-08-Manual-WithCBR-MT");
+        runMeasurement(manualHierarchy, true, false, MT_THREADS, "MERCEDES-08-Manual-WithCBR-MT-24K");
     }
 
     // =========================================================
@@ -342,22 +342,22 @@ public class CamaroBvhHierarchyTest2 {
 
     @Test
     public void test09_Auto_NoCBR_NoMT() {
-        runMeasurement(autoHierarchy, false, true, 0, "MERCEDES-09-Auto-NoCBR-NoMT");
+        runMeasurement(autoHierarchy, false, true, 0, "MERCEDES-09-Auto-NoCBR-NoMT-24K");
     }
 
     @Test
     public void test10_Auto_WithCBR_NoMT() {
-        runMeasurement(autoHierarchy, true, true, 0, "MERCEDES-10-Auto-WithCBR-NoMT");
+        runMeasurement(autoHierarchy, true, true, 0, "MERCEDES-10-Auto-WithCBR-NoMT-24K");
     }
 
     @Test
     public void test11_Auto_NoCBR_MT() {
-        runMeasurement(autoHierarchy, false, true, MT_THREADS, "MERCEDES-11-Auto-NoCBR-MT");
+        runMeasurement(autoHierarchy, false, true, MT_THREADS, "MERCEDES-11-Auto-NoCBR-MT-24K");
     }
 
     @Test
     public void test12_Auto_WithCBR_MT() {
-        runMeasurement(autoHierarchy, true, true, MT_THREADS, "MERCEDES-12-Auto-WithCBR-MT");
+        runMeasurement(autoHierarchy, true, true, MT_THREADS, "MERCEDES-12-Auto-WithCBR-MT-24K");
     }
 
     @Test
@@ -365,7 +365,7 @@ public class CamaroBvhHierarchyTest2 {
 
         cameraBuilder.setUseAdvancedEffects(false);
 
-        runMeasurement(autoHierarchy, true, true, MT_THREADS, "MERCEDES-13-Auto-WithCBR-MT-NoEffects-4.5K-check import");
+        runMeasurement(autoHierarchy, true, true, MT_THREADS, "MERCEDES-13-Auto-WithCBR-MT-NoEffects-24K");
 
         cameraBuilder.setUseAdvancedEffects(true);
     }
