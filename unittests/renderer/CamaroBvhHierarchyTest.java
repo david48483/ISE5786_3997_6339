@@ -131,9 +131,7 @@ public class CamaroBvhHierarchyTest {
                         .setMaterial(new Material().setKD(0.2).setKS(0.8).setShininess(200).setKT(0.0))
         );
 
-        Geometries fullScene = new Geometries(loadedCarModel, planeScena, spheres);
-
-        manualHierarchy = fullScene;
+        manualHierarchy = new Geometries(loadedCarModel, planeScena, spheres);
         flatScene = manualHierarchy.flatten();
 
         autoHierarchy = manualHierarchy.flatten();
