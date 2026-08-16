@@ -64,9 +64,6 @@ public class Scene {
      */
     private boolean _bvhTreeEnable = false;
 
-
-
-
     /**
      * Sets the scene background color.
      *

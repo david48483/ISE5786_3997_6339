@@ -50,7 +50,9 @@ public class Tube extends RadialGeometry {
     }
 
     @Override
-    protected AABB setBoundingBoxHelper() {return null; }
+    protected AABB setBoundingBoxHelper() {
+        return null;
+    }
 
     @Override
     public String toString() {

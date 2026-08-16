@@ -22,7 +22,6 @@ public final class AmbientLight extends Light {
      * @param color intensity color of the ambient light
      */
     public AmbientLight(Color color) {
-        // _intensity = color;
         super(color);
     }
 

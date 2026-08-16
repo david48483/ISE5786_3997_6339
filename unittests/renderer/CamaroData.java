@@ -1,10 +1,34 @@
 package renderer;
 
+/**
+ * Stores packed static geometry, normal, and material arrays for the Camaro model tests.
+ */
 public class CamaroData {
+
+    /**
+     * Prevents instantiation of this utility data holder.
+     */
+    private CamaroData() {
+    }
+    /**
+     * Packed vertex coordinates array.
+     */
     public static final double[] RAW_VERTICES = new double[57345];
+    /**
+     * Packed normal vectors array.
+     */
     public static final double[] RAW_NORMALS = new double[33828];
+    /**
+     * Packed triangle vertex indices array.
+     */
     public static final int[] RAW_INDICES = new int[75540];
+    /**
+     * Packed triangle normal indices array.
+     */
     public static final int[] RAW_NORMAL_INDICES = new int[75540];
+    /**
+     * Packed face-to-material mapping array.
+     */
     public static final int[] RAW_FACE_MATERIALS = new int[25180];
 
     static {
@@ -79,7 +103,14 @@ public class CamaroData {
         System.arraycopy(MChunk6.data, 0, RAW_FACE_MATERIALS, 24000, MChunk6.data.length);
     }
 
+
+    /**
+     * Stores packed numeric data for VChunk0.
+     */
     private static class VChunk0 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             0.137823, -0.331099, 2.80522, 0.150986, -0.323769, 2.80522, 0.137823, -0.323769, 2.80583, 0.141229, -0.330849, 2.80522, 0.144406, -0.330117, 2.80522, 
             0.147131, -0.328952, 2.80522, 0.137823, -0.330849, 2.80538, 0.141365, -0.330552, 2.80538, 0.144426, -0.329811, 2.80538, 0.146814, -0.32878, 2.80538, 
@@ -349,9 +380,22 @@ public class CamaroData {
             -0.784584, 0.850457, 0.542616, -0.704198, 0.919222, 0.499164, -0.232896, 0.868129, 0.605289, -0.107262, 0.922703, 0.50023, -0.40795, 0.865363, 0.608322, 
             -0.603429, 0.920175, 0.510374, -0.48883, 0.921977, 0.513819, -0.823372, 0.844574, 0.481008, -0.05313, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VChunk0() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VChunk1.
+     */
     private static class VChunk1 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             0.905143, 0.537093, -0.451731, 0.903679, 0.552331, 
             -0.785689, 0.889973, 0.471525, -0.550677, 0.901107, 0.54733, -0.666711, 0.898503, 0.538981, -0.317113, 0.904529, 0.552379, -0.162669, 0.905034, 0.545008, 
@@ -622,9 +666,22 @@ public class CamaroData {
             0.35161, 0.183608, 2.86276, 0.596336, 0.170181, 2.84447, 0.35161, 0.170181, 2.86276, 0.596336, 0.156754, 2.84447, 0.35161, 0.156754, 2.86276, 
             0.596336, 0.143327, 2.84447, 0.35161, 0.143327, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VChunk1() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VChunk2.
+     */
     private static class VChunk2 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             2.86276, 0.596336, 0.129899, 2.84447, 0.35161, 0.129899, 2.86276, 0.596336, 0.116472, 2.84447, 
             0.35161, 0.116472, 2.86276, 0.596336, 0.103045, 2.84447, 0.35161, 0.103045, 2.86276, 0.596336, 0.089618, 2.84447, 0.35161, 0.089618, 2.86276, 
@@ -895,9 +952,22 @@ public class CamaroData {
             0.975631, 0.120898, 2.65467, 0.857056, 0.040604, 2.67787, 0.936008, 0.025398, 2.66237, 0.981204, 0.092927, 2.65359, 0.907689, 0.195276, 2.80029, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VChunk2() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VChunk3.
+     */
     private static class VChunk3 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             0.907991, 0.166019, 2.66782, 0.879973, 0.160455, 2.67327, 0.959761, 0.041243, 2.65776, 0.975631, 0.064956, 2.65467, 0.879973, 0.025398, 2.67327, 
             0.907991, 0.019835, 2.66782, 0.835618, 0.092927, 2.68275, 0.841127, 0.065277, 2.68168, 0.962225, 0.103697, 2.63162, 0.962225, 0.082157, 2.63162, 
@@ -1167,9 +1237,22 @@ public class CamaroData {
             0.813354, 0.154251, 2.78369, 0.997217, 0.031602, 2.74795, 0.796845, 0.114461, 2.7869, 1.01373, 0.071393, 2.74473, 0.984966, 0.036845, 2.68649, 
             0.801725, 0.11262, 2.72212, 1.00006, 0.073234, 2.68356, 0.801725, 0.073234, 2.72212, 1.00006, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VChunk3() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VChunk4.
+     */
     private static class VChunk4 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             0.11262, 2.68356, 0.816823, 0.036845, 2.71918, 
             0.984966, 0.149009, 2.68649, 0.844719, 0.008995, 2.71376, 0.957069, 0.176859, 2.69191, 0.881168, -0.006078, 2.70667, 0.881168, 0.191932, 2.70667, 
@@ -1440,9 +1523,22 @@ public class CamaroData {
             -1.1456, -0.402236, -1.81842, -1.1456, -0.331008, -1.85649, -1.1456, -0.253722, -1.87994, -1.06697, -0.173347, -1.89207, -1.06697, -0.092149, -1.88407, 
             -1.06697, -0.014072, -1.86039, -1.06697, 0.057885, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VChunk4() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VChunk5.
+     */
     private static class VChunk5 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             -1.82192, -1.06697, 0.120955, -1.77016, -1.06697, 0.172715, -1.70709, -1.06697, 0.211177, -1.63514, 
             -1.06697, 0.234861, -1.55706, -1.06697, 0.242859, -1.47586, -1.06697, 0.234861, -1.39467, -1.06697, 0.211177, -1.31659, -1.06697, 0.172715, -1.24463, 
@@ -1713,9 +1809,22 @@ public class CamaroData {
             0.868252, -0.173347, -1.19917, 0.868252, -0.173347, -1.19917, 0.868252, -0.335985, -1.25201, 0.868252, -0.335985, -1.25201, 0.868252, -0.4365, -1.39036, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VChunk5() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VChunk6.
+     */
     private static class VChunk6 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             0.868252, -0.4365, -1.39036, 0.868252, -0.4365, -1.56137, 0.868252, -0.4365, -1.56137, 0.868252, -0.335985, -1.69971, 0.868252, -0.335985, -1.69971, 
             0.827734, -0.010709, -1.69971, 0.827734, -0.010709, -1.69971, 0.827734, -0.173347, -1.75256, 0.827734, -0.173347, -1.75256, 0.827734, 0.089807, -1.56137, 
@@ -1985,9 +2094,22 @@ public class CamaroData {
             -1.10759, -0.198194, 1.69261, -1.10759, -0.045271, 1.74229, -1.10759, 0.049241, 1.87238, -1.10759, 0.049241, 2.03317, -1.10759, -0.045271, 2.16326, 
             -1.10759, -0.198195, 2.21294, -1.10759, -0.351118, 2.16326, -1.10759, -0.44563, 2.03317, -1.10759, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VChunk6() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VChunk7.
+     */
     private static class VChunk7 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             -0.44563, 1.87238, -1.10759, -0.351118, 1.74229, 
             -0.861685, -0.198194, 1.69261, -0.861685, -0.045271, 1.74229, -0.861685, 0.049241, 1.87238, -0.861685, 0.049241, 2.03317, -0.861685, -0.045271, 2.16326, 
@@ -2258,9 +2380,22 @@ public class CamaroData {
             -1.10896, -0.112669, 1.90326, -1.10896, -0.122708, 1.90905, -1.10896, -0.122708, 1.90905, -1.10896, -0.132746, 1.90326, -1.10896, -0.132746, 1.90326, 
             -1.10896, -0.132746, 1.89167, -1.10896, -0.132746, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VChunk7() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VChunk8.
+     */
     private static class VChunk8 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             1.89167, -1.1321, -0.112669, 1.89167, -1.1321, -0.112669, 1.89167, -1.1321, -0.122708, 1.88587, 
             -1.1321, -0.122708, 1.88587, -1.1321, -0.112669, 1.90326, -1.1321, -0.112669, 1.90326, -1.1321, -0.122708, 1.90905, -1.1321, -0.122708, 1.90905, 
@@ -2531,9 +2666,22 @@ public class CamaroData {
             1.07778, 0.447332, 0.683321, 1.07781, 0.447549, 0.680739, 1.0778, 0.448263, 0.678248, 1.07775, 0.449448, 0.675944, 1.07765, 0.451057, 0.673916, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VChunk8() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VChunk9.
+     */
     private static class VChunk9 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             1.07752, 0.45303, 0.67224, 1.07735, 0.455289, 0.670983, 1.07716, 0.457749, 0.670192, 1.11439, 0.474407, 0.664707, 1.11425, 0.476988, 0.664906, 
             1.11429, 0.47949, 0.665578, 1.1145, 0.481819, 0.666696, 1.11486, 0.483885, 0.668217, 1.11537, 0.485608, 0.670084, 1.11601, 0.486922, 0.672224, 
@@ -2803,9 +2951,22 @@ public class CamaroData {
             0.835984, 0.932054, 0.37063, 0.744565, 0.934779, 0.495659, 0.754202, 0.944432, 0.425431, 0.789165, 0.94915, 0.369164, 0.546016, 0.938369, 0.500953, 
             0.553298, 0.966292, 0.428096, 0.561619, 0.974805, 0.369731, 0.700741, 0.935625, 0.496907, 0.709823, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VChunk9() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VChunk10.
+     */
     private static class VChunk10 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             0.957333, 0.425347, 0.720204, 0.961933, 0.368585, 
             0.796259, 0.932183, 0.450098, 0.749384, 0.944724, 0.460545, 0.549657, 0.956057, 0.464525, 0.705282, 0.950205, 0.461127, 0.835984, 0.912449, -0.036433, 
@@ -3076,9 +3237,22 @@ public class CamaroData {
             0.303294, 0.481316, 1.24263, 0.288851, 0.481715, 1.24512, 0.274409, 0.482114, 1.2476, 0.497462, 0.474023, 1.12618, 0.483249, 0.474469, 1.12866, 
             0.469035, 0.474916, 1.13115, 0.454822, 0.475363, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VChunk10() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VChunk11.
+     */
     private static class VChunk11 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             1.13364, 0.440609, 0.47581, 1.13613, 0.426396, 0.476256, 1.13861, 0.412183, 0.476703, 1.1411, 
             0.397969, 0.47715, 1.14359, 0.383756, 0.477597, 1.14608, 0.369543, 0.478044, 1.14857, 0.35533, 0.47849, 1.15105, 0.341117, 0.478937, 1.15354, 
@@ -3349,9 +3523,22 @@ public class CamaroData {
             -0.867296, 0.19969, 1.76068, -0.865426, 0.048105, -1.06453, -0.858144, -0.269972, -0.981341, -0.857504, -0.247438, -2.12816, -0.862475, -0.267761, -2.02152, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VChunk11() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VChunk12.
+     */
     private static class VChunk12 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             -0.856421, -0.352277, 1.1586, -0.852515, 0.254127, -1.29758, -0.866087, -0.352277, 1.49843, -0.855125, 0.08346, -1.86027, -0.847681, -0.352277, 0.84524, 
             -0.864158, -0.102458, -1.94061, -0.855125, 0.222528, -1.7269, -0.86889, 0.182044, 2.18226, -0.821277, -0.181295, -2.47254, -0.921503, -0.352277, 1.03194, 
@@ -3621,9 +3808,22 @@ public class CamaroData {
             0.459091, 0.571885, -1.9478, 0.15303, 0.571885, -1.96589, 0, 0.571885, -1.97381, 0.88932, 0.4894, -2.13431, 0.890676, 0.466433, -2.27212, 
             0.677942, 0.40467, -2.7019, 0.642851, 0.407275, -2.70197, 0.150658, 0.407329, -2.70196, 0, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VChunk12() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VChunk13.
+     */
     private static class VChunk13 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             0.407329, -2.70192, 0.841381, 0.393985, -2.70128, 
             0.787116, 0.396567, -2.70169, 0.451975, 0.407329, -2.70205, 0.354451, 0.942065, 0.506405, 0.280585, 0.624426, -1.82343, 0.280585, 0.624426, -1.82343, 
@@ -3894,9 +4094,22 @@ public class CamaroData {
             -0.933633, -0.27546, -1.97822, -1.00311, -0.27546, -1.97822, -1.07038, -0.287956, 2.4069, -1.00105, -0.287956, 2.4069, -1.07498, -0.352277, 1.49843, 
             -1.00535, -0.352277, 1.49843, -0.803733, -0.05435, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VChunk13() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VChunk14.
+     */
     private static class VChunk14 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             2.84587, -0.803733, -0.05435, 2.84587, -0.718752, -0.249928, 2.71247, -0.803733, -0.249928, 2.69802, 
             -0.867439, -0.05435, 2.83504, -0.867439, -0.05435, 2.83504, -1.0203, -0.04745, 2.81954, -1.0203, -0.04745, 2.81954, -1.10026, -0.264044, 2.54385, 
@@ -3990,9 +4203,22 @@ public class CamaroData {
             -0.952877, 0.137953, 2.42284, -0.952877, 0.137953, 2.42284, -0.942239, 0.122758, 2.43201, -1.07697, 0.011129, 2.77393, -1.13971, -0.012477, 2.36668, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VChunk14() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VNChunk0.
+     */
     private static class VNChunk0 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             -0, 1, -0, 1, -0, -0, -0, -0, -1, 0.0391, -0.533, 0.8452, 0.1194, -0.5176, 0.8473, 
             0.1984, -0.4643, 0.8631, 0.0151, -0.1965, 0.9804, 0.0454, -0.1842, 0.9818, 0.0724, -0.1663, 0.9834, 0.0093, -0.1075, 0.9942, 
@@ -4262,9 +4488,22 @@ public class CamaroData {
             -0.9531, 0.294, -0.072, -0.9421, 0.3352, 0.0071, 0.9531, -0.294, 0.072, 0.9421, -0.3352, -0.0071, 0.9531, 0.294, -0.072, 
             -0.9563, -0.2884, 0.0483, 0.2413, 0.0226, -0.9702, -0.9563, 0.2884, -0.0483, 0.9563, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VNChunk0() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VNChunk1.
+     */
     private static class VNChunk1 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             -0.2884, 0.0483, 0.1473, 0.876, 0.4593, 
             0.3726, 0.77, 0.518, 0.3034, 0.8464, 0.4376, 0.5554, 0.7194, 0.4172, 0.4898, 0.7836, 0.3821, 0.1525, 0.9623, 0.2253, 
@@ -4535,9 +4774,22 @@ public class CamaroData {
             -0.4629, -0.5908, 0.6608, 0.7053, -0.6619, 0.2539, 0.7944, -0.4181, 0.4405, 0.6747, -0.5366, 0.5067, 0.8749, -0.4384, 0.206, 
             0.7199, -0.405, 0.5637, 0.631, -0.519, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VNChunk1() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VNChunk2.
+     */
     private static class VNChunk2 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             0.5766, 0.5009, 0.6837, 0.5306, 0.6747, 0.5366, 0.5067, 0.7053, 0.6619, 0.2539, 
             0.4091, 0.7511, 0.5181, 0.541, 0.6564, 0.5258, 0.4074, 0.7418, 0.5327, -0.3753, 0.7386, 0.5601, -0.2179, 0.7924, 0.5698, 
@@ -4808,9 +5060,22 @@ public class CamaroData {
             0.0342, -0.7785, 0.6268, -0.1182, -0.7795, 0.6152, -0.106, -0.8284, 0.55, -0.1116, -0.8393, 0.5321, -0.9096, -0.3502, 0.2236, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VNChunk2() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VNChunk3.
+     */
     private static class VNChunk3 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             -0.8962, -0.1629, 0.4126, -0.9572, -0.1823, 0.2248, -0.8532, -0.3158, 0.4152, -0.8214, -0.1426, 0.5522, -0.8342, -0, 0.5514, 
             -0.9111, -0, 0.4121, -0.9744, -0, 0.2246, 0.5183, -0.6387, 0.5687, 0.3721, -0.7251, 0.5795, 0.3753, -0.7386, 0.5601, 
@@ -5080,9 +5345,22 @@ public class CamaroData {
             -0.9814, 0.1774, -0.0735, -0.9814, 0.1883, -0.0375, -0.9814, 0.192, -0, -0.9814, 0.1883, 0.0375, -0.9814, 0.1774, 0.0735, 
             -0.9814, 0.1596, 0.1067, -0.9814, 0.1358, 0.1358, -0.9814, 0.1067, 0.1596, -0.9814, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VNChunk3() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VNChunk4.
+     */
     private static class VNChunk4 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             0.0735, 0.1774, -0.9814, 0.0375, 0.1883, 
             -1, -0, -0.0096, -1, 0.0019, -0.0094, -1, 0.0037, -0.0088, -1, 0.0053, -0.0079, -1, 0.0068, -0.0068, 
@@ -5353,9 +5631,22 @@ public class CamaroData {
             -0.0457, -0.7221, -0.6902, 0.3849, 0.0486, 0.9217, 0.1335, 0.027, 0.9907, -0.3029, 0.5125, -0.8035, -0.4858, 0.3283, -0.8101, 
             0.0183, -0.392, -0.9198, -0.1431, -0.5835, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VNChunk4() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VNChunk5.
+     */
     private static class VNChunk5 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             -0.7994, 0.4295, -0.1411, 0.892, 0.1893, -0.1604, 0.9687, -0.501, 0.4967, -0.7087, 
             -0.2369, -0.4198, -0.8761, 0.4582, -0.3239, 0.8277, -0.2596, 0.9592, 0.1119, -0.4088, 0.8795, 0.2436, -0.3894, 0.9204, -0.0358, 
@@ -5626,9 +5917,22 @@ public class CamaroData {
             0.9984, 0.0002, 0.0559, 0.9992, 0.0054, -0.0403, 0.1516, 0.9582, 0.2426, 0.0384, 0.9839, 0.1747, 0.9193, 0.3936, -0.0005, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VNChunk5() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VNChunk6.
+     */
     private static class VNChunk6 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             -0.0293, 0.5913, 0.8059, -0.0168, 0.37, 0.9289, -0.0295, 0.595, 0.8032, 0.9992, 0.0286, 0.0289, 0.9996, 0.0015, -0.028, 
             0.1666, -0.0216, 0.9858, 0.166, -0.0203, 0.9859, 0.7484, 0.6484, 0.14, 0.6194, 0.7715, 0.1456, -0.0113, 0.998, 0.0629, 
@@ -5898,9 +6202,22 @@ public class CamaroData {
             0.0325, 0.9406, 0.3379, 0.0272, 0.9363, 0.3502, 0.0318, 0.9382, 0.3446, 0.9915, -0.0022, 0.1303, 0.9874, 0.0219, 0.1567, 
             0.9888, 0.0341, 0.1453, 0.9718, 0.0056, 0.2358, 0.9616, 0.0186, 0.2738, 0.982, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VNChunk6() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VNChunk7.
+     */
     private static class VNChunk7 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             0.0173, 0.1881, 0.1057, 0.9225, 0.3712, 
             0.977, -0.1328, 0.1668, 0.9675, -0.1509, 0.2028, 0.9796, -0.0733, 0.1869, 0.9992, -0.0402, 0.0001, -0, -0.9989, 0.047, 
@@ -6171,9 +6488,22 @@ public class CamaroData {
             -0.0991, 0.8458, 0.5242, -0.0499, 0.8419, 0.5373, -0.1124, 0.6787, 0.7258, -0.0744, 0.8462, 0.5276, -0.0118, -0.9944, 0.105, 
             -0.0225, -0.9749, 0.2214, -0.1428, 0.7059, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VNChunk7() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for VNChunk8.
+     */
     private static class VNChunk8 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final double[] data = {
             0.6938, -0.0986, 0.8475, 0.5216, -0.1476, 0.685, 0.7135, -0.0859, 0.6923, 0.7165, 
             -0.0513, 0.8446, 0.533, -0.0257, 0.6786, 0.734, 0.0145, 0.8464, 0.5324, 0.638, -0.7577, 0.1373, 0.4116, -0.8984, 0.1533, 
@@ -6299,9 +6629,22 @@ public class CamaroData {
             -0.0366, 0.9968, -0.0705, 0.0133, 0.9847, -0.1737, -0.9385, 0.2178, 0.2681, -0.9616, 0.0186, 0.2738, 0.0506, -0.2401, 0.9694, 
             0.1652, -0.2033, 0.9651, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private VNChunk8() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk0.
+     */
     private static class IChunk0 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             222, 113, 74, 2, 186, 150, 222, 261, 113, 2, 38, 186, 185, 111, 259, 
             112, 1, 75, 3, 6, 0, 4, 7, 3, 5, 8, 4, 7, 10, 6, 
@@ -6571,9 +6914,22 @@ public class CamaroData {
             1054, 1048, 1050, 1059, 1053, 1057, 1058, 1055, 1059, 1056, 1054, 1058, 1063, 1057, 1061, 
             1062, 1059, 1063, 1060, 1058, 1062, 1067, 1061, 1065, 1066, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk0() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk1.
+     */
     private static class IChunk1 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             1063, 1067, 1064, 1062, 1066, 
             1071, 1065, 1069, 1070, 1067, 1071, 1068, 1066, 1070, 1075, 1069, 1073, 1074, 1071, 1075, 
@@ -6844,9 +7200,22 @@ public class CamaroData {
             1651, 1646, 1526, 1526, 1797, 1651, 1641, 1643, 1526, 1526, 1843, 1641, 1675, 1663, 1527, 
             1527, 1805, 1675, 1651, 1660, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk1() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk2.
+     */
     private static class IChunk2 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             1527, 1527, 1852, 1651, 1528, 1810, 1649, 1662, 1674, 1528, 
             1528, 1799, 1662, 1649, 1652, 1528, 1673, 1647, 1529, 1529, 1975, 1673, 1653, 1976, 1529, 
@@ -7117,9 +7486,22 @@ public class CamaroData {
             2644, 2553, 2563, 2563, 2567, 2564, 2564, 2539, 2173, 2537, 2642, 2565, 2297, 2233, 2298, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk2() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk3.
+     */
     private static class IChunk3 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             2295, 2656, 2296, 2298, 2232, 2299, 2299, 2231, 2300, 2300, 2230, 2301, 2301, 2229, 2302, 
             2302, 2228, 2303, 2303, 2227, 2304, 2304, 2226, 2305, 2305, 2225, 2306, 2306, 2224, 2307, 
@@ -7389,9 +7771,22 @@ public class CamaroData {
             4640, 4623, 5639, 5639, 3429, 4638, 4591, 4638, 3413, 4641, 4599, 3422, 3438, 5640, 4641, 
             4631, 4639, 5640, 5640, 3421, 4599, 3415, 5641, 4592, 4642, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk3() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk4.
+     */
     private static class IChunk4 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             4624, 5641, 5641, 3430, 4640, 
             4592, 4640, 3414, 4643, 4600, 3423, 3439, 5642, 4643, 4632, 4641, 5642, 5642, 3422, 4600, 
@@ -7662,9 +8057,22 @@ public class CamaroData {
             4710, 5677, 4653, 3460, 4685, 5677, 5677, 4685, 3459, 5677, 4708, 3443, 4711, 5678, 5232, 
             3468, 4693, 5678, 5678, 4693, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk4() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk5.
+     */
     private static class IChunk5 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             3467, 5232, 5678, 4709, 4712, 5679, 4654, 3461, 4686, 5679, 
             5679, 4686, 3460, 5679, 4710, 3444, 4713, 5680, 5233, 3469, 4694, 5680, 5680, 4694, 3468, 
@@ -7935,9 +8343,22 @@ public class CamaroData {
             5875, 3646, 5050, 5096, 5043, 3639, 3655, 5876, 5096, 5075, 5088, 5876, 5876, 3636, 5043, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk5() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk6.
+     */
     private static class IChunk6 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             5098, 5036, 3646, 3662, 5877, 5098, 5068, 5090, 5877, 5877, 3643, 5036, 3813, 5878, 5101, 
             3814, 5878, 5099, 3826, 5878, 5111, 3825, 5878, 5110, 3823, 5878, 5109, 3821, 5878, 5107, 
@@ -8207,9 +8628,22 @@ public class CamaroData {
             3682, 5905, 5154, 5132, 5156, 5905, 5905, 3718, 5200, 3719, 5906, 5199, 5155, 5140, 5906, 
             5906, 3691, 5157, 5199, 5157, 3717, 5156, 5198, 3718, 3683, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk6() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk7.
+     */
     private static class IChunk7 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             5907, 5156, 5133, 5158, 5907, 
             5907, 3716, 5198, 3717, 5908, 5197, 5157, 5141, 5908, 5908, 3692, 5159, 5197, 5159, 3714, 
@@ -8480,9 +8914,22 @@ public class CamaroData {
             6899, 6932, 6900, 6914, 6945, 6946, 6900, 6933, 6901, 6887, 6920, 6888, 6914, 6947, 6915, 
             6901, 6934, 6902, 6888, 6921, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk7() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk8.
+     */
     private static class IChunk8 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             6889, 6915, 6948, 6916, 6902, 6935, 6903, 6890, 6921, 6922, 
             6916, 6949, 6917, 6903, 6936, 6904, 6938, 6953, 6939, 6925, 6981, 6951, 6937, 6982, 6938, 
@@ -8753,9 +9200,22 @@ public class CamaroData {
             7087, 7939, 7944, 7086, 7944, 7949, 8127, 8133, 8129, 8141, 8145, 8139, 8128, 8148, 8136, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk8() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk9.
+     */
     private static class IChunk9 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             8134, 8144, 8132, 8130, 8138, 8126, 7250, 7255, 7249, 7248, 7253, 7247, 7246, 7251, 7245, 
             8151, 8157, 8153, 8165, 8169, 8163, 8152, 8172, 8160, 8158, 8168, 8156, 8154, 8162, 8150, 
@@ -9025,9 +9485,22 @@ public class CamaroData {
             9308, 10493, 9309, 9305, 10485, 9306, 10401, 10505, 10397, 10425, 10507, 10429, 10413, 10509, 10417, 
             9296, 10511, 10405, 9303, 10512, 10433, 9300, 10513, 10421, 9297, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk9() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk10.
+     */
     private static class IChunk10 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             10514, 10409, 9304, 9325, 9295, 
             9301, 10508, 9302, 9298, 10510, 9299, 10527, 9322, 9321, 10525, 9321, 9320, 10523, 9320, 9319, 
@@ -9298,9 +9771,22 @@ public class CamaroData {
             11377, 11344, 11345, 11332, 11363, 11331, 11378, 11345, 11346, 11333, 11364, 11332, 11352, 11319, 11320, 
             11347, 11378, 11346, 11366, 11333, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk10() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk11.
+     */
     private static class IChunk11 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             11334, 11321, 11352, 11320, 11380, 11347, 11348, 11367, 11334, 11335, 
             11354, 11321, 11322, 11381, 11348, 11349, 11395, 11362, 11363, 11409, 11376, 11377, 11396, 11363, 11364, 
@@ -9571,9 +10057,22 @@ public class CamaroData {
             11670, 11702, 11671, 11658, 11657, 11689, 11645, 11644, 11676, 11659, 11658, 11690, 11646, 11645, 11677, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk11() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk12.
+     */
     private static class IChunk12 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             11660, 11659, 11691, 11646, 11678, 11679, 11660, 11692, 11693, 11647, 11679, 11680, 11661, 11693, 11694, 
             11648, 11680, 11681, 11663, 11662, 11694, 11649, 11681, 11682, 11663, 11695, 11696, 11651, 11650, 11682, 
@@ -9843,9 +10342,22 @@ public class CamaroData {
             12858, 13281, 12859, 13294, 12873, 12872, 12859, 13282, 12860, 13295, 12874, 12873, 12860, 13283, 12861, 
             12847, 13269, 12848, 13296, 12875, 12874, 12861, 13284, 12862, 12848, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk12() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk13.
+     */
     private static class IChunk13 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             13271, 12849, 13297, 12876, 12875, 
             12862, 13285, 12863, 12849, 13272, 12850, 13298, 12877, 12876, 13285, 12864, 12863, 12850, 13273, 12851, 
@@ -10116,9 +10628,22 @@ public class CamaroData {
             13800, 13832, 13801, 13836, 13800, 13805, 17440, 17455, 17452, 13860, 17444, 17443, 17441, 17454, 17453, 
             13864, 17443, 13874, 13849, 14979, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk13() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk14.
+     */
     private static class IChunk14 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             14977, 17429, 17428, 17458, 14947, 13872, 14949, 14822, 17427, 14825, 
             14823, 13856, 14822, 14824, 17436, 14826, 13851, 17449, 17450, 17431, 17449, 13850, 14738, 13874, 17439, 
@@ -10389,9 +10914,22 @@ public class CamaroData {
             15183, 15418, 18317, 15183, 15345, 15336, 18211, 15562, 15556, 18378, 15176, 15218, 15325, 15310, 15346, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk14() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk15.
+     */
     private static class IChunk15 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             18122, 18161, 18155, 15907, 18119, 15918, 15524, 15307, 15535, 15411, 18358, 15318, 18451, 15910, 15314, 
             15161, 15347, 15333, 15103, 15314, 15315, 15106, 15502, 15484, 15104, 15314, 15105, 15523, 18319, 18093, 
@@ -10661,9 +11199,22 @@ public class CamaroData {
             15293, 19083, 19079, 15739, 16800, 15866, 18601, 16801, 15966, 18632, 16797, 15791, 15865, 16798, 15816, 
             15866, 16799, 15865, 15966, 16802, 16007, 16007, 16805, 16128, 16126, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk15() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk16.
+     */
     private static class IChunk16 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             16794, 15294, 16127, 16803, 16126, 
             16128, 16804, 16127, 19082, 16794, 16645, 16647, 16806, 16809, 18181, 16815, 15328, 15328, 16812, 15053, 
@@ -10934,9 +11485,22 @@ public class CamaroData {
             14568, 14569, 14541, 14569, 14570, 14549, 14571, 17709, 17710, 14570, 14554, 14550, 14557, 17702, 17709, 
             14521, 14509, 14557, 14529, 14554, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk16() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk17.
+     */
     private static class IChunk17 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             14570, 14514, 14521, 14571, 14528, 14570, 14569, 14520, 14569, 14568, 
             14513, 14524, 14563, 14525, 14566, 14567, 14527, 14568, 14565, 14601, 14523, 14559, 14519, 14567, 14609, 
@@ -11207,9 +11771,22 @@ public class CamaroData {
             16122, 16042, 16043, 16841, 16867, 16059, 16867, 16868, 16058, 16868, 16869, 16057, 15238, 16078, 16068, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk17() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for IChunk18.
+     */
     private static class IChunk18 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             16078, 16079, 16067, 16079, 16080, 16066, 15240, 16032, 16099, 16032, 16031, 16100, 16031, 16030, 16101, 
             16008, 16131, 15243, 16131, 16130, 15561, 16130, 16129, 15242, 16691, 15446, 15721, 16692, 16691, 15255, 
@@ -11449,9 +12026,22 @@ public class CamaroData {
             18995, 18993, 18934, 18967, 18965, 18937, 19035, 19033, 18946, 19031, 19029, 18954, 19028, 19026, 18962, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private IChunk18() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk0.
+     */
     private static class INChunk0 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             2, 2, 2, 159, 159, 159, 2, 2, 2, 159, 159, 159, 0, 0, 0, 
             1, 1, 1, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 
@@ -11721,9 +12311,22 @@ public class CamaroData {
             1280, 1155, 1277, 1281, 1110, 1114, 1282, 1279, 1281, 1283, 1280, 1282, 1284, 1114, 1121, 
             1285, 1281, 1284, 1286, 1282, 1285, 1287, 1121, 1125, 1288, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk0() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk1.
+     */
     private static class INChunk1 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             1284, 1287, 1289, 1285, 1288, 
             1290, 1125, 1129, 1291, 1287, 1290, 1292, 1288, 1291, 1293, 1129, 1133, 1294, 1290, 1293, 
@@ -11994,9 +12597,22 @@ public class CamaroData {
             1809, 1810, 1811, 1811, 1786, 1809, 1745, 1787, 1811, 1811, 1812, 1745, 1813, 1814, 1815, 
             1815, 1816, 1813, 1809, 1817, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk1() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk2.
+     */
     private static class INChunk2 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             1815, 1815, 1818, 1809, 1819, 1820, 1821, 1822, 1823, 1819, 
             1819, 1799, 1822, 1821, 1808, 1819, 1824, 1825, 1826, 1826, 1827, 1824, 1802, 1828, 1826, 
@@ -12267,9 +12883,22 @@ public class CamaroData {
             2305, 2305, 2305, 2305, 2305, 2305, 2305, 2305, 2305, 2305, 2305, 2305, 2301, 2302, 2301, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk2() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk3.
+     */
     private static class INChunk3 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             2301, 2302, 2301, 2301, 2302, 2301, 2301, 2302, 2301, 2301, 2302, 2301, 2301, 2302, 2301, 
             2301, 2302, 2301, 2301, 2302, 2301, 2301, 2302, 2301, 2301, 2302, 2301, 2301, 2302, 2301, 
@@ -12539,9 +13168,22 @@ public class CamaroData {
             3788, 3789, 3787, 3787, 3778, 3777, 3681, 3777, 3682, 3790, 3690, 3688, 3791, 3792, 3790, 
             3793, 3784, 3792, 3792, 3782, 3690, 3710, 3794, 3697, 3795, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk3() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk4.
+     */
     private static class INChunk4 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             3796, 3794, 3794, 3797, 3788, 
             3697, 3788, 3698, 3798, 3704, 3702, 3799, 3800, 3798, 3801, 3790, 3800, 3800, 3688, 3704, 
@@ -12812,9 +13454,22 @@ public class CamaroData {
             3945, 3947, 3858, 3946, 3969, 3947, 3947, 3969, 3938, 3947, 3937, 3847, 3948, 3952, 3949, 
             3951, 3977, 3952, 3952, 3977, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk4() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk5.
+     */
     private static class INChunk5 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             3943, 3949, 3952, 3944, 3953, 3955, 3866, 3954, 3970, 3955, 
             3955, 3970, 3946, 3955, 3945, 3856, 3956, 3960, 3957, 3959, 3978, 3960, 3960, 3978, 3951, 
@@ -13085,9 +13740,22 @@ public class CamaroData {
             4776, 4703, 4697, 4767, 4701, 4699, 4779, 4780, 4767, 4781, 4734, 4780, 4780, 4711, 4701, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk5() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk6.
+     */
     private static class INChunk6 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             4778, 4705, 4703, 4782, 4783, 4778, 4784, 4739, 4783, 4783, 4715, 4705, 4300, 4300, 4301, 
             4300, 4300, 4300, 4300, 4300, 4300, 4300, 4300, 4300, 4300, 4300, 4300, 4300, 4300, 4300, 
@@ -13357,9 +14025,22 @@ public class CamaroData {
             4918, 4919, 4907, 4920, 4921, 4919, 4919, 4922, 4917, 4916, 4923, 4924, 4915, 4925, 4923, 
             4923, 4926, 4927, 4924, 4927, 4928, 4921, 4929, 4922, 4930, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk6() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk7.
+     */
     private static class INChunk7 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             4931, 4921, 4932, 4933, 4931, 
             4931, 4934, 4929, 4928, 4935, 4936, 4927, 4937, 4935, 4935, 4938, 4939, 4936, 4939, 4940, 
@@ -13630,9 +14311,22 @@ public class CamaroData {
             5187, 5220, 5188, 5202, 5233, 5234, 5188, 5221, 5189, 5175, 5208, 5176, 5202, 5235, 5203, 
             5189, 5222, 5190, 5176, 5209, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk7() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk8.
+     */
     private static class INChunk8 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             5177, 5203, 5236, 5204, 5190, 5223, 5191, 5178, 5209, 5210, 
             5204, 5237, 5205, 5191, 5224, 5192, 5226, 5243, 5227, 5213, 5260, 5261, 5225, 5242, 5226, 
@@ -13903,9 +14597,22 @@ public class CamaroData {
             5523, 5524, 5523, 5522, 5523, 5522, 5550, 5550, 5550, 5516, 5516, 5516, 5667, 5667, 5667, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk8() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk9.
+     */
     private static class INChunk9 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             5668, 5668, 5668, 5515, 5515, 5515, 5507, 5507, 5507, 5552, 5552, 5552, 5551, 5551, 5551, 
             5550, 5550, 5550, 5516, 5516, 5516, 5670, 5670, 5670, 5672, 5672, 5671, 5669, 5669, 5669, 
@@ -14175,9 +14882,22 @@ public class CamaroData {
             5744, 5744, 5744, 5745, 5745, 5745, 5741, 5741, 5741, 5741, 5741, 5741, 5741, 5741, 5741, 
             5741, 5741, 5741, 5741, 5741, 5741, 5741, 5741, 5741, 5741, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk9() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk10.
+     */
     private static class INChunk10 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             5741, 5741, 5741, 5741, 5741, 
             5741, 5741, 5741, 5741, 5741, 5741, 5816, 5817, 5816, 5815, 5816, 5815, 5814, 5815, 5814, 
@@ -14448,9 +15168,22 @@ public class CamaroData {
             6257, 6224, 6225, 6212, 6243, 6211, 6258, 6225, 6226, 6213, 6426, 6212, 6232, 6199, 6200, 
             6227, 6258, 6226, 6246, 6213, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk10() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk11.
+     */
     private static class INChunk11 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             6214, 6201, 6232, 6200, 6260, 6227, 6228, 6247, 6214, 6215, 
             6423, 6201, 6202, 6261, 6228, 6229, 6275, 6425, 6243, 6289, 6256, 6257, 6276, 6243, 6426, 
@@ -14721,9 +15454,22 @@ public class CamaroData {
             6038, 6070, 6039, 6026, 6025, 6057, 6013, 6012, 6044, 6027, 6026, 6058, 6014, 6013, 6045, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk11() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk12.
+     */
     private static class INChunk12 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             6028, 6027, 6059, 6014, 6046, 6047, 6028, 6060, 6061, 6015, 6047, 6048, 6029, 6061, 6062, 
             6016, 6048, 6049, 6031, 6030, 6062, 6017, 6049, 6050, 6031, 6063, 6064, 6019, 6018, 6050, 
@@ -14993,9 +15739,22 @@ public class CamaroData {
             7510, 7511, 7512, 7513, 7514, 7508, 7512, 7515, 7516, 7517, 7518, 7514, 7516, 7519, 7520, 
             7521, 7522, 7523, 7524, 7525, 7518, 7520, 7526, 7527, 7523, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk12() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk13.
+     */
     private static class INChunk13 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             7528, 7529, 7530, 7531, 7525, 
             7527, 7532, 7533, 7529, 7534, 7535, 7536, 7537, 7531, 7532, 7538, 7533, 7535, 7539, 7540, 
@@ -15266,9 +16025,22 @@ public class CamaroData {
             8465, 7826, 8391, 7803, 8465, 8392, 8466, 8467, 8468, 8469, 8470, 8471, 8472, 8473, 8472, 
             8474, 8471, 8475, 8476, 8477, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk13() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk14.
+     */
     private static class INChunk14 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             8477, 8478, 8479, 8479, 8480, 8481, 8482, 8483, 8484, 8485, 
             8486, 8487, 8483, 8488, 8489, 8490, 8491, 8492, 8491, 8477, 8492, 8493, 8494, 8475, 8495, 
@@ -15539,9 +16311,22 @@ public class CamaroData {
             9689, 9863, 9864, 9689, 9647, 9691, 9865, 9618, 9686, 8031, 8030, 9866, 9649, 9867, 9625, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk14() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk15.
+     */
     private static class INChunk15 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             9595, 9868, 9590, 9537, 9869, 9554, 9870, 9871, 9551, 9872, 9679, 9873, 9874, 9535, 9875, 
             9876, 9644, 9653, 9877, 9875, 9878, 8043, 9879, 9880, 9531, 9875, 9529, 9532, 9581, 9881, 
@@ -15811,9 +16596,22 @@ public class CamaroData {
             10025, 11009, 10949, 8585, 8587, 8585, 9365, 9291, 8599, 11010, 10948, 10355, 8585, 8587, 8687, 
             8585, 8587, 8585, 8599, 9291, 8599, 8599, 9291, 8599, 8599, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk15() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk16.
+     */
     private static class INChunk16 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             10028, 10027, 8599, 9291, 8599, 
             8599, 9291, 8599, 11011, 10028, 10945, 10958, 10967, 10021, 9637, 10933, 9638, 9638, 9454, 9901, 
@@ -16084,9 +16882,22 @@ public class CamaroData {
             9001, 9003, 9002, 9003, 9007, 9004, 9005, 9008, 8962, 9007, 8966, 8965, 8973, 8975, 9008, 
             8947, 8918, 8973, 8949, 8966, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk16() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk17.
+     */
     private static class INChunk17 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             9007, 8948, 8947, 9005, 8950, 9007, 9003, 8945, 9003, 9001, 
             8917, 8930, 8986, 8935, 8990, 8999, 8935, 9001, 8997, 8940, 8921, 8976, 8941, 8999, 8993, 
@@ -16357,9 +17168,22 @@ public class CamaroData {
             8145, 8147, 8147, 10414, 8589, 8705, 8589, 8589, 8705, 8589, 8589, 8705, 9961, 8247, 8247, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk17() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for INChunk18.
+     */
     private static class INChunk18 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             8247, 8247, 8247, 8247, 8247, 8247, 8710, 8351, 8350, 8351, 8351, 8350, 8351, 8351, 8350, 
             8361, 10407, 10140, 10407, 10409, 9763, 10409, 8711, 10018, 10415, 8575, 8720, 10416, 10415, 10417, 
@@ -16599,9 +17423,22 @@ public class CamaroData {
             10834, 11266, 10835, 10837, 11267, 10838, 10840, 11268, 10841, 10843, 11269, 10844, 10846, 11270, 10847, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private INChunk18() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for MChunk0.
+     */
     private static class MChunk0 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
@@ -16871,9 +17708,22 @@ public class CamaroData {
             3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
             3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private MChunk0() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for MChunk1.
+     */
     private static class MChunk1 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             3, 3, 3, 3, 3, 
             3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 
@@ -17144,9 +17994,22 @@ public class CamaroData {
             5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
             5, 5, 5, 5, 5, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private MChunk1() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for MChunk2.
+     */
     private static class MChunk2 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
             5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
@@ -17417,9 +18280,22 @@ public class CamaroData {
             7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private MChunk2() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for MChunk3.
+     */
     private static class MChunk3 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 
             7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 
@@ -17689,9 +18565,22 @@ public class CamaroData {
             6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 
             6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private MChunk3() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for MChunk4.
+     */
     private static class MChunk4 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             6, 6, 6, 6, 6, 
             6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 
@@ -17962,9 +18851,22 @@ public class CamaroData {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
             0, 0, 0, 0, 0, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private MChunk4() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for MChunk5.
+     */
     private static class MChunk5 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
@@ -18235,9 +19137,22 @@ public class CamaroData {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
             
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private MChunk5() {
+        }
     }
 
+
+    /**
+     * Stores packed numeric data for MChunk6.
+     */
     private static class MChunk6 {
+        /**
+         * Packed data values for this chunk.
+         */
         static final int[] data = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
@@ -18319,6 +19234,12 @@ public class CamaroData {
             9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
             9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 
         };
+
+        /**
+         * Prevents instantiation of this static chunk holder.
+         */
+        private MChunk6() {
+        }
     }
 
 }

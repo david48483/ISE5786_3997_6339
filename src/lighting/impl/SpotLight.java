@@ -18,8 +18,17 @@ public class SpotLight extends PointLight {
      */
     private final Vector _direction;
 
+    /**
+     * The narrow beam factor for the spotlight. Higher values create a narrower beam.
+     */
     private int _narrowBeam = 1;
 
+    /**
+     * Sets the narrow beam factor for the spotlight.
+     *
+     * @param narrowBeam the narrow beam factor (higher values create a narrower beam)
+     * @return this spotlight instance for method chaining
+     */
     public SpotLight setNarrowBeam(int narrowBeam) {
         _narrowBeam = narrowBeam;
         return this;
@@ -61,7 +70,6 @@ public class SpotLight extends PointLight {
             return _intensity;
         }
         double projection = alignZero(_direction.dotProduct(l));
-        /* return projection <= 0 ? Color.BLACK : super.getIntensity(p).scale(projection);*/
 
         if (projection <= 0) {
             return Color.BLACK;

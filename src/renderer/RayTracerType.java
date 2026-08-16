@@ -2,8 +2,9 @@ package renderer;
 
 /**
  * Enumerates the available ray tracing strategies.
- * <p>
  * Used to select which ray tracer implementation the renderer should use.
+ *
+ * @author David &amp; Yehuda
  */
 public enum RayTracerType {
     /**

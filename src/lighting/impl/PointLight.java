@@ -75,6 +75,12 @@ public class PointLight extends Light implements LightSource {
         _position = position;
     }
 
+    /**
+     * Returns the direction vector from a point on the surface to the light source.
+     *
+     * @param p the point on the surface
+     * @return normalized direction vector from the point to the light
+     */
     @Override
     public Vector getL(Point p) {
         return p.subtract(_position).normalize();

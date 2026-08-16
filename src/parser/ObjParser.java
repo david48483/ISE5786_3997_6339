@@ -74,7 +74,7 @@ public class ObjParser {
                     } catch (IllegalArgumentException e) {
                         // Catches "Zero vector is not allowed" and skips the degenerate triangle
                     } catch (IndexOutOfBoundsException e) {
-                        // תופס למקרה שיש שורת משולש שמפנה לנקודה שלא קיימת
+                        // Catches cases where a face line references a non-existent vertex
                         System.err.println("Invalid vertex index in face definition: " + line);
                     }
                 }

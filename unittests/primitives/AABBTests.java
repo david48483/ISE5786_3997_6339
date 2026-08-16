@@ -16,14 +16,33 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class AABBTests {
 
-    // Shared box used across tests: a thin box on the XY plane
+    /**
+     * Shared box used across tests as a thin area on the XY plane.
+     */
     private static final AABB BOX_XY = new AABB(new Point(0, 0, 0), new Point(4, 4, 0));
 
-    // ---- Error messages ----
+    /**
+     * Error message for invalid minimum corner assertions.
+     */
     private static final String ERR_BOX_MIN = "ERROR: Bounding box min point is incorrect";
+    /**
+     * Error message for invalid maximum corner assertions.
+     */
     private static final String ERR_BOX_MAX = "ERROR: Bounding box max point is incorrect";
+    /**
+     * Error message for invalid intersection assertions.
+     */
     private static final String ERR_INTERSECTS = "ERROR: AABB.intersects() returned wrong result";
+    /**
+     * Error message for invalid union assertions.
+     */
     private static final String ERR_UNION = "ERROR: AABB.union() returned wrong box";
+
+    /**
+     * Creates the test suite instance.
+     */
+    AABBTests() {
+    }
 
     /**
      * Test method for basic box creation and accessors.

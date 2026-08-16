@@ -11,6 +11,8 @@ import static primitives.Util.alignZero;
 
 /**
  * A sampler that generates points randomly (stochastically) within a circular target area.
+ *
+ * @author David &amp; Yehuda
  */
 public class RandomSampler implements Sampler {
 
@@ -30,11 +32,23 @@ public class RandomSampler implements Sampler {
      */
     private TargetShapeType _shape = TargetShapeType.SQUARE;
 
+    /**
+     * Sets the geometric shape of the target area in which points are generated.
+     *
+     * @param shape the target shape type (e.g., CIRCLE or SQUARE)
+     */
     @Override
-    public void setTargetShape(TargetShapeType shape){
+    public void setTargetShape(TargetShapeType shape) {
         this._shape = shape;
     }
 
+    /**
+     * Generates a list of 2D points within a target area.
+     *
+     * @param amount the requested number of points
+     * @param size   the size (diameter/length) of the target area
+     * @return list of generated 2D points
+     */
     @Override
     public List<Point2D> generatePoints(int amount, double size) {
         List<Point2D> points = new ArrayList<>();

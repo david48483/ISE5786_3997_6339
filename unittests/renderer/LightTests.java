@@ -317,10 +317,9 @@ class LightsTests {
                 .writeToImage("lightSphereSpotSharp");
     }
 
-    //
-//    /**
-//     * Produce a picture of two triangles lighted by a narrow spotlight
-//     */
+    /**
+     * Produce a picture of two triangles lighted by a narrow spotlight.
+     */
     @Test
     @SuppressWarnings("java:S109")
     void testTrianglesSpotSharp() {

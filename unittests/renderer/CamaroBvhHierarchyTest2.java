@@ -39,23 +39,61 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class CamaroBvhHierarchyTest2 {
 
+    /**
+     * Shared scene used by the measurement tests.
+     */
     private static Scene scene;
+    /**
+     * Shared camera builder used to render all variants.
+     */
     private static Camera.Builder cameraBuilder;
 
+    /**
+     * Flattened geometry layout.
+     */
     private static Geometries flatScene;
+    /**
+     * Manually grouped geometry hierarchy.
+     */
     private static Geometries manualHierarchy;
+    /**
+     * Automatically generated BVH hierarchy.
+     */
     private static Geometries autoHierarchy;
 
+    /**
+     * Automatic thread count selection for multithreaded rendering.
+     */
     private static final int MT_THREADS = -1; // optimal thread count
 
-    private static final int RESOLUTION = 400;
+    /**
+     * Base image resolution for render-time measurements.
+     */
+    private static final int RESOLUTION = 2000;
+    /**
+     * Suffix appended to output names to encode render resolution.
+     */
     private static final String RES_SUFFIX = "-" + RESOLUTION + "R";
 
+    /**
+     * Precision threshold used to reject degenerate triangles.
+     */
     private static final double DELTA = 1e-6;
 
-    // Map to store render times for all tests
+    /**
+     * Stores render time per test for the final summary output.
+     */
     private static final Map<String, Double> renderTimes = new LinkedHashMap<>();
 
+    /**
+     * Creates the test suite instance.
+     */
+    public CamaroBvhHierarchyTest2() {
+    }
+
+    /**
+     * Builds the shared scene and rendering variants before all tests.
+     */
     @BeforeAll
     public static void setupScene() {
         // 1. Path to the JSON file
@@ -69,7 +107,7 @@ public class CamaroBvhHierarchyTest2 {
                         .setMaterial(new Material().setKD(0.1).setKS(0.2).setKR(0.15).setKG(15).setShininess(10).setKA(0.8)));
 
         Geometries spheres = new Geometries(
-                // כדור אדום - Emission הונמך כדי לשמור על הצבע המקורי תחת התאורה החדשה
+                // Red sphere - Emission reduced to preserve the original color under the new lighting
                 new Sphere(new Point(-4, -2, 0.45), 0.45)
                         .setEmission(new Color(80, 10, 20))
                         .setMaterial(new Material()
@@ -78,7 +116,7 @@ public class CamaroBvhHierarchyTest2 {
                                 .setKT(0.4)
                                 .setKB(0.9)),
 
-                // כדור מרכזי - מראה (ללא שינוי, הוא לא פולט אור)
+                // Central sphere - mirror (no change, it doesn't emit light)
                 new Sphere(new Point(40, 43, 0.70), 0.70)
                         .setMaterial(new Material()
                                 .setKD(0.0)
@@ -87,7 +125,7 @@ public class CamaroBvhHierarchyTest2 {
                                 .setKT(0.0)
                                 .setKG(2.0)),
 
-                // כדור כחול - Emission הונמך משמעותית
+                // Blue sphere - Emission significantly reduced
                 new Sphere(new Point(22, 20, 0.70), 0.70)
                         .setEmission(new Color(10, 30, 80))
                         .setMaterial(new Material().setKD(0.2).setKS(0.8).setShininess(200).setKT(0.0))
@@ -112,27 +150,27 @@ public class CamaroBvhHierarchyTest2 {
         scene = new Scene("Direct JSON Scene");
         scene.setBackground(new Color(100, 100, 100));
 
-// תאורת אווירה - משאירים באפור ניטרלי כדי לשמור על צללים רכים
+        // Ambient light - kept in neutral gray to maintain soft shadows
         scene.setAmbientLight(new AmbientLight(new Color(60, 60, 60)));
 
-// 1. תאורה מרכזית (Key Light) - חיזקנו ללבן מקסימלי והקטנו את מקדמי ההנחתה
-// עכשיו האור הזה ישטוף את הרכב בעוצמה גבוהה וייתן לו מראה לבן ונקי
+        // 1. Key Light - strengthened to maximum white and reduced attenuation coefficients
+        // This light will now flood the car with high intensity and give it a clean white appearance
         scene.lights.add(new PointLight(new Color(255, 255, 255), new Point(-20, -24, 10))
                 .setKl(0.001).setKq(0.0001));
 
-// 2. תאורת מילוי רכה מהצד האחורי-ימני (שומרת על הנפח מאחור)
+        // 2. Soft fill light from the rear-right side (maintains volume from behind)
         scene.lights.add(new PointLight(new Color(100, 100, 100), new Point(0, 5, 10))
                 .setKl(0.01).setKq(0.001));
 
         scene.lights.add(new PointLight(new Color(100, 100, 100), new Point(-10, -0, 5))
                 .setKl(0.001).setKq(0.0001));
 
-// 3. הזרקור הצהוב על הפגוש
-// הורדנו מעט את עוצמת הצבע שלו כדי שיהווה "אקסנט" (הארה נקודתית) ולא ישתלט על כל הרכב
+        // 3. Yellow spotlight on the bumper
+        // Reduced its color intensity slightly to serve as an "accent" (spot illumination) rather than dominate the entire car
         scene.lights.add(new SpotLight(new Color(200, 180, 0), new Point(0, -6, 8), new Vector(0, 1, -2))
                 .setKl(0.01).setKq(0.001).setNarrowBeam(60));
 
-// 4. אור כיווני עדין - שינינו לאפור נקי כדי לתמוך בנפח הכללי בלי להוסיף צבעוניות
+        // 4. Gentle directional light - changed to clean gray to support overall volume without adding color
         scene.lights.add(new DirectionalLight(new Color(50, 50, 50), new Vector(1, -0.2, -1)));
 
         assertNotNull(scene, "Scene should not be null");
@@ -191,6 +229,14 @@ public class CamaroBvhHierarchyTest2 {
         return geometries;
     }
 
+    /**
+     * Parses material definitions and populates material and color maps.
+     *
+     * @param root parsed JSON scene root
+     * @param materialsMap material output map by material name
+     * @param colorsMap base color output map by material name
+     * @param emissionsMap emission color output map by material name
+     */
     private static void parseMaterials(JSONObject root, Map<String, Material> materialsMap, Map<String, Color> colorsMap, Map<String, Color> emissionsMap) {
         if (!root.has("materials")) return;
 
@@ -198,15 +244,15 @@ public class CamaroBvhHierarchyTest2 {
         for (String matName : materialsObj.keySet()) {
             JSONObject m = materialsObj.getJSONObject(matName);
 
-            // --- קריאת צבע בסיס (RGB נפרדים לשימוש בחומר) ---
+            // --- Reading base color (separate RGB for use in material) ---
             JSONArray col = m.getJSONArray("color");
             double r = col.getDouble(0);
             double g = col.getDouble(1);
             double b = col.getDouble(2);
             Color baseColor = new Color(r * 255, g * 255, b * 255);
 
-            // --- קריאת Emission ---
-            Color emissionColor = new Color(0, 0, 0); // ברירת מחדל: לא מאיר
+            // --- Reading Emission ---
+            Color emissionColor = new Color(0, 0, 0); // Default: not emitting
             if (m.has("emission")) {
                 JSONArray em = m.getJSONArray("emission");
                 emissionColor = new Color(
@@ -219,12 +265,12 @@ public class CamaroBvhHierarchyTest2 {
             double kt = m.optDouble("kt", 0.0);
             double roughness = m.optDouble("roughness", 0.5);
 
-            // --- התיקון: שימוש ב-Double3 כדי לשמור על הצבע המקורי ---
-            // נכפיל בפקטור (למשל 0.8) כדי לפנות מקום להשתקפויות (Specular)
+            // --- Fix: Using Double3 to preserve the original color ---
+            // Multiply by a factor (e.g., 0.8) to make room for reflections (Specular)
             double diffuseFactor = 0.8;
             Double3 kD = new Double3(r * diffuseFactor, g * diffuseFactor, b * diffuseFactor);
 
-            // הברקות (Specular) נשארות לבנות/אפורות כדי לשקף את צבע התאורה
+            // Highlights (Specular) remain white/gray to reflect the lighting color
             double ks = 1.0 - roughness;
             Double3 kS = new Double3(ks, ks, ks);
 
@@ -232,9 +278,9 @@ public class CamaroBvhHierarchyTest2 {
             double kb = m.optDouble("kb", roughness);
 
             Material mat = new Material()
-                    .setKD(kD) // משתמשים בצבע במקום במספר בודד!
+                    .setKD(kD) // Using color instead of a single number!
                     .setKS(kS)
-                    .setKA(new Double3(r * 0.1, g * 0.1, b * 0.1)) // תאורת אווירה בצבע תואם
+                    .setKA(new Double3(r * 0.1, g * 0.1, b * 0.1)) // Ambient light in matching color
                     .setShininess((int) (ks * 100))
                     .setKT(kt)
                     .setKG(kg)
@@ -246,6 +292,13 @@ public class CamaroBvhHierarchyTest2 {
         }
     }
 
+    /**
+     * Parses spheres from JSON and appends them to the geometry container.
+     *
+     * @param root parsed JSON scene root
+     * @param geometries geometry container to populate
+     * @param materialsMap material lookup by material name
+     */
     private static void parseSpheres(JSONObject root, Geometries geometries, Map<String, Material> materialsMap) {
         if (!root.has("spheres")) return;
 
@@ -265,6 +318,13 @@ public class CamaroBvhHierarchyTest2 {
         }
     }
 
+    /**
+     * Parses planes from JSON and appends them to the geometry container.
+     *
+     * @param root parsed JSON scene root
+     * @param geometries geometry container to populate
+     * @param materialsMap material lookup by material name
+     */
     private static void parsePlanes(JSONObject root, Geometries geometries, Map<String, Material> materialsMap) {
         if (!root.has("planes")) return;
 
@@ -286,6 +346,15 @@ public class CamaroBvhHierarchyTest2 {
         }
     }
 
+    /**
+     * Parses triangles from JSON and appends non-degenerate faces.
+     *
+     * @param root parsed JSON scene root
+     * @param geometries geometry container to populate
+     * @param materialsMap material lookup by material name
+     * @param colorsMap base color lookup by material name
+     * @param emissionsMap emission color lookup by material name
+     */
     private static void parseTriangles(JSONObject root, Geometries geometries, Map<String, Material> materialsMap, Map<String, Color> colorsMap , Map<String, Color> emissionsMap) {
         if (!root.has("triangles")) return;
 
@@ -326,21 +395,33 @@ public class CamaroBvhHierarchyTest2 {
     //flat
 // =========================================================
 
+    /**
+     * Measures flat scene performance without CBR and without multithreading.
+     */
     @Test
     public void test01_Flat_NoCBR_NoMT() {
         runMeasurement(flatScene, false, false, 0, "MERCEDES-01-Flat-NoCBR-NoMT");
     }
 
+    /**
+     * Measures flat scene performance with CBR and without multithreading.
+     */
     @Test
     public void test02_Flat_WithCBR_NoMT() {
         runMeasurement(flatScene, true, false, 0, "MERCEDES-02-Flat-WithCBR-NoMT");
     }
 
+    /**
+     * Measures flat scene performance without CBR and with multithreading.
+     */
     @Test
     public void test03_Flat_NoCBR_MT() {
         runMeasurement(flatScene, false, false, MT_THREADS, "MERCEDES-03-Flat-NoCBR-MT");
     }
 
+    /**
+     * Measures flat scene performance with CBR and with multithreading.
+     */
     @Test
     public void test04_Flat_WithCBR_MT() {
         runMeasurement(flatScene, true, false, MT_THREADS, "MERCEDES-04-Flat-WithCBR-MT");
@@ -350,21 +431,33 @@ public class CamaroBvhHierarchyTest2 {
     //  (Manual BVH)
     // =========================================================
 
+    /**
+     * Measures manual hierarchy performance without CBR and without multithreading.
+     */
     @Test
     public void test05_Manual_NoCBR_NoMT() {
         runMeasurement(manualHierarchy, false, false, 0, "MERCEDES-05-Manual-NoCBR-NoMT");
     }
 
+    /**
+     * Measures manual hierarchy performance with CBR and without multithreading.
+     */
     @Test
     public void test06_Manual_WithCBR_NoMT() {
         runMeasurement(manualHierarchy, true, false, 0, "MERCEDES-06-Manual-WithCBR-NoMT");
     }
 
+    /**
+     * Measures manual hierarchy performance without CBR and with multithreading.
+     */
     @Test
     public void test07_Manual_NoCBR_MT() {
         runMeasurement(manualHierarchy, false, false, MT_THREADS, "MERCEDES-07-Manual-NoCBR-MT");
     }
 
+    /**
+     * Measures manual hierarchy performance with CBR and with multithreading.
+     */
     @Test
     public void test08_Manual_WithCBR_MT() {
         runMeasurement(manualHierarchy, true, false, MT_THREADS, "MERCEDES-08-Manual-WithCBR-MT");
@@ -374,26 +467,41 @@ public class CamaroBvhHierarchyTest2 {
     //  (Auto BVH)
     // =========================================================
 
+    /**
+     * Measures automatic BVH performance without CBR and without multithreading.
+     */
     @Test
     public void test09_Auto_NoCBR_NoMT() {
         runMeasurement(autoHierarchy, false, true, 0, "MERCEDES-09-Auto-NoCBR-NoMT");
     }
 
+    /**
+     * Measures automatic BVH performance with CBR and without multithreading.
+     */
     @Test
     public void test10_Auto_WithCBR_NoMT() {
         runMeasurement(autoHierarchy, true, true, 0, "MERCEDES-10-Auto-WithCBR-NoMT");
     }
 
+    /**
+     * Measures automatic BVH performance without CBR and with multithreading.
+     */
     @Test
     public void test11_Auto_NoCBR_MT() {
         runMeasurement(autoHierarchy, false, true, MT_THREADS, "MERCEDES-11-Auto-NoCBR-MT");
     }
 
+    /**
+     * Measures automatic BVH performance with CBR and with multithreading.
+     */
     @Test
     public void test12_Auto_WithCBR_MT() {
         runMeasurement(autoHierarchy, true, true, MT_THREADS, "MERCEDES-12-Auto-WithCBR-MT");
     }
 
+    /**
+     * Measures automatic BVH performance with CBR and multithreading, while advanced effects are disabled.
+     */
     @Test
     public void test13_Auto_WithCBR_MT_NoEffects() {
 
@@ -404,6 +512,15 @@ public class CamaroBvhHierarchyTest2 {
         cameraBuilder.setUseAdvancedEffects(true);
     }
 
+    /**
+     * Renders one configuration and stores its elapsed render time.
+     *
+     * @param geometries geometries configuration to render
+     * @param useCbr whether CBR acceleration is enabled
+     * @param bvh whether BVH acceleration is enabled
+     * @param threads thread count configuration
+     * @param testName output image name
+     */
     private void runMeasurement(Geometries geometries, boolean useCbr, boolean bvh, int threads, String testName) {
         scene.setGeometries(geometries);
         scene.setAABB(useCbr);
@@ -428,6 +545,9 @@ public class CamaroBvhHierarchyTest2 {
         renderTimes.put(finalTestName, timeInSeconds);
     }
 
+    /**
+     * Prints a final summary of all measured render times.
+     */
     @org.junit.jupiter.api.AfterAll
     public static void printSummary() {
         System.out.println("\n==================================================");

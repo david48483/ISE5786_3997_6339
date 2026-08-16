@@ -26,19 +26,43 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * Unit test for rendering a scene with a structured BVH hierarchy,
  * comparing Flat, Manual, and Automatic BVH configurations.
  *
- * @author David & Yehuda
+ * @author David &amp; Yehuda
  */
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class BvhHierarchyTest1 {
 
+    /**
+     * Shared scene used by the measurement tests.
+     */
     private static Scene scene;
+    /**
+     * Shared camera builder used to render all variants.
+     */
     private static Camera.Builder cameraBuilder;
 
+    /**
+     * Flattened geometry layout.
+     */
     private static Geometries flatScene;
+    /**
+     * Manually grouped geometry hierarchy.
+     */
     private static Geometries manualHierarchy;
+    /**
+     * Automatically generated BVH hierarchy.
+     */
     private static Geometries autoHierarchy;
 
+    /**
+     * Automatic thread count selection for multithreaded rendering.
+     */
     private static final int MT_THREADS = -1; // optimal thread count for multithreading
+
+    /**
+     * Creates the test suite instance.
+     */
+    public BvhHierarchyTest1() {
+    }
 
     /**
      * Static helper method that builds the scene once for the entire measurement series.
@@ -54,7 +78,7 @@ public class BvhHierarchyTest1 {
 
 // Opaque metallic material - strong and very focused highlight, no ambient reflection
         Material metallicMat = new Material().setKD(0.3).setKS(0.8).setShininess(300);
-        // 1. הכנת החומרים
+        // 1. Material preparation
         Material glossyMat = new Material().setKD(0.2).setKS(0.8).setShininess(200).setKR(0.6).setKG(4.0);
         Material glassyMat = new Material().setKD(0.2).setKS(0.5).setShininess(120).setKT(0.85);
         Material milkyMat = new Material().setKD(0.4).setKS(0.2).setShininess(40).setKT(0.5).setKB(80.0);
@@ -124,21 +148,33 @@ public class BvhHierarchyTest1 {
     // Flat scene measurements
     // =========================================================
 
+    /**
+     * Measures flat scene performance without CBR and without multithreading.
+     */
     @Test
     public void test01_Flat_NoCBR_NoMT() {
         runMeasurement(flatScene, false, false, 0, "01-Flat-NoCBR-NoMT.");
     }
 
+    /**
+     * Measures flat scene performance with CBR and without multithreading.
+     */
     @Test
     public void test02_Flat_WithCBR_NoMT() {
         runMeasurement(flatScene, true, false, 0, "02-Flat-WithCBR-NoMT.");
     }
 
+    /**
+     * Measures flat scene performance without CBR and with multithreading.
+     */
     @Test
     public void test03_Flat_NoCBR_MT() {
         runMeasurement(flatScene, false, false, MT_THREADS, "03-Flat-NoCBR-MT.");
     }
 
+    /**
+     * Measures flat scene performance with CBR and with multithreading.
+     */
     @Test
     public void test04_Flat_WithCBR_MT() {
         runMeasurement(flatScene, true, false, MT_THREADS, "04-Flat-WithCBR-MT.");
@@ -148,21 +184,33 @@ public class BvhHierarchyTest1 {
     // Manual BVH hierarchy measurements
     // =========================================================
 
+    /**
+     * Measures manual hierarchy performance without CBR and without multithreading.
+     */
     @Test
     public void test05_Manual_NoCBR_NoMT() {
         runMeasurement(manualHierarchy, false, false, 0, "05-Manual-NoCBR-NoMT.");
     }
 
+    /**
+     * Measures manual hierarchy performance with CBR and without multithreading.
+     */
     @Test
     public void test06_Manual_WithCBR_NoMT() {
         runMeasurement(manualHierarchy, true, false, 0, "06-Manual-WithCBR-NoMT.");
     }
 
+    /**
+     * Measures manual hierarchy performance without CBR and with multithreading.
+     */
     @Test
     public void test07_Manual_NoCBR_MT() {
         runMeasurement(manualHierarchy, false, false, MT_THREADS, "07-Manual-NoCBR-MT.");
     }
 
+    /**
+     * Measures manual hierarchy performance with CBR and with multithreading.
+     */
     @Test
     public void test08_Manual_WithCBR_MT() {
         runMeasurement(manualHierarchy, true, false, MT_THREADS, "08-Manual-WithCBR-MT.");
@@ -172,21 +220,33 @@ public class BvhHierarchyTest1 {
     // Automatic BVH hierarchy measurements
     // =========================================================
 
+    /**
+     * Measures automatic BVH performance without CBR and without multithreading.
+     */
     @Test
     public void test09_Auto_NoCBR_NoMT() {
         runMeasurement(autoHierarchy, false, true, 0, "09-Auto-NoCBR-NoMT.");
     }
 
+    /**
+     * Measures automatic BVH performance with CBR and without multithreading.
+     */
     @Test
     public void test10_Auto_WithCBR_NoMT() {
         runMeasurement(autoHierarchy, true, true, 0, "10-Auto-WithCBR-NoMT.");
     }
 
+    /**
+     * Measures automatic BVH performance without CBR and with multithreading.
+     */
     @Test
     public void test11_Auto_NoCBR_MT() {
         runMeasurement(autoHierarchy, false, true, MT_THREADS, "11-Auto-NoCBR-MT.");
     }
 
+    /**
+     * Measures automatic BVH performance with CBR and with multithreading.
+     */
     @Test
     public void test12_Auto_WithCBR_MT() {
         runMeasurement(autoHierarchy, true, true, MT_THREADS, "12-Auto-WithCBR-MT.");
@@ -198,6 +258,12 @@ public class BvhHierarchyTest1 {
 
     /**
      * Helper method that performs a single full measurement and prints the results.
+     *
+     * @param geometries geometries configuration to render
+     * @param cbr whether CBR acceleration is enabled
+     * @param bvh whether BVH acceleration is enabled
+     * @param threads thread count configuration
+     * @param testName output image name
      */
     private void runMeasurement(Geometries geometries, boolean cbr, boolean bvh,  int threads, String testName) {
         // Set the geometric structure for the scene
@@ -223,6 +289,19 @@ public class BvhHierarchyTest1 {
         System.out.println(">>> Render time for [" + testName + "]: " + (endTime - startTime) / 1000.0 + " seconds.");
     }
 
+    /**
+     * Builds a dense cluster of spheres around the given origin.
+     *
+     * @param origin cluster center point
+     * @param nx sphere count on the X axis
+     * @param ny sphere count on the Y axis
+     * @param nz sphere count on the Z axis
+     * @param spacing spacing between neighboring spheres
+     * @param radius base sphere radius
+     * @param mat material assigned to generated spheres
+     * @param emission emission color assigned to generated spheres
+     * @return generated sphere cluster geometry
+     */
     private static Geometries buildSphereCluster(Point origin, int nx, int ny, int nz,
                                                  double spacing, double radius,
                                                  Material mat, Color emission) {

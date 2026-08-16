@@ -1,4 +1,4 @@
-package geometries.impl; // Or geometries.impl, depending on your project structure
+package geometries.impl;
 
 import geometries.api.Intersectable;
 import primitives.AABB;
@@ -10,6 +10,8 @@ import java.util.List;
  * A builder class for creating a Bounding Volume Hierarchy (BVH) tree.
  * It uses the Surface Area Heuristic (SAH) algorithm and supports N-ary trees
  * (e.g., Binary, Quaternary).
+ *
+ * @author David &amp; Yehuda
  */
 public class BvhBuilder {
 
@@ -24,6 +26,17 @@ public class BvhBuilder {
      */
     private static int MAX_BRANCHES = 2;
 
+    /**
+     * Prevents instantiation of this static utility class.
+     */
+    private BvhBuilder() {
+    }
+
+    /**
+     * Sets the number of bins to use for the SAH algorithm.
+     *
+     * @param count the number of bins
+     */
     public static void setBINS(int count) {
         BINS_COUNT = count;
     }
@@ -43,9 +56,26 @@ public class BvhBuilder {
      * A simple helper class to represent a "Bin" for the SAH algorithm.
      */
     private static class Bin {
+        /**
+         * Accumulated bounds for all boxes in this bin.
+         */
         AABB bounds = null;
+        /**
+         * Number of boxes assigned to this bin.
+         */
         int count = 0;
 
+        /**
+         * Creates an empty bin.
+         */
+        Bin() {
+        }
+
+        /**
+         * Adds a box to the bin and expands accumulated bounds.
+         *
+         * @param box bounding box to add
+         */
         void add(AABB box) {
             count++;
             if (bounds == null) {
@@ -60,9 +90,21 @@ public class BvhBuilder {
      * Helper record/class to hold the result of a single binary split.
      */
     private static class SplitResult {
+        /**
+         * Geometries assigned to the left side of the split.
+         */
         List<Intersectable> left;
+        /**
+         * Geometries assigned to the right side of the split.
+         */
         List<Intersectable> right;
 
+        /**
+         * Creates a split result with left and right partitions.
+         *
+         * @param left geometries in the left partition
+         * @param right geometries in the right partition
+         */
         SplitResult(List<Intersectable> left, List<Intersectable> right) {
             this.left = left;
             this.right = right;
@@ -257,6 +299,12 @@ public class BvhBuilder {
         return new SplitResult(leftList, rightList);
     }
 
+    /**
+     * Calculates the surface area of a bounding box.
+     *
+     * @param box bounding box to evaluate
+     * @return surface area of the box, or 0 when the box is null
+     */
     private static double calculateSurfaceArea(AABB box) {
         if (box == null) return 0;
         double x = box.getMax().getX() - box.getMin().getX();
@@ -265,6 +313,13 @@ public class BvhBuilder {
         return 2.0 * (x * y + y * z + z * x);
     }
 
+    /**
+     * Returns the center coordinate of a box on a selected axis.
+     *
+     * @param box bounding box to evaluate
+     * @param axis axis index (0 for X, 1 for Y, 2 for Z)
+     * @return center coordinate on the selected axis
+     */
     private static double getCenter(AABB box, int axis) {
         switch (axis) {
             case 0: return (box.getMin().getX() + box.getMax().getX()) / 2.0;
@@ -274,6 +329,12 @@ public class BvhBuilder {
         }
     }
 
+    /**
+     * Creates a leaf node containing the provided geometries.
+     *
+     * @param geometries geometries to place in the leaf
+     * @return leaf node with all input geometries
+     */
     private static Geometries createLeaf(List<Intersectable> geometries) {
         Geometries leaf = new Geometries();
         for (Intersectable geo : geometries) {
@@ -282,6 +343,12 @@ public class BvhBuilder {
         return leaf;
     }
 
+    /**
+     * Splits a geometry list into two halves by index.
+     *
+     * @param geometries geometries to split
+     * @return split result with left and right halves
+     */
     private static SplitResult splitInHalf(List<Intersectable> geometries) {
         int mid = geometries.size() / 2;
         return new SplitResult(

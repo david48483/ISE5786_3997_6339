@@ -57,8 +57,8 @@ public class BvhHierarchyTest {
 
         Geometries clusterA = buildSphereCluster(
                 new Point(-80, -10, -90), // general position
-                4, 4, 1,                   // 16 כדורים
-                14, 6,                     // מרווח ורדיוס
+                4, 4, 1,                   // 16 spheres
+                14, 6,                     // spacing and radius
                 glossyMat,
                 new Color(30, 80, 30)
         );

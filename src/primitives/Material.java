@@ -76,7 +76,7 @@ public class Material {
     }
 
     /**
-     * Returns the ambient reflection coefficient (kA) of the material, which represents how much ambient light the material reflects.
+     * Sets the ambient reflection coefficient.
      *
      * @param obj the new ambient reflection coefficient to set for the material
      * @return the material with the updated ambient reflection coefficient
@@ -185,7 +185,7 @@ public class Material {
     }
 
     /**
-     * Returns the ambient reflection coefficient (kA) of the material, which represents how much ambient light the material reflects.
+     * Sets the ambient reflection coefficient uniformly for all channels.
      *
      * @param obj the new ambient reflection coefficient to set for the material, given as a single double value that will be applied to all color channels
      * @return the material with the updated ambient reflection coefficient

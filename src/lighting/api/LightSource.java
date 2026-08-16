@@ -5,8 +5,10 @@ import primitives.Point;
 import primitives.Vector;
 
 /**
- * Represents a light source in a 3D scene. A light source can be of various types, such as point light, directional light, or spotlight.
- * Each light source must be able to provide the direction of the light (as a vector) and the intensity of the light (as a color) at a given point in the scene.
+ * Represents a light source in a 3D scene.
+ * A light source can be of various types, such as point light, directional light, or spotlight.
+ * Each light source must be able to provide the direction of the light (as a vector)
+ * and the intensity of the light (as a color) at a given point in the scene.
  *
  * @author David &amp; Yehuda
  */

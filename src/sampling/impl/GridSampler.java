@@ -4,6 +4,8 @@ import primitives.Point2D;
 
 /**
  * Generates points at the center of each grid cell.
+ *
+ * @author David &amp; Yehuda
  */
 public class GridSampler extends AbstractGridSampler {
 
@@ -13,6 +15,14 @@ public class GridSampler extends AbstractGridSampler {
     public GridSampler() {
     }
 
+    /**
+     * Calculates the sample point position within the specified cell.
+     *
+     * @param x    origin x coordinate of the cell
+     * @param y    origin y coordinate of the cell
+     * @param step size of the cell
+     * @return Point2D inside the cell
+     */
     @Override
     protected Point2D getPoint(double x, double y, double step) {
         // Point at the center of the cell

@@ -25,18 +25,47 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class CamaroBvhHierarchyTest {
 
+    /**
+     * Shared scene used by the measurement tests.
+     */
     private static Scene scene;
+    /**
+     * Shared camera builder used to render all variants.
+     */
     private static Camera.Builder cameraBuilder;
 
+    /**
+     * Flattened geometry layout.
+     */
     private static Geometries flatScene;
+    /**
+     * Manually grouped geometry hierarchy.
+     */
     private static Geometries manualHierarchy;
+    /**
+     * Automatically generated BVH hierarchy.
+     */
     private static Geometries autoHierarchy;
 
+    /**
+     * Automatic thread count selection for multithreaded rendering.
+     */
     private static final int MT_THREADS = -1; // optimal thread count
 
-    // Map to store render times for all tests, printed as a summary at the end
+    /**
+     * Stores render time per test for the final summary output.
+     */
     private static final Map<String, Double> renderTimes = new LinkedHashMap<>();
 
+    /**
+     * Creates the test suite instance.
+     */
+    public CamaroBvhHierarchyTest() {
+    }
+
+    /**
+     * Builds the shared scene and rendering variants before all tests.
+     */
     @BeforeAll
     public static void setupScene() {
         // 1. Create Point objects
@@ -197,21 +226,33 @@ public class CamaroBvhHierarchyTest {
     // Flat scene measurements
     // =========================================================
 
+    /**
+     * Measures flat scene performance without CBR and without multithreading.
+     */
     @Test
     public void test01_Flat_NoCBR_NoMT() {
         runMeasurement(flatScene, false, false, 0, "camaro-01-Flat-NoCBR-NoMT");
     }
 
+    /**
+     * Measures flat scene performance with CBR and without multithreading.
+     */
     @Test
     public void test02_Flat_WithCBR_NoMT() {
         runMeasurement(flatScene, true, false, 0, "camaro-02-Flat-WithCBR-NoMT");
     }
 
+    /**
+     * Measures flat scene performance without CBR and with multithreading.
+     */
     @Test
     public void test03_Flat_NoCBR_MT() {
         runMeasurement(flatScene, false, false, MT_THREADS, "camaro-03-Flat-NoCBR-MT");
     }
 
+    /**
+     * Measures flat scene performance with CBR and with multithreading.
+     */
     @Test
     public void test04_Flat_WithCBR_MT() {
         runMeasurement(flatScene, true, false, MT_THREADS, "camaro-04-Flat-WithCBR-MT");
@@ -221,21 +262,33 @@ public class CamaroBvhHierarchyTest {
     // Manual BVH hierarchy measurements
     // =========================================================
 
+    /**
+     * Measures manual hierarchy performance without CBR and without multithreading.
+     */
     @Test
     public void test05_Manual_NoCBR_NoMT() {
         runMeasurement(manualHierarchy, false, false, 0, "camaro-05-Manual-NoCBR-NoMT");
     }
 
+    /**
+     * Measures manual hierarchy performance with CBR and without multithreading.
+     */
     @Test
     public void test06_Manual_WithCBR_NoMT() {
         runMeasurement(manualHierarchy, true, false, 0, "camaro-06-Manual-WithCBR-NoMT");
     }
 
+    /**
+     * Measures manual hierarchy performance without CBR and with multithreading.
+     */
     @Test
     public void test07_Manual_NoCBR_MT() {
         runMeasurement(manualHierarchy, false, false, MT_THREADS, "camaro-07-Manual-NoCBR-MT");
     }
 
+    /**
+     * Measures manual hierarchy performance with CBR and with multithreading.
+     */
     @Test
     public void test08_Manual_WithCBR_MT() {
         runMeasurement(manualHierarchy, true, false, MT_THREADS, "camaro-08-Manual-WithCBR-MT");
@@ -245,21 +298,33 @@ public class CamaroBvhHierarchyTest {
     // Automatic BVH hierarchy measurements
     // =========================================================
 
+    /**
+     * Measures automatic BVH performance without CBR and without multithreading.
+     */
     @Test
     public void test09_Auto_NoCBR_NoMT() {
         runMeasurement(autoHierarchy, false, true, 0, "camaro-09-Auto-NoCBR-NoMT");
     }
 
+    /**
+     * Measures automatic BVH performance with CBR and without multithreading.
+     */
     @Test
     public void test10_Auto_WithCBR_NoMT() {
         runMeasurement(autoHierarchy, true, true, 0, "camaro-10-Auto-WithCBR-NoMT");
     }
 
+    /**
+     * Measures automatic BVH performance without CBR and with multithreading.
+     */
     @Test
     public void test11_Auto_NoCBR_MT() {
         runMeasurement(autoHierarchy, false, true, MT_THREADS, "camaro-11-Auto-NoCBR-MT");
     }
 
+    /**
+     * Measures automatic BVH performance with CBR and with multithreading.
+     */
     @Test
     public void test12_Auto_WithCBR_MT() {
         runMeasurement(autoHierarchy, true, true, MT_THREADS, "camaro-12-Auto-WithCBR-MT");
@@ -269,6 +334,15 @@ public class CamaroBvhHierarchyTest {
     // Helper methods and end-of-run summary
     // =========================================================
 
+    /**
+     * Renders one configuration and stores its elapsed render time.
+     *
+     * @param geometries geometries configuration to render
+     * @param useCbr whether CBR acceleration is enabled
+     * @param bvh whether BVH acceleration is enabled
+     * @param threads thread count configuration
+     * @param testName output image name
+     */
     private void runMeasurement(Geometries geometries, boolean useCbr, boolean bvh, int threads, String testName) {
         scene.setGeometries(geometries);
         scene.setAABB(useCbr);
